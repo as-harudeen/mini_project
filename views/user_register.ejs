@@ -1,0 +1,29 @@
+<%- include('./include/_header') -%>
+
+<form method="post">
+    <div class="input-control">
+        <label for="username">Username</label>
+        <input type="text" name="username" id="username">
+        <p class="err"></p>
+    </div>
+    <div class="input-control">
+        <label for="credantial">credantial</label>
+        <input type="text" name="credantial" id="credantial">
+        <p class="err"></p>
+    </div>
+    <div class="input-control">
+        <label for="password">password</label>
+        <input type="password" name="password" id="password">
+        <p class="err"></p>
+    </div>
+    <div class="input-control">
+        <label for="confirm_password">Confirm password</label>
+        <input type="text" name="confirm_password" id="confirm_password">
+        <p class="err"></p>
+    </div>
+    <button type="submit">Register</button>
+</form>
+
+<script src="/js/user/register.js"></script>
+
+<%- include('./include/_footer') -%>
