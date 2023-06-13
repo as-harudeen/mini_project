@@ -1,15 +1,18 @@
 const router = require('express').Router();
 const {
     register,
-    login,
-    getUser
-} 
-= require('../controllers/userController.js')
+    loginWithPass,
+    getUser,
+    verifyUser,
+    generateOTP,
+    verifyOTP,
+    loginWithOTP
+} = require('../controllers/userController.js')
+const registerMail = require('../controllers/mailer.js')
 const {
     registerGET,
     loginGET
-} 
-= require('../render/user.render.js')
+} = require('../render/user.render.js')
 
 //Register
 router
@@ -18,17 +21,24 @@ router
 .post(register)
 
 
-//Login
+//Login with OTP
 router
 .route('/login')
 .get(loginGET)
-.post(login)
+.post(verifyUser,loginWithPass)
+
+
+//Login with OTP
+router
+.post("/login-otp", verifyUser, loginWithOTP)
 
 
 //Home
 router
 .route('/')
-.get()
+.get((req, res)=>{
+    res.send("Home")
+})
 
 
 //Products
@@ -60,5 +70,13 @@ router
 router.post('/get-user', getUser)
 
 
+//Generate OTP
+router.get('/generate-otp', generateOTP)
+
+//verify OTP
+router.post('/verify-otp', verifyOTP)
+
+//register mail
+router.post('/registerMail', registerMail)
 
 module.exports = router;

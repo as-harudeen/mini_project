@@ -1,7 +1,17 @@
 const express = require('express');
 const path = require('path');
-const morgan = require('morgan')
+const morgan = require('morgan');
+const mongoose = require('mongoose');
 require('dotenv').config();
+
+//connect to data base
+mongoose.connect('mongodb://127.0.0.1:27017/mini-project')
+.then(()=>{
+    console.log("Database connected....")
+})
+.catch(err =>{
+    console.log(err.message)
+})
 
 
 const app = express();

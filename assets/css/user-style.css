@@ -1,0 +1,8 @@
+.input-control.success input{
+    border-color: greenyellow;
+
+  }
+
+.input-control.err input{
+    border-color: red;
+}
