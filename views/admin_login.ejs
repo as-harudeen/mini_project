@@ -1,5 +1,31 @@
 <%- include('./include/_header') -%>
 
+<div class="container  d-flex justify-content-center align-items-center">
+    <div class="card p-2">
+        <h2 class="text-center">Hi, Welcome back</h2>
+        <form class="m-2 d-flex justify-content-center flex-column" method="post">
+            <div class="input-control">
+                <label class="d-block" for="email">Email</label>
+                <input type="text" name="admin_email" id="email">
+                <button class="btn btn-sm" disabled type="button" id="send-otp">send OTP</button>
+                <p class="err"></p>
+            </div>
+            <div class="input-control">
+                <input type="number" name="otp" id="otp">
+                <p class="err"></p>
+                <button class="btn btn-sm" disabled type="button" id="verify-otp">Verify</button>
+                <button class="btn btn-sm btn-light" type="button" id="verify-email">Verify Email</button>
+            </div>
+            <div class="input-control">
+                <label class="d-block" for="password">Password</label>
+                <input type="password" name="password" id="password">
+                <p class="err"></p>
+            </div>
+            <button class="btn btn-outline-light" type="submit">Login</button>
+        </form>
+    </div>
+</div>
+
 <form method="post">
     <div class="input-control">
         <label for="email">Email</label>

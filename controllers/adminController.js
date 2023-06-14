@@ -16,7 +16,7 @@ const bcrypt = require('bcrypt')
 const login = async (req, res)=>{
 
     try {
-        const {admin_email, password} = req.body
+        const {admin_email, password, OTP} = req.body
     
         console.log(admin_email)
         const db = mongoose.connection.db;
@@ -24,7 +24,12 @@ const login = async (req, res)=>{
         const data = await root.findOne({})
         console.log(data.admin_email)
         if(data.admin_email !== admin_email) return res.status(209).send({msg: "email not found"})
-    
+
+        if(req.app.locals.OTP === OTP){
+
+        } else {
+            
+        }
         const comparePass = await bcrypt.compare(password, data.password)
         if(!comparePass) return res.status(209).send({msg: "Password not match"})
     

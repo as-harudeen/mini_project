@@ -6,3 +6,24 @@
 .input-control.err input{
     border-color: red;
 }
+
+
+.container {
+  height: 100vh;
+}
+
+.card {
+  background-color: rgb(34, 34, 122);
+  color: white;
+  height: max(50vh, 400px);
+  width: max(40vw, 200px);
+  max-width: 18rem;
+}
+
+input {
+  width: 100%;
+  border: 1px solid rgb(255, 255, 255);
+  border-radius: 4px;
+  background-color: rgba(255, 255, 255, 0.386);
+  margin-bottom: 10px;
+}

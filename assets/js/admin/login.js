@@ -4,6 +4,7 @@ const passwordInp = document.getElementById('password')
 const verifyEmailBtn = document.getElementById('verify-email')
 const sendOTPBtn = document.getElementById('send-otp')
 const verifyOTPBtn = document.getElementById('verify-otp')
+const otpInp = document.getElementById('otp')
 let OTPSended = false
 
 
@@ -98,7 +99,7 @@ const setSuccess = (element)=>{
 
 
 //SendOTP
-sendOTP_btn.addEventListener('click', async ()=>{
+sendOTPBtn.addEventListener('click', async ()=>{
     const response = await fetchData('/api/generate-otp', 'GET')
     if(response.ok){
         OTPSended = true
@@ -108,12 +109,12 @@ sendOTP_btn.addEventListener('click', async ()=>{
 })
 
 
-verifyOTP_btn.addEventListener('click', async()=>{
-    const response = await fetchData('/api/verify-otp', 'POST', {OTP: otpInp.value})
+verifyOTPBtn.addEventListener('click', async()=>{
+    const response = await fetchData('/api/admin/login', 'POST', {admin_email: emailInp.value})
     if(response.ok && OTPSended) {
+        // const response = await fetchData('/api/verify-otp', 'POST', {OTP: otpInp.value})
         setSuccess(otpInp)
-        const res = await fetchData('/api/login-otp', 'POST', {email: emailInp.value})
-        if(res.ok) window.location.href = '/api/'
+        window.location.href = '/api/'
     }
     else setError(otpInp, 'Not match')
 })
