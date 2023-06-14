@@ -28,7 +28,7 @@ emailInp.addEventListener('keyup', async ()=>{
             sendOTP_btn.disabled = false
             verifyOTP_btn.disabled = false
             resendOTP_btn.disabled = false
-        } else setError(emailInp, 'Email already taken')
+        } else setError(emailInp, 'Email is not found')
         
     } else {
         sendOTP_btn.disabled = true
@@ -118,6 +118,7 @@ const setSuccess = (element)=>{
 sendOTP_btn.addEventListener('click', async ()=>{
     const response = await fetchData('/api/generate-otp', 'GET')
     if(response.ok){
+        verified = true
         const data = await response.text()
         console.log(JSON.parse(data).OTP)
     }
@@ -126,8 +127,7 @@ sendOTP_btn.addEventListener('click', async ()=>{
 
 verifyOTP_btn.addEventListener('click', async()=>{
     const response = await fetchData('/api/verify-otp', 'POST', {OTP: otpInp.value})
-    if(response.ok) {
-        verified = true
+    if(response.ok && verified) {
         setSuccess(otpInp)
         const res = await fetchData('/api/login-otp', 'POST', {email: emailInp.value})
         if(res.ok) window.location.href = '/api/'

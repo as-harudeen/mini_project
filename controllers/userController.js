@@ -142,6 +142,7 @@ const getUser = async (req, res) => {
       res.status(201).send({OTP: req.app.locals.OTP})
   }
 
+  
 
   //Verify OTP
   //@des localhost:3000/api/verify-otp

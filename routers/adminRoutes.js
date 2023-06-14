@@ -2,8 +2,10 @@ const router = require('express').Router();
 const {
     loginGET,
     panelGET
-} 
-= require('../render/admin.render.js')
+} = require('../render/admin.render.js')
+const {
+    login
+} = require("../controllers/adminController.js")
 
 
 
@@ -11,7 +13,7 @@ const {
 router
 .route("/login")
 .get(loginGET)
-.post()
+.post(login)
 
 //Admin panel
 router
