@@ -12,7 +12,7 @@ let subCategories = []
 
 form.addEventListener('submit', async(e)=>{
     e.preventDefault()
-    
+    if(!subCategories.length) return setError(subCategoryInp, "Provide atleast one subcategory")
     const body = {
         category_name: categoryNameInp.value.trim(),
         subCategories
@@ -32,11 +32,19 @@ form.addEventListener('submit', async(e)=>{
         }  
         
 })
-    
+
+subCategoryInp.addEventListener('keypress', (e) => {
+    if (e.key === "Enter") {
+        e.preventDefault();
+        addButton.click();
+        subCategoryInp.value = ''
+    }
+});
     
 
 addButton.addEventListener('click', ()=>{
     const subCategory = subCategoryInp.value.trim()
+    if(!subCategory) return setError(subCategoryInp, "Sub category can't be empty")
     if(!subCategories.includes(subCategory)){
         subCategories.push(subCategory)
         setSuccess(subCategoryInp)
@@ -63,7 +71,6 @@ const printSubCategories = ()=>{
             subCategories = subCategories.filter(sc => sc != sub)
             printSubCategories()
         })
-        
         
         
         subCategoryContainer.appendChild(subDiv)

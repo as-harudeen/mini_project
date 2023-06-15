@@ -68,10 +68,31 @@ const addCategory = async (req, res)=>{
 
 }
 
-//@des http:localhost:3000/admin/login
+//@des http:localhost:3000/get-category
+//@method GET
+const getCategory = async (req, res)=>{
+    const {category_name} = req.query
+
+    try {
+        const condition = {}
+        console.log(category_name)
+        if(category_name) condition.category_name = category_name
+        console.log(condition)
+        const category = await CategoryModel.find(condition)
+        if(category_name && !category) return res.status(400).send("Category not exist")
+        console.log(category)
+        res.status(200).send(category)
+    } catch (err) {
+        console.log(err.message)
+        return res.status(500).send(err.message)
+    }
+}
+
+//@des http:localhost:3000/admin/panel/category/edit
 //@method POST
 
 module.exports = {
     login,
-    addCategory
+    addCategory,
+    getCategory
 }

@@ -2,11 +2,14 @@ const router = require('express').Router();
 const {
     loginGET,
     panelGET,
-    addCategoryGET
+    addCategoryGET,
+    categoryGET,
+    editCategoryGET
 } = require('../render/admin.render.js')
 const {
     login,
-    addCategory
+    addCategory,
+    getCategory
 } = require("../controllers/adminController.js")
 
 
@@ -26,16 +29,24 @@ router
 //category
 router
 .route('/panel/category')
-.get()
+.get(categoryGET)
 
+//get category
+router
+.route('/get-category')
+.get(getCategory)
 
 //add category
 router
 .route('/panel/category/add')
 .get(addCategoryGET)
 .post(addCategory)
-
-
+ 
+//Edit category
+router
+.route('/panel/category/edit')
+.get(editCategoryGET)
+.post()
 
 //Products
 router
