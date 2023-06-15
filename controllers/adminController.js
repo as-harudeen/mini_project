@@ -1,12 +1,11 @@
-const mongoose = require("mongoose")
+const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
+const CategoryModel = require('../models/categoryModel.js')
 
 
 
 //@des http:localhost:3000/admin/login
 //@method POST
-
-
 /*
 {
     admin_name: 'Achu',
@@ -41,10 +40,38 @@ const login = async (req, res)=>{
 }
 
 
+//@des http:localhost:3000/admin/panel/category/add
+//@method POST
+/*
+{
+    "category_name" : "Clothing",
+    "subCategories" : ["Shirt", "Pants"]
+}
+*/
+const addCategory = async (req, res)=>{
+    const {category_name, subCategories} = req.body
+
+    try {
+        const isExist = await CategoryModel.findOne({category_name})
+        if(isExist) return res.status(400).send("Category already exist")
+    
+        const category = await CategoryModel.create({
+            category_name,
+            subCategories
+        })
+    
+        res.status(200).send(`${category}  Created success...`)
+    } catch (err) {
+        console.log(err.message)
+        res.status(500).send(err.message)
+    }
+
+}
 
 //@des http:localhost:3000/admin/login
 //@method POST
 
 module.exports = {
-    login
+    login,
+    addCategory
 }

@@ -10,7 +10,13 @@ const panelGET = (req, res)=>{
 }
 
 
+//@des http:localhost:3000/admin/panel/category/add
+const addCategoryGET = (req, res)=>{
+    res.status(200).render('admin_addCategory')
+}
+
 module.exports = {
     loginGET,
-    panelGET
+    panelGET,
+    addCategoryGET
 }

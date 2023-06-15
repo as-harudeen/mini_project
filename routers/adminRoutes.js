@@ -1,10 +1,12 @@
 const router = require('express').Router();
 const {
     loginGET,
-    panelGET
+    panelGET,
+    addCategoryGET
 } = require('../render/admin.render.js')
 const {
-    login
+    login,
+    addCategory
 } = require("../controllers/adminController.js")
 
 
@@ -19,6 +21,19 @@ router
 router
 .route('/panel')
 .get()
+
+
+//category
+router
+.route('/panel/category')
+.get()
+
+
+//add category
+router
+.route('/panel/category/add')
+.get(addCategoryGET)
+.post(addCategory)
 
 
 

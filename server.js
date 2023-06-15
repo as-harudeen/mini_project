@@ -34,7 +34,7 @@ app.set('view engine', 'ejs')
 
 //Using routers
 app.use("/api", require('./routers/userRoutes.js'));
-app.use("/api/admin", require('./routers/adminRoutes.js'));
+app.use("/admin", require('./routers/adminRoutes.js'));
 
 
 app.listen(port, ()=>{
