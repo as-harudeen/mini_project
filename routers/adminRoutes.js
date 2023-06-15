@@ -9,7 +9,8 @@ const {
 const {
     login,
     addCategory,
-    getCategory
+    getCategory,
+    editCategory
 } = require("../controllers/adminController.js")
 
 
@@ -44,9 +45,9 @@ router
  
 //Edit category
 router
-.route('/panel/category/edit')
+.route('/panel/category/edit/:category_name')
 .get(editCategoryGET)
-.post()
+.put(editCategory)
 
 //Products
 router

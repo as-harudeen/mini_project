@@ -88,11 +88,30 @@ const getCategory = async (req, res)=>{
     }
 }
 
-//@des http:localhost:3000/admin/panel/category/edit
-//@method POST
+//@des http:localhost:3000/admin/panel/category/edit/:category_name
+//@method PUT
+const editCategory = async (req, res)=>{
+    const {oldCategory_name, 
+        category_name, 
+        subCategories} = req.body
+
+        console.log(subCategories)
+
+    if(category_name !== oldCategory_name){
+        const category = await CategoryModel.find({category_name})
+        if(category) return res.status(400).send('Category already exist')
+    }
+
+    const category = await CategoryModel.findOneAndReplace({
+        category_name: oldCategory_name,
+    }, {category_name, subCategories})
+
+    res.status(200).send(category)
+}
 
 module.exports = {
     login,
     addCategory,
-    getCategory
+    getCategory,
+    editCategory
 }

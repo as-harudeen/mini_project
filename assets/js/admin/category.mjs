@@ -27,7 +27,7 @@ const fetch =  async ()=>{
         }
 
         editBtn.addEventListener('click', ()=>{
-            window.location.href = `/admin/panel/category/edit?category_name=${ctr.category_name}`
+            window.location.href = `/admin/panel/category/edit/${ctr.category_name}`
         })
 
 

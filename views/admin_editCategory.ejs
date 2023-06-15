@@ -1,0 +1,30 @@
+<%- include('./include/_header') -%>
+
+
+<form id="form" method="post">
+    <div class="input-control">
+        <label for="category_name">Category name</label>
+        <input value=<%= category.category_name %> type="text" name="category_name" id="category_name">
+        <p class="err"></p>
+    </div>
+    <div class="input-control">
+        <label for="sub_category_name">Sub Category</label>
+        <input type="text" name="sub_category_name" id="sub_category_name">
+        <button class="add" type="button">add</button>
+        <p class="err"></p>
+    </div>
+    <div class="sub_category_container">
+    
+        <%for(let i = 0; i < category.subCategories.length; i++){%>
+            <div>
+                <p><%= category.subCategories[i] %></p>
+                <button>Delete</button>
+            </div>
+        <%}%>
+    </div>
+    <button type="submit">Save</button>
+</form>
+
+
+<script type="module" src="/js/admin/editCategory.mjs"></script>
+<%- include('./include/_footer') -%>
