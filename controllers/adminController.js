@@ -54,10 +54,15 @@ const addCategory = async (req, res)=>{
     try {
         const isExist = await CategoryModel.findOne({category_name})
         if(isExist) return res.status(400).send("Category already exist")
-    
+
+        const buildSubCategories = []
+        subCategories.forEach((sub)=>{
+            buildSubCategories.push({subcategory_name: sub, isDisabled: false})
+        })
+
         const category = await CategoryModel.create({
             category_name,
-            subCategories
+            subCategories: buildSubCategories
         })
     
         res.status(200).send(`${category}  Created success...`)
@@ -93,25 +98,98 @@ const getCategory = async (req, res)=>{
 const editCategory = async (req, res)=>{
     const {oldCategory_name, 
         category_name, 
-        subCategories} = req.body
+        subCategories,
+        oldSubCategories
+    } = req.body
+    
 
-        console.log(subCategories)
+    //to Get what sub-categoies should be disbled
+    const subCategoriesToDisble = oldSubCategories.filter(sub=>{
+        return !subCategories.includes(sub)
+    })
 
-    if(category_name !== oldCategory_name){
-        const category = await CategoryModel.find({category_name})
-        if(category) return res.status(400).send('Category already exist')
+    //to Get what are the sub-categories to add
+    const subCategoriesToAdd = []
+    subCategories.forEach(sub=>{
+        if(!oldSubCategories.includes(sub)){
+            subCategoriesToAdd.push({category_name: sub, isDisabled: false})
+        }
+    })
+        //Checking whether new category name is already exist
+    if(category_name !== oldCategory_name){ 
+        const isExist = await CategoryModel.findOne({category_name})
+        if(isExist) return res.status(400).send('Category already exist')
     }
+    
+    const filter = {
+        category_name: oldCategory_name
+    };
+    const update = {$set: { 'subCategories.$[elem].isDisabled': true } }
+    const arrayFilters = [{ 'elem.subcategory_name': { $in: subCategoriesToDisble} }];
+    //Disabling
+    await CategoryModel.updateMany(filter, update, {arrayFilters})
 
-    const category = await CategoryModel.findOneAndReplace({
-        category_name: oldCategory_name,
-    }, {category_name, subCategories})
+    //Adding new subcategoies
+    await CategoryModel.updateOne({category_name: oldCategory_name},
+        { $push: { subCategories: { $each: subCategoriesToAdd } } })
 
-    res.status(200).send(category)
+
+    res.status(200).send("Success")
 }
+
+
+//@des localhost:3000/admin/disable
+//method PUT
+const disable = async (req, res)=>{
+    const {category_name, subcategory_name} = req.body 
+
+    console.log(category_name, subcategory_name)
+    try {
+
+        const filter = {
+            category_name,
+            'subCategories.subcategory_name' : subcategory_name
+        }
+        const update = {
+            $set: { 'subCategories.$.isDisabled': true }
+        }
+
+        await CategoryModel.updateOne(filter, update)
+        
+        res.status(200).send("Disabled")
+    } catch (err) {
+        return res.status(500).send(err.message)
+    }
+}
+
+const enable = async (req, res)=>{
+    const {category_name, subcategory_name} = req.body 
+
+    console.log(category_name, subcategory_name)
+    try {
+
+        const filter = {
+            category_name,
+            'subCategories.subcategory_name' : subcategory_name
+        }
+        const update = {
+            $set: { 'subCategories.$.isDisabled': false}
+        }
+
+        await CategoryModel.updateOne(filter, update)
+        console.log("enabled")
+        res.status(200).send("Enabled")
+    } catch (err) {
+        return res.status(500).send(err.message)
+    }
+}
+
 
 module.exports = {
     login,
     addCategory,
     getCategory,
-    editCategory
+    editCategory,
+    disable,
+    enable
 }

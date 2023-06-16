@@ -7,9 +7,12 @@ const categoriesContiner = document.querySelector('.categories-container');
 
 
 const fetch =  async ()=>{
+    categoriesContiner.innerHTML = ''
     const response = await fetchData('/admin/get-category', 'GET')
     const data = await response.json()
     
+    console.log(data)
+
     for(let ctr of data){
         const categoryDiv = document.createElement('div')
 
@@ -22,7 +25,28 @@ const fetch =  async ()=>{
         const subCatDiv = document.createElement('div')
         for(let sub of ctr.subCategories){
             const subCat = document.createElement('div')
-            subCat.innerHTML = sub
+            const subCatName = document.createElement('h6')
+            subCatName.innerHTML = sub.subcategory_name
+
+            const subCatBtn = document.createElement('button')
+            subCatBtn.innerHTML = sub.isDisabled ? 'list' : 'unlist'
+
+            subCatBtn.addEventListener('click', async ()=>{
+                const body = {
+                    category_name: categoryTitle.innerText,
+                    subcategory_name: subCatName.innerText
+                }
+
+                console.log(body)
+                const query = subCatBtn.innerText === 'list' ? 'disable' : 'enable'
+                const response = await fetchData(`/admin/${query}`,
+                'PUT', body)
+
+                if(response.ok) subCatBtn.innerHTML === 'list' ? subCatBtn.innerHTML = 'unlist' : subCatBtn.innerHTML = 'list'
+            })
+
+            subCat.appendChild(subCatName)
+            subCat.appendChild(subCatBtn)
             subCatDiv.appendChild(subCat)
         }
 

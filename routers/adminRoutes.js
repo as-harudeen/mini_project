@@ -10,7 +10,9 @@ const {
     login,
     addCategory,
     getCategory,
-    editCategory
+    editCategory,
+    disable,
+    enable
 } = require("../controllers/adminController.js")
 
 
@@ -25,6 +27,17 @@ router
 router
 .route('/panel')
 .get()
+
+
+//Disable
+router
+.route('/disable')
+.put(disable)
+
+//Enable
+router
+.route('/enable')
+.put(enable)
 
 
 //category

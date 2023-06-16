@@ -11,7 +11,7 @@ const categoryName = categoryNameInp.value
 
 let subCategories = []
 
-const build = ()=>{
+const build = ()=>{ //asign exist subcategoreis to array
     const subDivs = subCategoryContainer.querySelectorAll('div')
     for(let i = 0; i < subDivs.length; i++){
         const subDiv = subDivs[i]
@@ -19,14 +19,17 @@ const build = ()=>{
     }
 }
 build()
-console.log(subCategories)
+
+const oldSubCategories = [...subCategories] //to compare old one and new one
+
 form.addEventListener('submit', async(e)=>{
     e.preventDefault()
     if(!subCategories.length) return setError(subCategoryInp, "Provide atleast one subcategory")
     const body = {
         oldCategory_name: categoryName,
         category_name: categoryNameInp.value.trim(),
-        subCategories
+        subCategories,
+        oldSubCategories
     }
     const response = await fetchData(
         `/admin/panel/category/edit/${categoryName}`,
@@ -60,7 +63,7 @@ addButton.addEventListener('click', ()=>{
         subCategories.push(subCategory)
         setSuccess(subCategoryInp)
         printSubCategories()
-    } else setError(subCategoryInp, "sub category alredy added..?")
+    } else setError(subCategoryInp, "sub category already added..?")
 })
     
 

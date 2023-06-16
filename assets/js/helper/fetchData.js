@@ -6,7 +6,7 @@ const fetchData = async (url, method, body) => {
       },
     };
   
-    if (method === 'POST') {
+    if (method === 'POST' || method === 'PUT') {
       options.body = JSON.stringify(body);
     }
   
