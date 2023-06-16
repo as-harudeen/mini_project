@@ -6,6 +6,24 @@ const categoriesContiner = document.querySelector('.categories-container');
 
 
 
+function createSubCatBtnClickHandler(categoryName, subcategoryName, button) {
+    return async function() {
+      const body = {
+        category_name: categoryName,
+        subcategory_name: subcategoryName
+      };
+  
+      console.log(body);
+      const query = button.innerHTML === 'list' ? 'enable' : 'disable';
+      console.log(query)
+      const response = await fetchData(`/admin/${query}`, 'PUT', body);
+  
+      if (response.ok) {
+        button.innerHTML = button.innerHTML === 'list' ? 'unlist' : 'list';
+      }
+    };
+  }
+
 const fetch =  async ()=>{
     categoriesContiner.innerHTML = ''
     const response = await fetchData('/admin/get-category', 'GET')
@@ -29,21 +47,23 @@ const fetch =  async ()=>{
             subCatName.innerHTML = sub.subcategory_name
 
             const subCatBtn = document.createElement('button')
-            subCatBtn.innerHTML = sub.isDisabled ? 'list' : 'unlist'
+            sub.isDisabled == true ? subCatBtn.innerHTML = 'list' : subCatBtn.innerHTML = 'unlist'
 
-            subCatBtn.addEventListener('click', async ()=>{
-                const body = {
-                    category_name: categoryTitle.innerText,
-                    subcategory_name: subCatName.innerText
-                }
+            subCatBtn.addEventListener('click', createSubCatBtnClickHandler(categoryTitle.innerText, subCatName.innerText, subCatBtn));
 
-                console.log(body)
-                const query = subCatBtn.innerText === 'list' ? 'disable' : 'enable'
-                const response = await fetchData(`/admin/${query}`,
-                'PUT', body)
+            // subCatBtn.addEventListener('click', async ()=>{
+            //     const body = {
+            //         category_name: categoryTitle.innerText,
+            //         subcategory_name: subCatName.innerText
+            //     }
 
-                if(response.ok) subCatBtn.innerHTML === 'list' ? subCatBtn.innerHTML = 'unlist' : subCatBtn.innerHTML = 'list'
-            })
+            //     console.log(body)
+            //     const query = subCatBtn.innerHTML === 'list' ? 'disable' : 'enable'
+            //     const response = await fetchData(`/admin/${query}`,
+            //     'PUT', body)
+
+            //     if(response.ok) subCatBtn.innerHTML === 'list' ? subCatBtn.innerHTML = 'unlist' : subCatBtn.innerHTML = 'list'
+            // })
 
             subCat.appendChild(subCatName)
             subCat.appendChild(subCatBtn)

@@ -98,24 +98,15 @@ const getCategory = async (req, res)=>{
 const editCategory = async (req, res)=>{
     const {oldCategory_name, 
         category_name, 
-        subCategories,
-        oldSubCategories
+        subCategories
     } = req.body
     
 
-    //to Get what sub-categoies should be disbled
-    const subCategoriesToDisble = oldSubCategories.filter(sub=>{
-        return !subCategories.includes(sub)
+    const buildSubCategories = subCategories.map(sub => {
+        return {subcategory_name: sub, isDisabled: false}
     })
 
-    //to Get what are the sub-categories to add
-    const subCategoriesToAdd = []
-    subCategories.forEach(sub=>{
-        if(!oldSubCategories.includes(sub)){
-            subCategoriesToAdd.push({category_name: sub, isDisabled: false})
-        }
-    })
-        //Checking whether new category name is already exist
+     //Checking whether new category name is already exist
     if(category_name !== oldCategory_name){ 
         const isExist = await CategoryModel.findOne({category_name})
         if(isExist) return res.status(400).send('Category already exist')
@@ -124,14 +115,12 @@ const editCategory = async (req, res)=>{
     const filter = {
         category_name: oldCategory_name
     };
-    const update = {$set: { 'subCategories.$[elem].isDisabled': true } }
-    const arrayFilters = [{ 'elem.subcategory_name': { $in: subCategoriesToDisble} }];
+    const update = {
+        $set: {category_name}, 
+        $push: { subCategories: { $each: buildSubCategories } } 
+    };
     //Disabling
-    await CategoryModel.updateMany(filter, update, {arrayFilters})
-
-    //Adding new subcategoies
-    await CategoryModel.updateOne({category_name: oldCategory_name},
-        { $push: { subCategories: { $each: subCategoriesToAdd } } })
+    await CategoryModel.updateOne(filter, update)
 
 
     res.status(200).send("Success")
@@ -154,8 +143,8 @@ const disable = async (req, res)=>{
             $set: { 'subCategories.$.isDisabled': true }
         }
 
-        await CategoryModel.updateOne(filter, update)
-        
+        const cate = await CategoryModel.findOneAndUpdate(filter, update)
+        console.log(cate, "hihhihihihhihhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh")
         res.status(200).send("Disabled")
     } catch (err) {
         return res.status(500).send(err.message)
@@ -176,8 +165,8 @@ const enable = async (req, res)=>{
             $set: { 'subCategories.$.isDisabled': false}
         }
 
-        await CategoryModel.updateOne(filter, update)
-        console.log("enabled")
+        const cate = await CategoryModel.findOneAndUpdate(filter, update)
+        console.log(cate, "dsaffffffffffffffffffffffffffffffffffffffffffenabled")
         res.status(200).send("Enabled")
     } catch (err) {
         return res.status(500).send(err.message)

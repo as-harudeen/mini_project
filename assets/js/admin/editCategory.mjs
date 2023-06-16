@@ -7,29 +7,32 @@ const categoryNameInp = document.getElementById('category_name')
 const subCategoryInp = document.getElementById('sub_category_name')
 const addButton = document.querySelector('.add')
 const subCategoryContainer = document.querySelector('.sub_category_container')
-const categoryName = categoryNameInp.value
+let categoryName 
 
 let subCategories = []
+let oldSubCategories = [] //to compare old one and new one
 
-const build = ()=>{ //asign exist subcategoreis to array
-    const subDivs = subCategoryContainer.querySelectorAll('div')
-    for(let i = 0; i < subDivs.length; i++){
-        const subDiv = subDivs[i]
-        subCategories.push(subDiv.querySelector('p').innerText)
+const buildOldSubCategories = async()=>{
+    const res = await fetchData(`/admin/get-category?category_name=${categoryNameInp.value}`, 'GET')
+    if(res.ok){
+        const data = await res.json()
+        oldSubCategories = []
+        categoryName = data[0].category_name
+        for(let sub of data[0].subCategories){
+            oldSubCategories.push(sub.subcategory_name)
+        }
     }
 }
-build()
-
-const oldSubCategories = [...subCategories] //to compare old one and new one
+buildOldSubCategories()
 
 form.addEventListener('submit', async(e)=>{
     e.preventDefault()
-    if(!subCategories.length) return setError(subCategoryInp, "Provide atleast one subcategory")
+    if(!subCategories.length && categoryNameInp.value.trim() === categoryName) return setError(subCategoryInp, "There is no change")
+
     const body = {
         oldCategory_name: categoryName,
         category_name: categoryNameInp.value.trim(),
-        subCategories,
-        oldSubCategories
+        subCategories
     }
     const response = await fetchData(
         `/admin/panel/category/edit/${categoryName}`,
@@ -39,10 +42,15 @@ form.addEventListener('submit', async(e)=>{
         if(response.status == 400) setError(categoryNameInp, "Category name already exist")
         if(response.ok) {
             setSuccess(categoryNameInp)
+            subCategories = []
             subCategoryContainer.innerHTML = ''
             const msg = document.createElement('p')
             msg.innerHTML = "Category updated"
             subCategoryContainer.appendChild(msg)
+            setTimeout(()=>{
+                subCategoryContainer.removeChild(msg)
+            }, 2000)
+            buildOldSubCategories()
         }  
         
 })
@@ -59,7 +67,7 @@ subCategoryInp.addEventListener('keypress', (e) => {
 addButton.addEventListener('click', ()=>{
     const subCategory = subCategoryInp.value.trim()
     if(!subCategory) return setError(subCategoryInp, "Sub category can't be empty")
-    if(!subCategories.includes(subCategory)){
+    if(!subCategories.includes(subCategory) && !oldSubCategories.includes(subCategory)){
         subCategories.push(subCategory)
         setSuccess(subCategoryInp)
         printSubCategories()

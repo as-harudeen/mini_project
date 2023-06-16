@@ -13,15 +13,7 @@
         <button class="add" type="button">add</button>
         <p class="err"></p>
     </div>
-    <div class="sub_category_container">
-    
-        <%for(let i = 0; i < category.subCategories.length; i++){%>
-            <div>
-                <p><%= category.subCategories[i].subcategory_name %></p>
-                <button>Delete</button>
-            </div>
-        <%}%>
-    </div>
+    <div class="sub_category_container"></div>
     <button type="submit">Save</button>
 </form>
 
