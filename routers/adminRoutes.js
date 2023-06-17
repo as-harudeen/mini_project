@@ -4,7 +4,8 @@ const {
     panelGET,
     addCategoryGET,
     categoryGET,
-    editCategoryGET
+    editCategoryGET,
+    userManagementGET
 } = require('../render/admin.render.js')
 const {
     login,
@@ -12,8 +13,20 @@ const {
     getCategory,
     editCategory,
     disable,
-    enable
+    enable,
+    users,
+    block,
+    unblock,
+    logout
 } = require("../controllers/adminController.js")
+
+const authenticate = require('../controllers/auth/adminAuth.js')
+
+
+router.use((req, res, next)=>{
+    res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate')
+    next()
+})
 
 
 
@@ -22,6 +35,10 @@ router
 .route("/login")
 .get(loginGET)
 .post(login)
+
+
+router.use(authenticate)
+
 
 //Admin panel
 router
@@ -37,8 +54,10 @@ router
 //Enable
 router
 .route('/enable')
-.put(enable)
+.put(authenticate, enable)
 
+
+/**---------CATEGORY MANAGEMENTS-------------- */
 
 //category
 router
@@ -48,19 +67,22 @@ router
 //get category
 router
 .route('/get-category')
-.get(getCategory)
+.get(authenticate, getCategory)
 
 //add category
 router
 .route('/panel/category/add')
 .get(addCategoryGET)
 .post(addCategory)
- 
+
 //Edit category
 router
 .route('/panel/category/edit/:category_name')
 .get(editCategoryGET)
 .put(editCategory)
+
+
+/**---------PROCUTS MANAGEMENTS-------------- */
 
 //Products
 router
@@ -85,11 +107,12 @@ router
 .delete()
 
 
+/**---------USER MANAGEMENTS-------------- */
 
 //User management
 router
-.route('panel/user_management')
-.get()
+.route('/panel/user_management')
+.get(userManagementGET)
 
 //Edit user
 router
@@ -102,6 +125,21 @@ router
 .route('panel/user_management/delete_user/:user_id')
 .delete()
 
+//Get all users
+router
+.route('/get-users')
+.get(users)
+
+
+//Block
+router
+.route('/block/:userId')
+.put(block)
+
+//Block
+router
+.route('/unblock/:userId')
+.put(unblock)
 
 
 //Orders
@@ -123,7 +161,7 @@ router
 
 //Logout
 router
-.route('logout')
-.delete()
+.route('/logout')
+.delete(logout)
 
 module.exports = router;

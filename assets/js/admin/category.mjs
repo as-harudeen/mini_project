@@ -3,7 +3,7 @@ import { setSuccess, setError } from "../helper/setError&SetSuccess.js";
 
 
 const categoriesContiner = document.querySelector('.categories-container');
-
+const logoutBtn = document.getElementById('logout')
 
 
 function createSubCatBtnClickHandler(categoryName, subcategoryName, button) {
@@ -24,9 +24,13 @@ function createSubCatBtnClickHandler(categoryName, subcategoryName, button) {
     };
   }
 
+
+
+//Building ui
 const fetch =  async ()=>{
     categoriesContiner.innerHTML = ''
     const response = await fetchData('/admin/get-category', 'GET')
+    // if(response.status === 400) return window.location.href = '/admin/login'
     const data = await response.json()
     
     console.log(data)
@@ -51,20 +55,6 @@ const fetch =  async ()=>{
 
             subCatBtn.addEventListener('click', createSubCatBtnClickHandler(categoryTitle.innerText, subCatName.innerText, subCatBtn));
 
-            // subCatBtn.addEventListener('click', async ()=>{
-            //     const body = {
-            //         category_name: categoryTitle.innerText,
-            //         subcategory_name: subCatName.innerText
-            //     }
-
-            //     console.log(body)
-            //     const query = subCatBtn.innerHTML === 'list' ? 'disable' : 'enable'
-            //     const response = await fetchData(`/admin/${query}`,
-            //     'PUT', body)
-
-            //     if(response.ok) subCatBtn.innerHTML === 'list' ? subCatBtn.innerHTML = 'unlist' : subCatBtn.innerHTML = 'list'
-            // })
-
             subCat.appendChild(subCatName)
             subCat.appendChild(subCatBtn)
             subCatDiv.appendChild(subCat)
@@ -81,6 +71,10 @@ const fetch =  async ()=>{
         categoriesContiner.appendChild(categoryDiv)
     }
 }
-
 fetch()
 
+
+logoutBtn.addEventListener('click', async()=>{
+  const res = await fetchData('/admin/logout', 'DELETE')
+  if(res.ok) window.location.href = '/admin/login'
+})

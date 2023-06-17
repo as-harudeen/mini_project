@@ -42,7 +42,8 @@ const register = async(req, res)=>{
         const user = await UserModel.create({
             username,
             email,
-            password: hashedPassword
+            password: hashedPassword,
+            isBlocked: false
         })
 
         console.log(user, " created success")

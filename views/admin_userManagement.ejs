@@ -1,0 +1,23 @@
+<%- include('./include/_header') -%>
+
+
+<!-- <%users.forEach(user => {%>
+    <div>
+        <h5><%= user.username %></h5>
+        <button><%if(user.isBlocked){%>
+            unblock
+        <%}else {%>
+          block  
+        <%}%>    
+        </button>
+        <button>edit</button>
+    </div>
+<%})%> -->
+
+<div class="users-container">
+
+</div>
+
+<script type="module" src="/js/admin/userManagement.mjs"></script>
+
+<%- include('./include/_footer') -%>

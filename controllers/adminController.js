@@ -1,6 +1,8 @@
-const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
+const mongoose = require('mongoose')
 const CategoryModel = require('../models/categoryModel.js')
+const UserModel = require('../models/userModel.js')
 
 
 
@@ -15,7 +17,7 @@ const CategoryModel = require('../models/categoryModel.js')
 const login = async (req, res)=>{
 
     try {
-        const {admin_email, password, OTP} = req.body
+        const {admin_email, password} = req.body
     
         console.log(admin_email)
         const db = mongoose.connection.db;
@@ -24,19 +26,25 @@ const login = async (req, res)=>{
         console.log(data.admin_email)
         if(data.admin_email !== admin_email) return res.status(209).send({msg: "email not found"})
 
-        if(req.app.locals.OTP === OTP){
-
-        } else {
-            
-        }
         const comparePass = await bcrypt.compare(password, data.password)
-        if(!comparePass) return res.status(209).send({msg: "Password not match"})
-    
-        res.status(200).send("Login success")
+        if(!comparePass) return res.status(209).send({msg: "Password not match"})  
+        
+        const token = jwt.sign({
+            adminEmail: admin_email,
+            adminId: data._id
+        }, process.env.SUPER_SECRET , {expiresIn: '24h'})
+
+        res.cookie('adminToken', token, {httpOnly: true})
+        res.status(200).send(token)
     } catch (err) {
-        return res.status(209).send({msg: "OOPS"})
+        return res.status(500).send(err.message)
     }
 
+}
+
+const logout = async (req, res)=>{
+    res.clearCookie('adminToken')
+    res.status(200).send("Logout")
 }
 
 
@@ -78,14 +86,12 @@ const addCategory = async (req, res)=>{
 const getCategory = async (req, res)=>{
     const {category_name} = req.query
 
+    // if(!req.user) return res.status(400).send({msg: 'no token'})
     try {
         const condition = {}
-        console.log(category_name)
         if(category_name) condition.category_name = category_name
-        console.log(condition)
         const category = await CategoryModel.find(condition)
         if(category_name && !category) return res.status(400).send("Category not exist")
-        console.log(category)
         res.status(200).send(category)
     } catch (err) {
         console.log(err.message)
@@ -144,13 +150,14 @@ const disable = async (req, res)=>{
         }
 
         const cate = await CategoryModel.findOneAndUpdate(filter, update)
-        console.log(cate, "hihhihihihhihhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh")
         res.status(200).send("Disabled")
     } catch (err) {
         return res.status(500).send(err.message)
     }
 }
 
+//@des localhost:3000/admin/disable
+//method PUT
 const enable = async (req, res)=>{
     const {category_name, subcategory_name} = req.body 
 
@@ -166,12 +173,52 @@ const enable = async (req, res)=>{
         }
 
         const cate = await CategoryModel.findOneAndUpdate(filter, update)
-        console.log(cate, "dsaffffffffffffffffffffffffffffffffffffffffffenabled")
         res.status(200).send("Enabled")
     } catch (err) {
         return res.status(500).send(err.message)
     }
 }
+
+
+//@des localhost:3000/admin/getusers
+//method GET
+const users = async (req, res)=>{
+
+    try {
+        const data = await UserModel.find()
+        res.status(200).send(data)
+    } catch (err) {
+        return res.status(500).send(err.message)
+    }
+}
+
+
+//@des localhost:3000/admin/block/:userId
+//method put
+const block = async (req, res)=>{
+    const userId = req.params.userId
+    try {
+        await UserModel.updateOne({_id: userId}, {isBlocked: true})
+        res.status(200).send('blocked')
+    } catch (err) {
+        return res.status(500).send(err.message)
+    }
+}
+
+
+
+//@des localhost:3000/admin/block/:userId
+//method put
+const unblock = async (req, res)=>{
+    const userId = req.params.userId
+    try {
+        await UserModel.updateOne({_id: userId}, {isBlocked: false})
+        res.status(200).send('unblocked')
+    } catch (err) {
+        return res.status(500).send(err.message)
+    }
+}
+
 
 
 module.exports = {
@@ -180,5 +227,9 @@ module.exports = {
     getCategory,
     editCategory,
     disable,
-    enable
+    enable,
+    users,
+    block,
+    unblock,
+    logout
 }

@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
+const cookieParser = require('cookie-parser')
 require('dotenv').config();
 
 //connect to data base
@@ -23,6 +24,7 @@ app.use(express.urlencoded({extended: true}));
 
 //Using midlewares
 app.use(morgan('tiny'))
+app.use(cookieParser())
 
 //Setting static files
 app.use("/css", express.static(path.resolve(__dirname, 'assets/css')));
