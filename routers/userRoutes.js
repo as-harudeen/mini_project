@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const registerMail = require('../controllers/mailer.js')
 const {
     register,
     loginWithPass,
@@ -8,11 +9,12 @@ const {
     verifyOTP,
     loginWithOTP
 } = require('../controllers/userController.js')
-const registerMail = require('../controllers/mailer.js')
 const {
     registerGET,
     loginGET
 } = require('../render/user.render.js')
+
+
 
 //Register
 router

@@ -42,6 +42,8 @@ const login = async (req, res)=>{
 
 }
 
+//@des http:locathost:3000/admin/logout
+//method DELETE
 const logout = async (req, res)=>{
     res.clearCookie('adminToken')
     res.status(200).send("Logout")

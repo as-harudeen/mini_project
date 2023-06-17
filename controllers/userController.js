@@ -78,7 +78,7 @@ const loginWithPass = async (req, res)=>{
             userName: user.username
         }, env.SECRET, {expiresIn: '24h'})
 
-
+        res.cookie('userToken', token)
         res.status(200).send(token)
     } catch (err) {
         console.log(err.message)
@@ -105,7 +105,7 @@ const loginWithOTP = async (req, res)=>{
             userName: user.username,
         }, env.SECRET, {expiresIn: '24h'})
 
-
+        res.cookie('userToken', token)
         res.status(200).send(token)
     } catch (err) {
         return res.status(500).send("Internal error")
