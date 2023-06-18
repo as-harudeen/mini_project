@@ -24,10 +24,10 @@ const login = async (req, res)=>{
         const root = db.collection('root')
         const data = await root.findOne({})
         console.log(data.admin_email)
-        if(data.admin_email !== admin_email) return res.status(209).send({msg: "email not found"})
+        if(data.admin_email !== admin_email) return res.status(400).send({msg: "email not found"})
 
         const comparePass = await bcrypt.compare(password, data.password)
-        if(!comparePass) return res.status(209).send({msg: "Password not match"})  
+        if(!comparePass) return res.status(400).send({msg: "Password not match"})  
         
         const token = jwt.sign({
             adminEmail: admin_email,

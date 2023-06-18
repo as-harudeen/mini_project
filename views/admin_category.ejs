@@ -1,9 +1,162 @@
 <%- include('./include/_header') -%>
+    <div class="container-fluid p-0 min-vh-100 " style="margin-top: 7%;">
+        <%- include('./include/_adminNav.ejs')%>
+            <div class="container f-flex align-items-center justify-content-center">
+                <div class="row p-4 gap-3 d-flex justify-content-center">
+                    <div class="DashBoardUl container col-md-2 p-0 m-0 bg-white d-flex pt-4 sideBar">
+                        <ul class="d-flex flex-column">
+                            <li class="dashOther fw-bold p-1 m-2 ps-4 ">
+                                <!-- <img src="/assets/admin/d1.png" alt="" class="img-fluid me-2"> -->
+                                <span><a class="text-decoration-none" style="color: #cdcdcd ;"
+                                        href="/admin/Dashboard">DashBoard</a></span>
+                            </li>
+                            <li class="sideBarlist p-1 ps-4 m-2">
+                                <!-- <img src="/assets/admin/d3.png" alt="" class="img-fluid me-2"> -->
+                                <span><a href="/admin/category" class="text-decoration-none"
+                                        style="color: white;">Category</a></span>
+                            </li>
+                            <li class="dashOther fw-bold p-1 ps-4 m-2">
+                                <!-- <img src="/assets/admin/d2.png" alt="" class="img-fluid me-2"> -->
+                                <span></span>
+                                <a href="/admin/productView" class="text-decoration-none"
+                                    style="color: #cdcdcd;">Product</a></span>
+                            </li>
+                            <li class="dashOther fw-bold p-1 ps-4 m-2">
+                                <!-- <img src="/assets/admin/d4.png" alt="" class="img-fluid me-2"> -->
+                                <span></span>
+                                <a href="/admin/coustomers" class="text-decoration-none"
+                                    style="color: #cdcdcd;">Coustomer</a></span>
+                            </li>
+                            <li class="dashOther fw-bold p-1 ps-4 m-2">
+                                <!-- <img src="/assets/admin/d5.png" alt="" class="img-fluid me-2"> -->
+                                <span></span>
+                                <a href="/admin/order" class="text-decoration-none"
+                                    style="color: #cdcdcd;">Order</a></span>
+                            </li>
+                            <li class="dashOther fw-bold p-1 ps-4 m-2">
+                                <!-- <img src="/assets/admin/d6.png" alt="" class="img-fluid me-2"> -->
+                                <span></span>
+                                <a href="/admin/coupons" class="text-decoration-none"
+                                    style="color: #cdcdcd;">Coupons</a></span>
+                            </li>
+                            <li class="dashOther fw-bold p-1 ps-4 m-2">
+                                <!-- <img src="/assets/admin/d2.png" alt="" class="img-fluid me-2"> -->
+                                <span></span>
+                                <a href="#" class="text-decoration-none" style="color: #cdcdcd;">Banner</a></span>
+                            </li>
+                            <li class="dashOther fw-bold p-1 ps-4 m-2">
+                                <!-- <img src="/assets/admin/d6.png" alt="" class="img-fluid me-2"> -->
+                                <span></span>
+                                <a href="" class="text-decoration-none" style="color: #cdcdcd;">Logout</a></span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class=" container col-md-9  p-0 m-0">
+                        <div id="categories" class="container-fluid p-0 m-0">
+                            <!-- SEARCH -->
+                            <div class="container-fluid saleTop bg-white d-flex align-items-center mb-3">
+                                <div class="container summary d-flex align-items-center justify-content-between p-4 "
+                                    id="product">
+                                    <h6 class="p-3 ps-4">Category</h6>
+                                    <input type="text" placeholder="what are you looking for?" class="text-center">
+                                </div>
+                            </div>
+                            <!-- OTHRT PART -->
+                            <!-- <div class="container-fluid py-4 categoryContainer">
+                                <div class="d-flex justify-content-between">
+                                    <h5 class="d-inline text-light">Clothing</h5>
+                                    <div>
+                                        <button class="btn btn-sm btn-outline-light">Edit</button>
+                                        <button class="btn btn-sm btn-outline-light drop-btn"><i class="fa-sharp fa-solid fa-arrow-down"></i></button>
+                                    </div>
+                                </div>
+                                <div class="sub-container d-none container-fluid Pa_table bg-white py-4">
+                                    <div class="container-fluid bg-white P-table m-0 px-0">
+                                        <div class="container-fluid  p-0 d-flex align-items-center justify-content-center">
+                                            <table class="w-100 tableSize ">
+                                                <thead class="cartTop" style="position:sticky; top: 0; z-index: 1;">
+                                                    <tr class="cart_table">
+                                                        <th class="first p-3 px-4">no</th>
+                                                        <th class="p-3">name</th>
+                                                        <th class="p-3">opion</th>
+                                                        <th class="third p-3">options</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr class="mt-2">
+                                                        <td scope="col" class="px-4">
+                                                            <span class="couponListFont">
+                                                                1
+                                                            </span>
+                                                        </td>
+                                                        <td scope="col" class="px-4">
+                                                            <span class="couponListFont">
+                                                                pants
+                                                            </span>
+                                                        </td>
+                                                        <td scope="col" class="px-4">
+                                                            <span class="couponListFont">
+                                                                tshirt
+                                                            </span>
+                                                        </td>
+                                                    </tr>
+                                                    <tr class="mt-2">
+                                                        <td scope="col" class="px-4">
+                                                            <span class="couponListFont">
+                                                                1
+                                                            </span>
+                                                        </td>
+                                                        <td scope="col" class="px-4">
+                                                            <span class="couponListFont">
+                                                                shirts
+                                                            </span>
+                                                        </td>
+                                                        <td scope="col" class="px-4">
+                                                            <span class="couponListFont">
+                                                                options
+                                                            </span>
+                                                        </td>
+                                                    </tr>
+                                                    
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> -->
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+    </div>
+
+    
+    
+    
+    
+    <!-- <script src="/js/alert.js"></script> -->
+    
+    <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> -->
+    <!-- <script src="/js/chart.js"></script> -->
+    
+    <button id="logout">logout</button>
+    <script type="module" src="/js/admin/category.mjs"></script>
+    <%- include('./include/_adminFooter.ejs')%>
+
+
+
+
+
+
+
+
+
 
 
 <div class="categories-container"></div>
 
-<button id="logout">logout</button>
-<script type="module" src="/js/admin/category.mjs"></script>
 
-<%- include('./include/_footer') -%>

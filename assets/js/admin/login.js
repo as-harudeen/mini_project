@@ -1,11 +1,11 @@
 const form = document.querySelector('form')
 const emailInp = document.getElementById('email')
 const passwordInp = document.getElementById('password')
-const verifyEmailBtn = document.getElementById('verify-email')
-const sendOTPBtn = document.getElementById('send-otp')
-const verifyOTPBtn = document.getElementById('verify-otp')
-const otpInp = document.getElementById('otp')
-let OTPSended = false
+// const verifyEmailBtn = document.getElementById('verify-email')
+// const sendOTPBtn = document.getElementById('send-otp')
+// const verifyOTPBtn = document.getElementById('verify-otp')
+// const otpInp = document.getElementById('otp')
+// let OTPSended = false
 
 
 
@@ -48,6 +48,7 @@ form.addEventListener("submit", async (e)=>{
     else {
         const data = await response.json()
 
+        console.log(data)
         if(data.msg === "email not found"){
             setError(emailInp, 'Not a Admin')
         } else {
