@@ -5,8 +5,6 @@ import { setSuccess, setError } from "../helper/setError&SetSuccess.js"
 const form = document.getElementById('form')
 const categoryNameInp = document.getElementById('category_name')
 const subCategoryInp = document.getElementById('sub_category_name')
-const addButton = document.querySelector('.add')
-const subCategoryContainer = document.querySelector('.sub_category_container')
 
 let subCategories = []
 
@@ -25,57 +23,58 @@ form.addEventListener('submit', async(e)=>{
         if(response.status == 400) setError(categoryNameInp, "Category name already exist")
         if(response.ok) {
             setSuccess(categoryNameInp)
-            subCategoryContainer.innerHTML = ''
+            previewBody.innerHTML = ''
+            categoryNameInp.value = ''
+            previewTitle.querySelector('h5').innerHTML = "Category added." 
             subCategories = []
-            const msg = document.createElement('p')
-            msg.innerHTML = "Category added"
-            subCategoryContainer.appendChild(msg)
         }  
         
 })
 
+
+const previewTitle = document.getElementById('preview-title')
+const previewBody = document.getElementById('preview-body')
+
+
+categoryNameInp.addEventListener('keyup', ()=>{
+    previewTitle.querySelector('h5').innerHTML = categoryNameInp.value.trim()
+})
+
+
+const addBtn = document.querySelector('.addbutton')
+
+addBtn.addEventListener('click', ()=>{
+    const subCat = subCategoryInp.value.trim()
+    if(!subCat) return setError(subCategoryInp, 'Give Subcategory name')
+    if(subCategories.includes(subCat)) return setError(subCategoryInp, "Subcategory exist")
+
+    subCategories.push(subCat)
+
+    const subDiv = document.createElement('div')
+
+
+    subDiv.innerHTML = `
+        <div class="d-flex justify-content-between">
+          <p>${subCat}</p>
+          <button class="btn">Delete</button>
+        </div>  
+    `
+    const delBtn = subDiv.querySelector('button')
+
+    delBtn.addEventListener('click', ()=>{
+        subCategories = subCategories.filter(sub => sub != subCat )
+        previewBody.removeChild(subDiv)
+    })
+
+    previewBody.appendChild(subDiv)
+
+})
+
+
 subCategoryInp.addEventListener('keypress', (e) => {
     if (e.key === "Enter") {
         e.preventDefault();
-        addButton.click();
+        addBtn.click();
         subCategoryInp.value = ''
     }
 });
-    
-
-addButton.addEventListener('click', ()=>{
-    const subCategory = subCategoryInp.value.trim()
-    if(!subCategory) return setError(subCategoryInp, "Sub category can't be empty")
-    if(!subCategories.includes(subCategory)){
-        subCategories.push(subCategory)
-        setSuccess(subCategoryInp)
-        printSubCategories()
-    } else setError(subCategoryInp, "sub category alredy added..?")
-})
-    
-
-const printSubCategories = ()=>{
-    subCategoryContainer.innerHTML = ''
-    for(let sub of subCategories){
-        
-        const subDiv = document.createElement('div')
-        const delBtn = document.createElement('button')
-        const subName = document.createElement('p')
-        
-        subName.innerHTML = sub
-        delBtn.innerHTML = 'delete'
-        
-        subDiv.appendChild(delBtn)
-        subDiv.appendChild(subName)
-        
-        delBtn.addEventListener('click', ()=>{
-            subCategories = subCategories.filter(sc => sc != sub)
-            printSubCategories()
-        })
-        
-        
-        subCategoryContainer.appendChild(subDiv)
-    }
-}
-
-printSubCategories()
