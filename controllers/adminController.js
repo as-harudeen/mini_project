@@ -87,7 +87,7 @@ const addCategory = async (req, res)=>{
 //@method GET
 const getCategory = async (req, res)=>{
     const {category_name} = req.query
-
+    console.log(category_name)
     // if(!req.user) return res.status(400).send({msg: 'no token'})
     try {
         const condition = {}
