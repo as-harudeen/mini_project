@@ -1,7 +1,6 @@
 const emailInp = document.getElementById('email');
 const passwordInp = document.getElementById('password');
-const form = document.querySelector('form')
-
+const form = document.getElementById('form')
 
 
 //OTP Handler
@@ -36,8 +35,6 @@ emailInp.addEventListener('keyup', async ()=>{
         resendOTP_btn.disabled = true
     }
 })
-
-
 
 
 form.addEventListener('submit', async (e)=>{

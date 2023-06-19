@@ -1,7 +1,4 @@
 <%- include('./include/_header.ejs') -%>
-
-<!-- <%- include("./include/_header")%> -->
-<!-- <%- include('./include/_header.ejs') -%> -->
    <div class="container-fluid p-0 justify-content-center align-items-center signUp min-vh-100" style="margin-top: 8%;">
       <%- include("./include/_adminNav.ejs")%>
          <div class="container d-flex justify-content-center align-items-center p-5">
@@ -14,7 +11,7 @@
                      <h2>Log in to Exclusive</h2>
                      <span>Enter your details</span>
                   </div>
-                  <form method="post">
+                  <form id="form" action="/admin/login" method="post">
                      <div class="credntials mt-4 d-flex flex-column gap-3 loginButton">
                         <!-- email -->
                         <div class="input-control">
@@ -38,44 +35,5 @@
             </div>
          </div>
    </div>
-   <script src="/js/admin/login.js"></script>
-   <!-- <%- include("./include/_footer")%> -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!-- <form method="post">
-    <div class="input-control">
-        <label for="email">Email</label>
-        <input type="text" name="admin_email" id="email">
-        <button disabled type="button" id="send-otp">send OTP</button>
-        <p class="err"></p>
-    </div>
-    <div class="input-control">
-        <input type="number" name="otp" id="otp">
-        <p class="err"></p>
-        <button disabled type="button" id="verify-otp">Verify</button>
-        <button type="button" id="verify-email">Verify Email</button>
-    </div>
-    <div class="input-control">
-        <label for="password">Password</label>
-        <input type="password" name="password" id="password">
-        <p class="err"></p>
-    </div>
-    <button type="submit">Login</button>
-</form> -->
-
-<!-- <script src="/js/admin/login.js"></script> -->
-
+   <script type="module" src="/js/admin/login.mjs"></script>
 <%- include('./include/_footer') -%>

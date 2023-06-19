@@ -1,4 +1,4 @@
-const form = document.querySelector('form')
+const form = document.getElementById('form')
 const usernameInp = document.getElementById('username')
 const emailInp = document.getElementById('email')
 const passwordInp = document.getElementById('password')
@@ -8,7 +8,6 @@ const confirmPasswordInp = document.getElementById('confirm_password')
 const otpInp = document.getElementById('otp')
 const sendOTP_btn = document.getElementById('send-otp')
 const verifyOTP_btn = document.getElementById('verify-otp')
-const resendOTP_btn = document.getElementById('resend-otp')
 let verified = false
 const regEx = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
@@ -16,6 +15,7 @@ const regEx = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[
 //For enable OTP buttons
 emailInp.addEventListener('keyup', async ()=>{
     verified = false
+    console.log("HIHIHI")
     if(regEx.test(emailInp.value.trim())){
         const response = await fetchData('get-user', 
         'POST', 
@@ -27,12 +27,11 @@ emailInp.addEventListener('keyup', async ()=>{
         setSuccess(emailInp)
         sendOTP_btn.disabled = false
         verifyOTP_btn.disabled = false
-        resendOTP_btn.disabled = false
         
     } else {
         sendOTP_btn.disabled = true
         verifyOTP_btn.disabled = true
-        resendOTP_btn.disabled = true
+
     }
 })
 
@@ -167,11 +166,4 @@ verifyOTP_btn.addEventListener('click', async()=>{
 })
 
 
-resendOTP_btn.addEventListener('click', async ()=>{
-    const response = await fetchData('/api/generate-otp', 'GET')
-    if(response.ok){
-        const data = await response.text()
-        console.log(JSON.parse(data).OTP)
-    }
-})
 
