@@ -1,6 +1,14 @@
-const form = document.querySelector('form')
+import fetchData from '../helper/fetchData.js'
+import {setSuccess, setError} from '../helper/setError&SetSuccess.js'
+
+const form = document.getElementById('form')
 const emailInp = document.getElementById('email')
 const passwordInp = document.getElementById('password')
+
+
+console.log(form)
+console.log("HIHIIHIHIIHI")
+
 // const verifyEmailBtn = document.getElementById('verify-email')
 // const sendOTPBtn = document.getElementById('send-otp')
 // const verifyOTPBtn = document.getElementById('verify-otp')
@@ -34,6 +42,10 @@ const passwordInp = document.getElementById('password')
 
 form.addEventListener("submit", async (e)=>{
     e.preventDefault()
+
+
+    console.log("inside event")
+
     const admin_email = emailInp.value.trim()
     const password = passwordInp.value.trim()
 
@@ -43,11 +55,9 @@ form.addEventListener("submit", async (e)=>{
     }
 
     const response = await fetchData('/admin/login', 'POST', body)
-    
-    if(response.status === 200) window.location.href = '/admin/panel/category'
+    if(response.ok) window.location.href = '/admin/panel/category'
     else {
         const data = await response.json()
-
         console.log(data)
         if(data.msg === "email not found"){
             setError(emailInp, 'Not a Admin')
@@ -57,46 +67,6 @@ form.addEventListener("submit", async (e)=>{
         }
     }
 })
-
-
-//Fetch 
-const fetchData = async (url, method, body) => {
-    const options = {
-      method,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    };
-  
-    if (method === 'POST') {
-      options.body = JSON.stringify(body);
-    }
-  
-    const response = await fetch(url, options);
-  
-    return response;
-  };
-
-
-
-const setError = (element, message)=>{
-    const inputControl = element.parentElement
-    const errorDisplay = inputControl.querySelector('.err')
-
-    errorDisplay.innerHTML = message
-    inputControl.classList.add('err')
-    inputControl.classList.remove('success')
-}
-
-const setSuccess = (element)=>{
-    const inputControl = element.parentElement
-    const errorDisplay = inputControl.querySelector('.err')
-
-    errorDisplay.innerHTML = ''
-    inputControl.classList.add('success')
-    inputControl.classList.remove('err')
-}
-
 
 
 //SendOTP
