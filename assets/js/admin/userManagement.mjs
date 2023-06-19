@@ -1,37 +1,36 @@
 import fetchData from "../helper/fetchData.js";
-import { setSuccess, setError } from "../helper/setError&SetSuccess.js";
-
-
-
-const userscontainer = document.querySelector('.users-container')
-
-
 
 const fetch = async()=>{
     const response = await fetchData('/admin/get-users', 'GET')
     const users = await response.json()
 
-    for(let user of users){
-        const userContainer = document.createElement('div')
-        const username = document.createElement('h6')
-        const userBtn = document.createElement('button')
-        username.innerText = user.username
-        userBtn.innerText = user.isBlock ? 'unblock' : 'block'
 
-        userBtn.addEventListener('click', async() => {
-            const query = userBtn.innerText === 'block' ? 'block' : 'unblock'
+    const tbody = document.querySelector('tbody')
 
+    for(let i = 0; i < users.length; i++){
+        const user = users[i]
+        const tr = document.createElement('tr')
+        tr.innerHTML = `                                                <tr>
+        <td class="ps-4">${i+ 1}</td>
+        <td class="ps-4">${user.username}</td>
+        <td class="ps-4">active</td>
+        <td class="ps-4"><button class='btn btn-sm btn-outline-dark'>${user.isBlocked ? 'unblock' : 'block'}</button></td>
+    </tr>`
+    
+        const opBtn = tr.querySelector('button')
+        opBtn.addEventListener('click', async() => {
+            const query = opBtn.innerText === 'block' ? 'block' : 'unblock'
+    
             const res = await fetchData(`/admin/${query}/${user._id}`, 'PUT')
             if(res.ok){
                 console.log(query)
-                userBtn.innerText == 'block' ? userBtn.innerText = 'unblock' : userBtn.innerText = 'block'
+                opBtn.innerText == 'block' ? opBtn.innerText = 'unblock' : opBtn.innerText = 'block'
             }
         })
-
-        userContainer.appendChild(username)
-        userContainer.appendChild(userBtn)
-        userscontainer.appendChild(userContainer)
+    
+        tbody.appendChild(tr)
     }
 }
 
 fetch()
+
