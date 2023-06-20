@@ -3,6 +3,10 @@ const jwt = require('jsonwebtoken')
 const mongoose = require('mongoose')
 const CategoryModel = require('../models/categoryModel.js')
 const UserModel = require('../models/userModel.js')
+const { all } = require('axios')
+// const redisClient = require('redis').createClient()
+// redisClient.connect()
+// .then(()=> console.log("conecteddddd"))
 
 
 
@@ -83,23 +87,50 @@ const addCategory = async (req, res)=>{
 
 }
 
+// const categoryChaching = async (key, categories)=>{
+//     for(let category of categories){
+//         await redisClient.hSet(key, category.category_name, JSON.stringify(category.subCategories))
+//     }
+//     console.log("category cached")
+// }
+
 //@des http:localhost:3000/get-category
 //@method GET
 const getCategory = async (req, res)=>{
     const {category_name} = req.query
     console.log(category_name)
+    // const oneCategory = await redisClient.hGet('categories', category_name)
+    // if(oneCategory) return {category_name, subCategories: JSON.parse(oneCategory)}
+    
+    
+    // if(!category_name){
+    //     const allCategory = await redisClient.HGETALL('categories')
+    //     if(allCategory){
+    //         const data = []
+    //         for(let key in allCategory){
+    //             const subCate = await redisClient.hGet('categories', key)
+    //             data.push({category_name: key, subCategories: JSON.parse(subCate)})
+    //         }
+    //         // console.log(data, 'from redis')
+    //         return res.send(data)
+    //     }
+    // }
+
     // if(!req.user) return res.status(400).send({msg: 'no token'})
     try {
         const condition = {}
         if(category_name) condition.category_name = category_name
         const category = await CategoryModel.find(condition)
         if(category_name && !category) return res.status(400).send("Category not exist")
+
+        // categoryChaching('categories', category)
         res.status(200).send(category)
     } catch (err) {
         console.log(err.message)
         return res.status(500).send(err.message)
     }
 }
+
 
 //@des http:localhost:3000/admin/panel/category/edit/:category_name
 //@method PUT
@@ -221,6 +252,14 @@ const unblock = async (req, res)=>{
     }
 }
 
+
+
+const addProduct = async (req, res)=>{
+    const {product_name, 
+        product_discription, 
+        stock, 
+        images} = req.body
+} 
 
 
 module.exports = {

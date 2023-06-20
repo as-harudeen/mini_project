@@ -5,7 +5,8 @@ const {
     addCategoryGET,
     categoryGET,
     editCategoryGET,
-    userManagementGET
+    userManagementGET,
+    addProductGET
 } = require('../render/admin.render.js')
 const {
     login,
@@ -20,7 +21,7 @@ const {
     logout
 } = require("../controllers/adminController.js")
 
-const authenticate = require('../controllers/auth/adminAuth.js')
+// const authenticate = require('../controllers/auth/adminAuth.js')
 
 
 router.use((req, res, next)=>{
@@ -37,7 +38,7 @@ router
 .post(login)
 
 
-router.use(authenticate)
+// router.use(authenticate)
 
 
 //Admin panel
@@ -54,7 +55,7 @@ router
 //Enable
 router
 .route('/enable')
-.put(authenticate, enable)
+.put(enable)
 
 
 /**---------CATEGORY MANAGEMENTS-------------- */
@@ -67,7 +68,7 @@ router
 //get category
 router
 .route('/get-category')
-.get(authenticate, getCategory)
+.get(getCategory)
 
 //add category
 router
@@ -91,8 +92,8 @@ router
 
 //Add product
 router
-.route('/panel/products/add_product')
-.get()
+.route('/panel/products/add')
+.get(addProductGET)
 .post()
 
 //Edit Product

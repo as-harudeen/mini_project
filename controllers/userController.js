@@ -162,6 +162,31 @@ const getUser = async (req, res) => {
         res.status(400).send("no match")
     }
 }
+
+const redis = require('redis')
+const client = redis.createClient();
+  client.connect()
+  .then(()=>console.log("connected"))
+  .catch(err => console.log(err.message))
+
+
+const red = async(req, res)=>{
+    
+    try {
+        const username = 'achu'
+
+        const inRedis = await client.hGet("sample",username)
+        // if(inRedis)return res.send(JSON.parse(inRedis))
+        const user = await UserModel.findOne({username})
+        console.log(user)
+        await client.hSet("sample",username, JSON.stringify(user))
+        await client.expire('sample', 10)
+        res.send("hj")
+    } catch (err) {
+        console.log(err.message)
+        res.send("internal error")
+    }
+}
   
 
 module.exports = {
@@ -171,5 +196,6 @@ module.exports = {
     verifyUser,
     generateOTP,
     verifyOTP,
-    loginWithOTP
+    loginWithOTP,
+    red
 }

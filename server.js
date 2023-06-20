@@ -39,10 +39,30 @@ app.use("/api", require('./routers/userRoutes.js'));
 app.use("/admin", require('./routers/adminRoutes.js'));
 
 
-app.get('/a/:id', (req, res)=>{
-    const id = req.params.id
-    res.send(id)
-})
+
+// const Redis = require('redis')
+// const redisClient = Redis.createClient()
+// redisClient.connect()
+// .then(()=> console.log("conected"))
+// const category = {
+//     category_name: 'Clothing',
+//     subcategories: ['a', 'b', 'c', 'd', 'e']
+// }
+
+// async function set (){
+//     await redisClient.hSet("categories", category.category_name, JSON.stringify(category.subcategories))
+// }
+// set()
+
+// async function get (){
+//     const data = await redisClient.HGETALL('categories', category.category_name)
+//     console.log(Object.keys(data))
+// }
+// get()
+
+
+
+
 
 app.listen(port, ()=>{
     console.log(`Server is running on port ${port}`);

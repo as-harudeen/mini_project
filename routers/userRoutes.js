@@ -7,7 +7,8 @@ const {
     verifyUser,
     generateOTP,
     verifyOTP,
-    loginWithOTP
+    loginWithOTP,
+    red
 } = require('../controllers/userController.js')
 const {
     registerGET,
@@ -80,5 +81,9 @@ router.post('/verify-otp', verifyOTP)
 
 //register mail
 router.post('/registerMail', registerMail)
+
+//redis
+router.route('/redis')
+.get(red)
 
 module.exports = router;
