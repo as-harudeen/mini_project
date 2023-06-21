@@ -29,6 +29,7 @@ app.use(cookieParser())
 //Setting static files
 app.use("/css", express.static(path.resolve(__dirname, 'assets/css')));
 app.use("/js", express.static(path.resolve(__dirname, 'assets/js')));
+app.use("/public", express.static(path.resolve(__dirname, 'assets/public')));
 
 //Seting view engine
 app.set('view engine', 'ejs')

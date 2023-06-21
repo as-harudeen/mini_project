@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const multer = require('multer')
 const {
     loginGET,
     panelGET,
@@ -18,7 +19,10 @@ const {
     users,
     block,
     unblock,
-    logout
+    logout,
+    addProduct,
+    getAllProducts,
+    getProduct
 } = require("../controllers/adminController.js")
 
 // const authenticate = require('../controllers/auth/adminAuth.js')
@@ -28,6 +32,20 @@ router.use((req, res, next)=>{
     res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate')
     next()
 })
+
+
+
+//multer
+const storage = multer.diskStorage({
+    destination: (req, file, cb)=>{
+        cb(null, 'assets/public/img')
+    },
+    filename: (req, file, cb)=>{
+        cb(null, file.originalname)
+    }
+})
+const upload = multer({storage: storage})
+
 
 
 
@@ -94,7 +112,7 @@ router
 router
 .route('/panel/products/add')
 .get(addProductGET)
-.post()
+.post(upload.array('photo'), addProduct)
 
 //Edit Product
 router
@@ -107,6 +125,9 @@ router
 .route('panel/products/delete_product/:product_id')
 .delete()
 
+
+//Get All product
+router.get('/get-products', getAllProducts)
 
 /**---------USER MANAGEMENTS-------------- */
 
