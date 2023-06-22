@@ -93,10 +93,37 @@
                                             <select name="subcategory" id="subcategory" class="mt-1 py-2"></select>
                                         </div>
                                     </div>
-                                    <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-4 d-flex flex-column">
+                                            <label for="">Colors*</label>
+                                            <input id="p_color" type="color" class="mt-1 py-2" name="offerPrice" placeholder="Enter color" title="Please enter color" required>
+                                            <button id="color_btn" type="button">add color</button>
+                                        <p class="err"></p>
+                                        </div>
+                                        <div id="p_color_container" class="col-md-8 d-flex flex-wrap gap-2 p-4"></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-1 d-flex flex-column" id="p_size">
+                                            <label for="">Size*</label>
+                                            <div  class="input-control">
+                                                <label for="">M</label>
+                                                <input type="checkbox" name="M" value="M" checked>
+                                                <label for="">L</label>
+                                                <input type="checkbox" name="L" value="L" checked>
+                                                <label for="">XL</label>
+                                                <input type="checkbox" name="XL" value="XL" checked>
+                                                <label for="">XLL</label>
+                                                <input type="checkbox" name="XXL" value="XXL">
+                                            </div>
+                                        </div>
+                                        <p class="err"></p>
+                                        <div id="p_color_container" class="col-md-8 d-flex flex-wrap gap-2 p-4"></div>
+                                    </div>
+                                    <div class="form-group input-control">
                                         <label for="">Discription*</label>
                                         <textarea id="p_des" class="form-control" placeholder="Description" name="description"
                                             rows="4" required></textarea>
+                                        <p class="err"></p>
                                     </div>
                                     <div class="input-cotrol">
                                         <input type="file" id="photo" class="form-control my-3 py-2" name="image" multiple>

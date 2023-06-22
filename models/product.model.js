@@ -27,9 +27,18 @@ const productSchema = new mongoose.Schema({
     },
     product_images: {
         type: [String],
+        required: true
     },
-    payment_methods: {
+    sizes: {
         type: [String],
+        required: true
+    },
+    colors: {
+        type: [String],
+        required: true
+    },
+    isDeleted: {
+        type: Boolean,
         required: true
     }
 })

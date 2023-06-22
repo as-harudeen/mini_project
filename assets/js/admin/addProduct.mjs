@@ -63,7 +63,6 @@ fileInp.addEventListener('change', (e)=>{
         const imgSrc = URL.createObjectURL(imgFiles[idx])
         const newDiv = document.createElement('div')
         newDiv.classList.add('product-img', 'col-md-2')
-        // newDiv.style.background = `url("${imgSrc}")`
         newDiv.innerHTML = `<img src="${imgSrc}">`
         const deleteBtn = document.createElement('button')
         deleteBtn.classList.add('btn', 'btn-danger')
@@ -83,6 +82,7 @@ fileInp.addEventListener('change', (e)=>{
 
 button.addEventListener('click', async (e)=>{
     e.preventDefault()
+    storingSize()
     if(validate()){
         const formData = new FormData()
         for (let i = 0; i < photoCollections.length; i++) {
@@ -90,12 +90,14 @@ button.addEventListener('click', async (e)=>{
         }
     
         const jsonData = {
-            product_name: p_nameInp.value.trim(),
-            product_price: parseInt(p_priceInp.value.trim()),
-            product_stock: parseInt(p_stockInp.value.trim()),
-            product_des: p_desInp.value.trim(),
+            product_name: name,
+            product_price: parseInt(price),
+            product_stock: parseInt(stock),
+            product_des: des,
             category: categorySel.value,
-            sub_category: subCategorySel.value
+            sub_category: subCategorySel.value,
+            sizes,
+            colors
         }
     
         formData.append('jsonData', JSON.stringify(jsonData))
@@ -107,8 +109,13 @@ button.addEventListener('click', async (e)=>{
         })
     
         if(response.ok){
-            const fileName = await response.text()
-            console.log(fileName)
+            p_nameInp.value = ''
+            p_priceInp.value = ''
+            p_stockInp.value = ''
+            p_desInp.value = ''
+            colors = []
+            colorContainer.innerHTML = ''
+            productsName.push(name)
             photoCollections = []
             div.innerHTML = ''
             const msg = document.createElement('p')
@@ -128,42 +135,135 @@ const p_nameInp = document.getElementById('p_name')
 const p_priceInp = document.getElementById('p_price')
 const p_stockInp = document.getElementById('p_stock')
 const p_desInp = document.getElementById('p_des')
+
+
+let name, price, stock, des 
+
+
 let productsName = []
 const res = await fetchData('/admin/get-products', 'GET')
 if(res.ok){
     const dt = await res.json()
     for(let i = 0; i < dt.length; i++){
-        productsName.push(dt[i].product_name)
+        productsName.push(dt[i].product_name.toLowerCase())
     }
 }
 //VALIDATION
 function validate(){
+
+    name = p_nameInp.value.trim()
+    price = p_priceInp.value.trim() 
+    stock = p_stockInp.value.trim()
+    des = p_desInp.value.trim()
+
     let allOk = true
-    if(productsName.includes(/p_nameInp.value.trim()/i)){
+
+    console.log(name)
+    if (name == ''){
+        setError(p_nameInp, "Name cant be empty")
+        allOk = false
+    } else if(productsName.includes(name.toLowerCase())){
         setError(p_nameInp, "Product name already exist")
         allOk = false
     } else setSuccess(p_nameInp)
 
-    const price = p_priceInp.value.trim() 
     const pricePattern = /^[1-9][0-9]*$/
-    console.log(pricePattern.test(price))
-    if(pricePattern.te)
-    if(typeof  price != 'number'){
-        setError(p_priceInp, "Price should be number")
+    if(pricePattern.test(price)) setSuccess(p_priceInp)
+    else {
+        setError(p_priceInp, "Provide valid Price")
         allOk = false
-    } else if(price <= 0){
-        setError(p_priceInp, "Price should be more than zero")
-    } else setSuccess(p_stockInp)
+    }
+
+    const stockPattern = /^[0-9]+$/
+    if(stockPattern.test(stock))setSuccess(p_stockInp)
+    else {
+        setError(p_stockInp, "Stock should be number")
+        allOk = false
+    }
+
+    if(des === ''){
+        setError(p_desInp, "Description can't be empty.")
+        allOk = false
+    } else setSuccess(p_desInp)
 
 
-    const stock = parseInt(p_stockInp.value.trim()) 
-    if(typeof  stock != Number){
-        setError(p_stockInp, "Price should be number")
+    if(!photoCollections.length) {
+        setError(fileInp, "Please provide at leat one photo")
         allOk = false
-    } else if(stock < 0){
-        setError(p_stockInp, "Price can't be negative")
-    } else setSuccess(p_stockInp)
+    } else setSuccess(fileInp)
+
+    if(!sizes.length){
+        allOk = false
+        setError(sizeDiv, "Give at least One size")
+    } else setSuccess(sizeDiv)
+
+    if(!colors.length){
+        allOk = false
+        setError(colorInp, "Please provide at least one color")
+    } else setSuccess(colorInp)
+
 
     return allOk
 }
 
+
+
+
+
+//Performing with COLOR 
+
+let colors = []
+
+const colorContainer = document.getElementById('p_color_container')
+const colorInp = document.getElementById('p_color') 
+const colorBtn = document.getElementById('color_btn')
+
+
+colorInp.addEventListener('keypress', (e)=>{
+    if (e.key === "Enter") {
+        e.preventDefault();
+        colorBtn.click();
+    }
+})
+
+colorBtn.addEventListener('click', ()=>{
+    const color = colorInp.value.trim()
+    if(!color.startsWith('#')) return setError(colorInp, 'Please provide valid hex color')
+
+    const newColorDiv = document.createElement('div')
+    newColorDiv.classList.add('p_color')
+   //validating color 
+    newColorDiv.style.backgroundColor = color
+    const bgColor = newColorDiv.style.backgroundColor
+    if(colors.includes(bgColor))return setError(colorInp, "Already added")
+    if(bgColor){
+        const del = document.createElement('button')
+        del.innerText = 'X'
+        del.classList.add('btn', 'btn-danger', 'fw-bold')
+
+        del.addEventListener('click', ()=>{//Delete button Event
+            colors = colors.filter( col => col != bgColor)
+            colorContainer.removeChild(newColorDiv)
+        })
+
+        colorInp.value = ''
+        setSuccess(colorInp)
+        colors.push(bgColor)
+        newColorDiv.appendChild(del)
+        colorContainer.appendChild(newColorDiv)
+    } else setError(colorInp, "Not valid color")
+})
+
+
+
+//Size
+
+const sizeDiv = document.getElementById('p_size')
+let sizes = []
+function storingSize(){
+    sizes = []
+    const checkedSize = document.querySelectorAll('input[type="checkbox"]:checked');
+    for(let i = 0; i < checkedSize.length; i++){
+        sizes.push(checkedSize[i].value)
+    }
+}

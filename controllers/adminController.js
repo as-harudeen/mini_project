@@ -3,7 +3,15 @@ const jwt = require('jsonwebtoken')
 const mongoose = require('mongoose')
 const CategoryModel = require('../models/categoryModel.js')
 const UserModel = require('../models/userModel.js')
-const { all } = require('axios')
+const ProductModel = require('../models/product.model.js')
+
+
+//creating multer storage
+const multer = require('multer')
+
+
+
+
 // const redisClient = require('redis').createClient()
 // redisClient.connect()
 // .then(()=> console.log("conecteddddd"))
@@ -94,7 +102,7 @@ const addCategory = async (req, res)=>{
 //     console.log("category cached")
 // }
 
-//@des http:localhost:3000/get-category
+//@des http:localhost:3000/admin/get-category
 //@method GET
 const getCategory = async (req, res)=>{
     const {category_name} = req.query
@@ -255,12 +263,65 @@ const unblock = async (req, res)=>{
 
 
 const addProduct = async (req, res)=>{
-    const {product_name, 
-        product_discription, 
-        stock, 
-        images} = req.body
+
+    const {
+        product_name,
+        product_price,
+        product_stock,
+        product_des,
+        category,
+        sub_category,
+        sizes,
+        colors
+    } = JSON.parse(req.body.jsonData)
+
+    try {
+        const files = req.files
+        console.log(files)
+        if(!files) return res.status(400).send("no file")
+
+        const filenames = files.map(file => file.originalname); // Extract filenames from files array
+        const product = await ProductModel.create({
+            product_name,
+            product_des,
+            product_price,
+            product_stock,
+            category,
+            sub_category,
+            product_images: filenames,
+            sizes,
+            colors,
+            isDeleted: false
+        });
+    
+        console.log(product)
+        res.status(200).send("uploaded")
+    } catch (err) {
+        console.log(err.message)
+        return res.status(500).json(err.message)
+    }    
 } 
 
+
+const getAllProducts = async (req, res)=>{
+    try {
+        const data = await ProductModel.find()
+        res.status(200).json(data)
+    } catch (err) {
+        res.status(500).send(err.message)
+    }
+}
+
+const getProduct = async (req, res)=>{
+    try {
+        const {product_id} = req.params
+        
+        const data = await ProductModel.findOne({_id: product_id})
+        res.status(200).json(data)
+    } catch (err) {
+        res.status(500).send(err.message)
+    }
+}
 
 module.exports = {
     login,
@@ -272,5 +333,8 @@ module.exports = {
     users,
     block,
     unblock,
-    logout
+    logout,
+    addProduct,
+    getAllProducts,
+    getProduct
 }
