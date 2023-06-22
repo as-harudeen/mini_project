@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken')
 const CategoryModel = require('../models/categoryModel.js')
+const ProductModel = require('../models/product.model.js')
 
 //@des http:localhost:3000/admin/login
 const loginGET = (req, res)=>{
@@ -58,12 +59,17 @@ const userManagementGET = async (req, res)=>{
 }
 
 
-/**=================USER GET============== */
+/**=================PRODUCT GET============== */
 
 //@des http:localhost:3000/admin/panel/products/add
 const addProductGET = async (req, res)=>{
-    const category = await CategoryModel.find()
-    res.status(200).render('admin/addProduct', {category})
+    res.status(200).render('admin/addProduct')
+}
+
+//@des http:localhost:3000/admin/panel/products
+const productsGET = async(req, res)=>{
+    const products = await ProductModel.find()
+    res.status(200).render('admin/products', {products})
 }
 
 
@@ -74,5 +80,6 @@ module.exports = {
     addCategoryGET,
     editCategoryGET,
     userManagementGET,
-    addProductGET
+    addProductGET,
+    productsGET
 }

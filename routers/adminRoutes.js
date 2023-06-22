@@ -7,7 +7,8 @@ const {
     categoryGET,
     editCategoryGET,
     userManagementGET,
-    addProductGET
+    addProductGET,
+    productsGET
 } = require('../render/admin.render.js')
 const {
     login,
@@ -106,7 +107,7 @@ router
 //Products
 router
 .route('/panel/products')
-.get()
+.get(productsGET)
 
 //Add product
 router

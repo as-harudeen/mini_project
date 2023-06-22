@@ -1,0 +1,63 @@
+import fetchData from "../helper/fetchData.js"
+import { setSuccess, setError } from "../helper/setError&SetSuccess.js"
+
+
+
+//filter
+const filterInp = document.getElementById('p_filter')
+let filter 
+filterInp.addEventListener('change', ()=>{
+    filter = filterInp.value
+    build()
+})
+
+
+//Search
+const searchInp = document.getElementById('search')
+
+let searchVal 
+searchInp.addEventListener('keyup', ()=>{
+    searchVal = searchInp.value.trim()
+    build()
+})
+
+
+
+
+const productContainer = document.getElementById('products_container')
+
+//build
+async function build(){
+    productContainer.innerHTML = ''
+    const option = {}
+    if(filter){
+        if(filter == 'deleted') option.isDeleted = true
+        else if(filter == 'undeleted') option.isDeleted = false
+    }
+    
+    if(searchVal) option.product_name = {$regex: `^${searchVal}`, $options: 'i'}
+
+
+    let url = `/admin/get-products?options=${JSON.stringify(option)}`
+    // if(searchVal) url += `&prefix="${searchVal}"`
+    const res = await fetchData(url, "GET")
+    
+    const products = await res.json()
+    products.forEach(product => {
+        const newDiv = document.createElement('div')
+        newDiv.innerHTML = `
+        <div class="ad_product" style="background-image: url('/public/img/${product.product_images[0]}');">
+        <button class="btn btn-sm btn-light ac_btn"> ${product.isDeleted ? 'Retrive' : 'Soft Delete'}</button>
+        <div class="text-light p_details">
+            <h6>${product.product_name}</h6>
+            <h6>Rs ${product.product_price}</h6>
+            <p>Qt-${product.product_stock}</p>
+        </div>
+        <a class="btn btn-sm btn-light edit_btn" href="/admin/panel/products/edit/${product._id}">Edit</a>
+        </div>
+        `
+        productContainer.appendChild(newDiv)
+    })
+
+}
+build()

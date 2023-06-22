@@ -8,6 +8,7 @@ const ProductModel = require('../models/product.model.js')
 
 //creating multer storage
 const multer = require('multer')
+const { options } = require('../routers/userRoutes.js')
 
 
 
@@ -261,7 +262,8 @@ const unblock = async (req, res)=>{
 }
 
 
-
+//@des localhost:3000/admin/panel/products/add
+//method POST
 const addProduct = async (req, res)=>{
 
     const {
@@ -303,15 +305,22 @@ const addProduct = async (req, res)=>{
 } 
 
 
+//@des localhost:3000/admin/get-products
+//method GET
 const getAllProducts = async (req, res)=>{
     try {
-        const data = await ProductModel.find()
+        let options = JSON.parse(req.query.options)
+        const data = await ProductModel.find(options)
         res.status(200).json(data)
     } catch (err) {
+        console.log(err.message)
         res.status(500).send(err.message)
     }
 }
 
+
+//@des localhost:3000/admin/:productId
+//method GET
 const getProduct = async (req, res)=>{
     try {
         const {product_id} = req.params
@@ -321,6 +330,12 @@ const getProduct = async (req, res)=>{
     } catch (err) {
         res.status(500).send(err.message)
     }
+}
+
+//@des localhost:3000/admin/panel/products/edit/:productId
+//method PUT
+const editProduct = async (req, res)=>{
+
 }
 
 module.exports = {

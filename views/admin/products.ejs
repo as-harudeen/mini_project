@@ -1,0 +1,82 @@
+<%- include('../include/_header.ejs')%>
+    <div class="container-fluid p-0 min-vh-100 " style="margin-top: 7%;">
+        <%- include('../include/_adminNav.ejs')%>
+            <div class="container f-flex align-items-center justify-content-center">
+                <div class="row p-4 gap-3 d-flex justify-content-center">
+                    <!-- SIDE BAR -->
+                    <div class="DashBoardUl container col-md-2 p-0 m-0 bg-white d-flex pt-4 sideBar">
+                        <ul class="d-flex flex-column">
+                            <li class="dashOther fw-bold p-1 m-2 ps-4 ">
+                                <img src="/assets/admin/d9.png" alt="" class="img-fluid me-2">
+                                <span><a class="text-decoration-none" style="color: #cdcdcd;"
+                                        href="/admin/Dashboard">DashBoard</a></span>
+                            </li>
+                            <li class="dashOther fw-bold p-1 ps-4 m-2">
+                                <img src="/assets/admin/d3.png" alt="" class="img-fluid me-2">
+                                <span><a href="/admin/cate  gory" class="text-decoration-none"
+                                        style="color: #cdcdcd;">Category</a></span>
+                            </li>
+                            <li class="sideBarlist fw-bold p-1 ps-4 m-2">
+                                <img src="/assets/admin/d2.png" alt="" class="img-fluid me-2">
+                                <span></span>
+                                <a href="/admin/productView" class="text-decoration-none"
+                                    style="color: white;">Product</a></span>
+                            </li>
+                            <li class="dashOther fw-bold p-1 ps-4 m-2">
+                                <img src="/assets/admin/d4.png" alt="" class="img-fluid me-2">
+                                <span></span>
+                                <a href="/admin/coustomers" class="text-decoration-none"
+                                    style="color: #cdcdcd;">Coustomer</a></span>
+                            </li>
+                            <li class="dashOther fw-bold p-1 ps-4 m-2">
+                                <img src="/assets/admin/d5.png" alt="" class="img-fluid me-2">
+                                <span></span>
+                                <a href="/admin/order" class="text-decoration-none" style="color: #cdcdcd;">Order</a></span>
+                            </li>
+                            <li class="dashOther fw-bold p-1 ps-4 m-2">
+                                <img src="/assets/admin/d6.png" alt="" class="img-fluid me-2">
+                                <span></span>
+                                <a href="/admin/coupons" class="text-decoration-none" style="color: #cdcdcd;">Coupons</a></span>
+                            </li>
+                            <li class="dashOther fw-bold p-1 ps-4 m-2">
+                                <img src="/assets/admin/d2.png" alt="" class="img-fluid me-2">
+                                <span></span>
+                                <a href="#" class="text-decoration-none" style="color: #cdcdcd;">Banner</a></span>
+                            </li>
+                            <li class="dashOther fw-bold p-1 ps-4 m-2">
+                                <img src="/assets/admin/d6.png" alt="" class="img-fluid me-2">
+                                <span></span>
+                                <a href="" class="text-decoration-none" style="color: #cdcdcd;">Logout</a></span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class=" container col-md-9  p-0 m-0">
+                        <div class="container p-0 bg-white p_addingWrapper">
+                            <!-- SEARCH -->
+                            <div class="container-fluid saleTop bg-white d-flex align-items-center mb-3">
+                                <div class="container summary d-flex align-items-center justify-content-between p-4 "
+                                    id="product">
+                                    <h6 class="p-3 ps-4">Products</h6>
+                                    <input id="search" type="text" placeholder="what are you looking for?" class="text-center">
+                                    <select class="ms-3" name="p_filter" id="p_filter">
+                                        <option value="All">All</option>
+                                        <option value="deleted">Deleted</option>
+                                        <option value="undeleted">UnDeleted</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- Other part -->
+                            <div class="container p-5">
+                            <div id="products_container" class="d-flex gap-2 flex-wrap"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script type="module" src="/js/admin/product.mjs"></script>
+    <%- include('../include/_adminFooter.ejs')%>
