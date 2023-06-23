@@ -73,6 +73,15 @@ const productsGET = async(req, res)=>{
 }
 
 
+//@des http:localhost:3000/admin/panel/products/edit/:product_id
+const editProductGET = async (req, res)=>{
+    const productId = req.params.product_id
+    console.log(productId)
+    const product = await ProductModel.findById(productId)
+    console.log(product)
+    res.status(200).render('admin/editProduct', {product})
+}
+
 module.exports = {
     loginGET,
     panelGET,
@@ -81,5 +90,6 @@ module.exports = {
     editCategoryGET,
     userManagementGET,
     addProductGET,
-    productsGET
+    productsGET,
+    editProductGET
 }

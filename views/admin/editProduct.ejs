@@ -1,0 +1,144 @@
+<%- include('../include/_header.ejs')%>
+    <div class="container-fluid p-0 min-vh-100 " style="margin-top: 7%;">
+        <%- include('../include/_adminNav.ejs')%>
+            <div class="container f-flex align-items-center justify-content-center">
+                <div class="row p-4 gap-3 d-flex justify-content-center">
+                    <!-- SIDE BAR -->
+                    <div class="DashBoardUl container col-md-2 p-0 m-0 bg-white d-flex pt-4 sideBar">
+                        <ul class="d-flex flex-column">
+                            <li class="dashOther fw-bold p-1 m-2 ps-4 ">
+                                <img src="/assets/admin/d9.png" alt="" class="img-fluid me-2">
+                                <span><a class="text-decoration-none" style="color: #cdcdcd;"
+                                        href="/admin/Dashboard">DashBoard</a></span>
+                            </li>
+                            <li class="dashOther fw-bold p-1 ps-4 m-2">
+                                <img src="/assets/admin/d3.png" alt="" class="img-fluid me-2">
+                                <span><a href="/admin/cate  gory" class="text-decoration-none"
+                                        style="color: #cdcdcd;">Category</a></span>
+                            </li>
+                            <li class="sideBarlist fw-bold p-1 ps-4 m-2">
+                                <img src="/assets/admin/d2.png" alt="" class="img-fluid me-2">
+                                <span></span>
+                                <a href="/admin/productView" class="text-decoration-none"
+                                    style="color: white;">Product</a></span>
+                            </li>
+                            <li class="dashOther fw-bold p-1 ps-4 m-2">
+                                <img src="/assets/admin/d4.png" alt="" class="img-fluid me-2">
+                                <span></span>
+                                <a href="/admin/coustomers" class="text-decoration-none"
+                                    style="color: #cdcdcd;">Coustomer</a></span>
+                            </li>
+                            <li class="dashOther fw-bold p-1 ps-4 m-2">
+                                <img src="/assets/admin/d5.png" alt="" class="img-fluid me-2">
+                                <span></span>
+                                <a href="/admin/order" class="text-decoration-none" style="color: #cdcdcd;">Order</a></span>
+                            </li>
+                            <li class="dashOther fw-bold p-1 ps-4 m-2">
+                                <img src="/assets/admin/d6.png" alt="" class="img-fluid me-2">
+                                <span></span>
+                                <a href="/admin/coupons" class="text-decoration-none" style="color: #cdcdcd;">Coupons</a></span>
+                            </li>
+                            <li class="dashOther fw-bold p-1 ps-4 m-2">
+                                <img src="/assets/admin/d2.png" alt="" class="img-fluid me-2">
+                                <span></span>
+                                <a href="#" class="text-decoration-none" style="color: #cdcdcd;">Banner</a></span>
+                            </li>
+                            <li class="dashOther fw-bold p-1 ps-4 m-2">
+                                <img src="/assets/admin/d6.png" alt="" class="img-fluid me-2">
+                                <span></span>
+                                <a href="" class="text-decoration-none" style="color: #cdcdcd;">Logout</a></span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class=" container col-md-9  p-0 m-0">
+                        <div class="container p-0 bg-white p_addingWrapper">
+                            <div class="container p-5">
+                                <form action="/admin/p_adding" method="post" enctype="multipart/form-data">
+                                    <div class="row d-flex mb-3">
+                                        <div class="col-md-6 d-flex flex-column input-control">
+                                            <label for="">Product Name*</label>
+                                            <input id="p_name" type="text" class="mt-1 py-2" name="p_name"
+                                                placeholder="Product Name" required value="<%= product.product_name %>">
+                                            <p class="err"></p>
+                                        </div>
+                                        <div class="col-md-6 d-flex flex-column">
+                                            <label for="">Category*</label>
+                                            <select name="category" id="category" class="mt-1 py-2">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row d-flex mb-3">
+                                        <div class='col-md-6 col-12 d-flex gap-3'>
+                                            <div class="col-md-5  d-flex flex-column">
+                                                <label for="">Price*</label>
+                                                <input id="p_price" type="tel" class="mt-1 py-2" name="price" placeholder="Price" title="Please enter numbers only"
+                                                value="<%= product.product_price %>" required>
+                                            <p class="err"></p>
+                                            </div>
+                                            <div class="col-md-4 d-flex flex-column">
+                                                <label for="">Stock*</label>
+                                                <input id="p_stock" type="number" class="mt-1 py-2" name="offerPrice" placeholder="Stock" title="Please enter number" 
+                                                value="<%= product.product_price %>"  required>
+                                            <p class="err"></p>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 d-flex flex-column">
+                                            <label for="">Subcategory*</label>
+                                            <select name="subcategory" id="subcategory" class="mt-1 py-2"></select>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4 d-flex flex-column">
+                                            <label for="">Colors*</label>
+                                            <input id="p_color" type="color" class="mt-1 py-2" name="offerPrice" placeholder="Enter color" title="Please enter color" required>
+                                            <button id="color_btn" type="button">add color</button>
+                                        <p class="err"></p>
+                                        </div>
+                                        <div id="p_color_container" class="col-md-8 d-flex flex-wrap gap-2 p-4"></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-1 d-flex flex-column" id="p_size">
+                                            <label for="">Size*</label>
+                                            <div  class="input-control">
+                                                <label for="">M</label>
+                                                <input type="checkbox" name="M" value="M">
+                                                <label for="">L</label>
+                                                <input type="checkbox" name="L" value="L">
+                                                <label for="">XL</label>
+                                                <input type="checkbox" name="XL" value="XL">
+                                                <label for="">XLL</label>
+                                                <input type="checkbox" name="XXL" value="XXL">
+                                            </div>
+                                        </div>
+                                        <p class="err"></p>
+                                        <div id="p_color_container" class="col-md-8 d-flex flex-wrap gap-2 p-4"></div>
+                                    </div>
+                                    <div class="form-group input-control">
+                                        <label for="">Discription*</label>
+                                        <textarea id="p_des" class="form-control" placeholder="Description" name="description"
+                                            rows="4" required><%= product.product_des %></textarea>
+                                        <p class="err"></p>
+                                    </div>
+                                    <div class="input-cotrol">
+                                        <input type="file" id="photo" class="form-control my-3 py-2" name="image" multiple>
+                                        <p class="err"></p>
+                                    </div>
+                                    <div class="mt-3">
+                                        <button type="submit" id="add-btn" class="btn btn-danger">Save Product</button>
+                                    </div>
+
+                                    <div class="row d-flex gap-3 px-4 py-5 mt-3" id="img-preview"></div>
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="/js/admin/editProduct.mjs"></script>
+    <!-- <script type="module" src="/js/admin/addProduct.mjs"></script> -->
+    <%- include('../include/_adminFooter.ejs')%>

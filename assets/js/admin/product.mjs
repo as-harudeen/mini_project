@@ -56,6 +56,18 @@ async function build(){
         <a class="btn btn-sm btn-light edit_btn" href="/admin/panel/products/edit/${product._id}">Edit</a>
         </div>
         `
+        const btn = newDiv.querySelector('button')
+        btn.addEventListener('click', async()=>{
+            const btnText = btn.innerText
+            if(btnText == 'Retrive'){
+                const res = await fetchData(`/admin/list/${product._id}`, 'PUT')
+                if(res.ok) btn.innerText = 'Soft Delete'
+            } else {
+                const res = await fetchData(`/admin/unlist/${product._id}`, 'PUT')
+                if(res.ok) btn.innerText = 'Retrive'
+            }
+        })
+
         productContainer.appendChild(newDiv)
     })
 

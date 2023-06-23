@@ -309,7 +309,9 @@ const addProduct = async (req, res)=>{
 //method GET
 const getAllProducts = async (req, res)=>{
     try {
-        let options = JSON.parse(req.query.options)
+        let options = {}
+        if(req.query.options) options = JSON.parse(req.query.options)
+        console.log(options)
         const data = await ProductModel.find(options)
         res.status(200).json(data)
     } catch (err) {
@@ -325,18 +327,61 @@ const getProduct = async (req, res)=>{
     try {
         const {product_id} = req.params
         
-        const data = await ProductModel.findOne({_id: product_id})
+        const data = await ProductModel.findById(product_id)
         res.status(200).json(data)
     } catch (err) {
         res.status(500).send(err.message)
     }
 }
 
-//@des localhost:3000/admin/panel/products/edit/:productId
+//@des localhost:3000/admin/panel/products/edit/:product_id
 //method PUT
 const editProduct = async (req, res)=>{
-
+    try {
+        const {product_id} = req.params
+        const options = JSON.parse(req.body.jsonData)
+        const files = req.files
+        const filenames = files.map(file => file.originalname); // Extract filenames from files array
+        // const product_images = [...photoCollection_prev, ...filenames]
+        const product = await ProductModel.updateOne(
+            {_id: product_id},
+            options
+        )
+        console.log(product)
+        res.status(200).send("updated")
+    } catch (err) {
+        console.log(err.message)
+        res.status(500).send(err.message)
+    }
 }
+
+//@des localhost:3000/admin/list/:product_id
+//method PUT
+const listProduct = async (req, res)=>{
+    const product_id = req.params.product_id
+
+    await ProductModel.updateOne(
+        {_id: product_id},
+        {$set: {isDeleted: false}}
+    )
+
+    res.status(200).send("Listed")
+}
+
+
+//@des localhost:3000/admin/unlist/:product_id
+//method PUT
+const unlistProduct = async (req, res)=>{
+    const product_id = req.params.product_id
+
+    await ProductModel.updateOne(
+        {_id: product_id},
+        {$set: {isDeleted: true}}
+    )
+
+    res.status(200).send("Unlisted")
+}
+
 
 module.exports = {
     login,
@@ -351,5 +396,8 @@ module.exports = {
     logout,
     addProduct,
     getAllProducts,
-    getProduct
+    getProduct,
+    editProduct,
+    listProduct,
+    unlistProduct
 }

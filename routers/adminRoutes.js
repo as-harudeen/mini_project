@@ -8,7 +8,8 @@ const {
     editCategoryGET,
     userManagementGET,
     addProductGET,
-    productsGET
+    productsGET,
+    editProductGET
 } = require('../render/admin.render.js')
 const {
     login,
@@ -23,7 +24,10 @@ const {
     logout,
     addProduct,
     getAllProducts,
-    getProduct
+    getProduct,
+    editProduct,
+    listProduct,
+    unlistProduct
 } = require("../controllers/adminController.js")
 
 // const authenticate = require('../controllers/auth/adminAuth.js')
@@ -117,9 +121,9 @@ router
 
 //Edit Product
 router
-.route('/panel/products/edit_product/:product_id')
-.get()
-.put()
+.route('/panel/products/edit/:product_id')
+.get(editProductGET)
+.put(upload.array('photo'),editProduct)
 
 //Delete Product
 router
@@ -129,6 +133,18 @@ router
 
 //Get All product
 router.get('/get-products', getAllProducts)
+
+
+//Get All product
+router.get('/get-product/:product_id', getProduct)
+
+
+//list product
+router.put('/list/:product_id', listProduct)
+
+//unlist product
+router.put('/unlist/:product_id', unlistProduct)
+
 
 /**---------USER MANAGEMENTS-------------- */
 
