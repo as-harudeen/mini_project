@@ -1,3 +1,7 @@
+import fetchData from "../helper/fetchData.js"
+import { setSuccess, setError } from "../helper/setError&SetSuccess.js"
+
+
 const form = document.getElementById('form')
 const usernameInp = document.getElementById('username')
 const emailInp = document.getElementById('email')
@@ -15,7 +19,6 @@ const regEx = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[
 //For enable OTP buttons
 emailInp.addEventListener('keyup', async ()=>{
     verified = false
-    console.log("HIHIHI")
     if(regEx.test(emailInp.value.trim())){
         const response = await fetchData('get-user', 
         'POST', 
@@ -71,25 +74,6 @@ form.addEventListener('submit', async (e) => {
 })
 
 
-//Fetch 
-const fetchData = async (url, method, body) => {
-    const options = {
-      method,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    };
-  
-    if (method === 'POST') {
-      options.body = JSON.stringify(body);
-    }
-  
-    const response = await fetch(url, options);
-  
-    return response;
-  };
-
-
 
 //Validation
 const checkValid = (username, email, password, confirm_password)=>{
@@ -124,25 +108,6 @@ const checkValid = (username, email, password, confirm_password)=>{
     return NoErr
 }
 
-
-
-const setError = (element, message)=>{
-    const inputControl = element.parentElement
-    const errorDisplay = inputControl.querySelector('.err')
-
-    errorDisplay.innerHTML = message
-    inputControl.classList.add('err')
-    inputControl.classList.remove('success')
-}
-
-const setSuccess = (element)=>{
-    const inputControl = element.parentElement
-    const errorDisplay = inputControl.querySelector('.err')
-
-    errorDisplay.innerHTML = ''
-    inputControl.classList.add('success')
-    inputControl.classList.remove('err')
-}
 
 
 

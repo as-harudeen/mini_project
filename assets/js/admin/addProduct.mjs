@@ -62,7 +62,7 @@ fileInp.addEventListener('change', (e)=>{
         photoCollections.push(imgFiles[idx])
         const imgSrc = URL.createObjectURL(imgFiles[idx])
         const newDiv = document.createElement('div')
-        newDiv.classList.add('product-img', 'col-md-2')
+        newDiv.classList.add('p-img', 'col-md-2')
         newDiv.innerHTML = `<img src="${imgSrc}">`
         const deleteBtn = document.createElement('button')
         deleteBtn.classList.add('btn', 'btn-danger')

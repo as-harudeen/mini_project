@@ -27,7 +27,8 @@ const {
     getProduct,
     editProduct,
     listProduct,
-    unlistProduct
+    unlistProduct,
+    test
 } = require("../controllers/adminController.js")
 
 // const authenticate = require('../controllers/auth/adminAuth.js')
@@ -202,5 +203,10 @@ router
 router
 .route('/logout')
 .delete(logout)
+
+//Test
+router
+.route('/page')
+.get(test)
 
 module.exports = router;

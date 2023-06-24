@@ -4,13 +4,8 @@ const mongoose = require('mongoose')
 const CategoryModel = require('../models/categoryModel.js')
 const UserModel = require('../models/userModel.js')
 const ProductModel = require('../models/product.model.js')
-
-
-//creating multer storage
-const multer = require('multer')
-const { options } = require('../routers/userRoutes.js')
-
-
+const sharp = require('sharp')
+const fs = require('fs')
 
 
 // const redisClient = require('redis').createClient()
@@ -279,6 +274,17 @@ const addProduct = async (req, res)=>{
 
     try {
         const files = req.files
+
+
+        for(let file of files){
+            await sharp(file.path)
+            .resize(300, 300)
+            .toFile(`${file.path}-cropped`)
+
+            fs.unlinkSync(file.path)
+            fs.renameSync(`${file.path}-cropped`, file.path)
+        }
+
         console.log(files)
         if(!files) return res.status(400).send("no file")
 
@@ -383,6 +389,20 @@ const unlistProduct = async (req, res)=>{
 }
 
 
+
+//test
+const test = async (req, res) => {
+    const options = {
+       limit: 2,
+       skip: 2
+    };
+ 
+    const products = await ProductModel.find({}, null, options);
+    console.log(products)
+    res.send(products)
+ }
+ 
+
 module.exports = {
     login,
     addCategory,
@@ -399,5 +419,6 @@ module.exports = {
     getProduct,
     editProduct,
     listProduct,
-    unlistProduct
+    unlistProduct,
+    test
 }

@@ -1,0 +1,103 @@
+<%- include("../include/_header.ejs")%>
+    <div class="container-fluid p-0 " style="margin-top: 7%;">
+        <%- include("../include/navbar.ejs")%>
+            <section class="container my-5 pt-3 p-5">
+                <div class="row m-4">
+                    <div class="col-1 p-0"></div>
+                    <div class="left col-lg-7 col-md-7 col-12 d-flex p-0 justify-content-center">
+                        <div class="smal-img-group gap-3 d-flex flex-column ">
+                            <div class="smal-img-col">
+                                <img src="/public/img/<%= product.product_images[0] %>" width="90%" alt=""
+                                class="img-fluid smalImg">
+                        </div>
+                        <div class="smal-img-col">
+                            <img src="/public/img/<%= product.product_images[1] %>" width="90%" alt=""
+                            class="img-fluid smalImg">
+                        </div>
+                        <div class="smal-img-col">
+                            <img src="/public/img/<%= product.product_images[2] %>" width="90%" alt=""
+                            class="img-fluid smalImg">
+                        </div>
+                        <div class="smal-img-col">
+                            <img src="/public/img/<%= product.product_images[3] %>" width="90%" alt=""
+                            class="img-fluid smalImg">
+                        </div>
+                        <div class="smal-img-col">
+                            <img src="/public/img/<%= product.product_images[4] %>" width="90%" alt=""
+                            class="img-fluid smalImg">
+                        </div>
+                        </div>
+                        <div class="mian-img col-lg-10 col-md-12 col-12">
+                            <img class="img-fluid" width="85%" src="/public/img/<%= product.product_images[0]%>" alt=""
+                                id="zoom">
+                        </div>
+                    </div>
+                    <div class="right col-lg-4 col-md-4 col-12 gap-3 p-0">
+                        <h3 class="mt-2">
+                            <%= product.product_name %>
+                        </h3>
+                        <div>
+                            <img src="/assets/product/star.png" alt="" class="img-fluid">
+                            <img src="/assets/product/star.png" alt="" class="img-fluid">
+                            <img src="/assets/product/star.png" alt="" class="img-fluid">
+                            <img src="/assets/product/star.png" alt="" class="img-fluid">
+                            <img src="/assets/product/star.png" alt="" class="img-fluid">
+                            <span>(150 reviews) &nbsp;| &nbsp;<span class="text-success">Instock</span></span>
+                        </div>
+                        <h2 class="mt-2 d-flex">
+                            <span class="text-dark">
+                                <h2>₹ &nbsp; </h2>
+                            </span>
+                            <%= product.product_price %> &nbsp;&nbsp; <span class="text-success">
+                                    <h2>76% off</h2>
+                                </span>
+                        </h2>
+                        <div class="pt-2">
+                            <p class="text-Description">
+                                <%= product.product_des %>
+                            </p>
+                        </div>
+                        <div class="mt-4" style="width:95%">
+                            <hr class="line bg-dark">
+                        </div>
+                        <h5 class="pt-2">Colors:</h5>
+                        <% product.colors.forEach(color =>{ %>
+                            <div class="p_color"></div>
+                        <%}) %>
+                        <h5 class="pt-2">Size:</h5>
+                        <div class="d-flex p_Cart_Buy gap-4 pt-2">
+
+                        </div>
+                        <p class="text-success fw-bold mt-4 " id="CartSuccMsg"></p>
+                        <div class="pt-3">
+                            <div class="border border-dark p_Delivery_Border" style="max-width: 350px;">
+                                <div class="d-flex align-items-center p-3 gap-3">
+                                    <img class="img-fluid" src="/assets/product/icon-delivery.png" alt=""
+                                        style="width:40px">
+                                    <h6>Free Delivery</h6>
+                                </div>
+                                <hr class="p-0 m-0 bg-dark">
+                                <div class="d-flex align-items-center p-3 gap-3">
+                                    <img class="img-fluid" src="/assets/product/Icon-return.png" alt=""
+                                        style="width:40px">
+                                    <h6>Return Delivery</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="pt-5">
+                    <hr class="bg-dark m-0 p-0">
+                </div>
+                <h4 class="pt-4 px-5">Related Adds</h4>
+                <div class="row">
+
+                </div>
+    </div>
+    </section>
+    </div>
+    <script src="/zoom/zoom.js"></script>
+    <script src="/zoom/zoomsl.min.js"></script>
+    <script src="/js/P_Image.js"></script>
+
+    <%- include("../include/_footer.ejs")%>

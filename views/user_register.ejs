@@ -16,7 +16,7 @@
                         <%=locals.succ? succ:""%>
                      </div>
                   </div>
-                  <form id="form"  class="w-100" method="post" onsubmit="return allChecking()">
+                  <form id="form"  class="w-100" method="post">
                      <div class="signUpForm d-flex gap-3 mt-4 flex-column loginButton">
                         <!-- NAME -->
                         <div class="iput-control">
@@ -73,39 +73,4 @@
    </div>
    <%- include('./include/_footer') -%>
 
-
-
-   <!-- <script src="/js/validation.js"></script>
-
-<form method="post">
-    <div class="input-control">
-        <label for="username">Username</label>
-        <input type="text" name="username" id="username">
-        <p class="err"></p>
-    </div>
-    <div class="input-control">
-        <label for="credantial">Email</label>
-        <input type="text" name="email" id="email">
-        <button disabled type="button" id="send-otp">send OTP</button>
-        <p class="err"></p>
-    </div>
-    <div class="input-control">
-        <input type="number" name="otp" id="otp">
-        <p class="err"></p>
-        <button disabled type="button" id="verify-otp">Verify</button>
-        <button disabled id="resend-otp">Resend</button>
-    </div>
-    <div class="input-control">
-        <label for="password">Password</label>
-        <input type="password" name="password" id="password">
-        <p class="err"></p>
-    </div>
-    <div class="input-control">
-        <label for="confirm_password">Confirm password</label>
-        <input type="text" name="confirm_password" id="confirm_password">
-        <p class="err"></p>
-    </div>
-    <button type="submit">Register</button>
-</form>-->
-
-<script src="/js/user/register.js"></script> 
+<script type="module" src="/js/user/register.mjs"></script> 

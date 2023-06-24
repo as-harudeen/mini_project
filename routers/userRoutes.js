@@ -4,7 +4,6 @@ const {
     register,
     loginWithPass,
     getUser,
-    verifyUser,
     generateOTP,
     verifyOTP,
     loginWithOTP,
@@ -12,9 +11,12 @@ const {
 } = require('../controllers/userController.js')
 const {
     registerGET,
-    loginGET
+    loginGET,
+    productGET,
+    homeGET,
+    shopGET
 } = require('../render/user.render.js')
-
+const {verifyUser} = require('../midlewares/user.midleware.js')
 
 
 //Register
@@ -39,15 +41,13 @@ router
 //Home
 router
 .route('/')
-.get((req, res)=>{
-    res.send("Home")
-})
+.get(homeGET)
 
 
 //Products
 router
-.route('/products')
-.get()
+.route('/shop')
+.get(shopGET)
 
 //Produt details
 router
