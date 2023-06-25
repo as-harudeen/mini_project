@@ -12,19 +12,19 @@
                             </li>
                             <li class="dashOther p-1 ps-4 m-2">
                                 <!-- <img src="/assets/admin/d3.png" alt="" class="img-fluid me-2"> -->
-                                <span><a href="/admin/category" class="text-decoration-none"
+                                <span><a href="/admin/panel/category" class="text-decoration-none"
                                         style="color: #cdcdcd;">Category</a></span>
                             </li>
                             <li class="dashOther fw-bold p-1 ps-4 m-2">
                                 <!-- <img src="/assets/admin/d2.png" alt="" class="img-fluid me-2"> -->
                                 <span></span>
-                                <a href="/admin/productView" class="text-decoration-none"
+                                <a href="/admin/panel/products" class="text-decoration-none"
                                     style="color: #cdcdcd;">Product</a></span>
                             </li>
                             <li class="sideBarlist fw-bold p-1 ps-4 m-2">
                                 <!-- <img src="/assets/admin/d4.png" alt="" class="img-fluid me-2"> -->
                                 <span></span>
-                                <a href="/admin/coustomers" class="text-decoration-none"
+                                <a href="/admin/panel/user_management" class="text-decoration-none"
                                     style="color: #fff;">Coustomer</a></span>
                             </li>
                             <li class="dashOther fw-bold p-1 ps-4 m-2">
@@ -58,7 +58,7 @@
                                 <div class="container summary d-flex align-items-center justify-content-between p-4 "
                                     id="product">
                                     <h6 class="p-3 ps-4">Coustomers</h6>
-                                    <input type="text" placeholder="what are you looking for?" class="text-center">
+                                    <input id="search" type="text" placeholder="what are you looking for?" class="text-center">
                                 </div>
                             </div>
                             <!-- OTHRT PART -->
@@ -78,6 +78,12 @@
                                             </tbody>
                                         </table>
                                     </div>
+                                    <div class="pagenation d-flex justify-content-center">
+                                        <!-- <button class="btn page-btn btn-outline-dark">1</button>
+                                        <button class="btn page-btn">2</button>
+                                        <button class="btn page-btn">3</button>
+                                        <button class="btn page-btn">4</button> -->
+                                    </div>
                                 </div>
                             </div>
                             </div>
@@ -89,14 +95,8 @@
     </div>
 
 
-    
-    <button id="logout">logout</button>
-    <script type="module" src="/js/admin/category.mjs"></script>
+
     <script type="module" src="/js/admin/userManagement.mjs"></script>
 <%- include('./include/_adminFooter.ejs')%>
-
-<div class="users-container">
-
-</div>
 
 
