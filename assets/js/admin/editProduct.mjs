@@ -174,7 +174,7 @@ let photoCollections_curr = []
 //Building previous Images
 for(let img of product.product_images){
     const newDiv = document.createElement('div')
-    newDiv.classList.add('product-img', 'col-md-2')
+    newDiv.classList.add('p-img', 'col-md-2')
     newDiv.innerHTML = `<img src="/public/img/${img}">`
     const deleteBtn = document.createElement('button')
     deleteBtn.classList.add('btn', 'btn-danger')
