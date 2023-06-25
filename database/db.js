@@ -13,7 +13,7 @@ const connect = async ()=>{
 
 
 const getDb = async ()=>{
-    const db = await mongoose.connection.db()
+    const db = mongoose.connection
     return db
 }
 

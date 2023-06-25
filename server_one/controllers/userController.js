@@ -155,11 +155,13 @@ const getUser = async (req, res) => {
 //method GET
 
 const count = async (req, res)=>{
-    const collection = req.params
-    const db = connection.db()
+    const option = req.query.option ? JSON.parse(req.query.option) : {}
+    console.log(option)
+    const {collection} = req.params
+    const db = await getDb()
     try {
-        const count = await db.collection(collection)
-        res.status(200).send(count)
+        const count = await db.collection(collection).countDocuments(option)
+        res.status(200).send(String(count))
     } catch (err) {
         res.status(500).send(err.message)
     }
