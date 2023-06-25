@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 const otpGenerator = require('otp-generator');
 const jwt = require('jsonwebtoken')
 const {getDb} = require('../../database/db.js')
+const sendMail = require('../controllers/mailer.js')
 const env = process.env
 
 
@@ -51,11 +52,21 @@ const register = async(req, res)=>{
 */
 const loginWithPass = async (req, res)=>{
     try {
-        const {email, password} = req.body
-        if(!email || !password) return res.status(400).json({err: "email and password is mandatory"})
+        const {email, password, OTP} = req.body
+        if(!password && !OTP) return res.status(400).json({err: "OTP or password is mandatory"})
         const user = await UserModel.findOne({email})
-        const compare = await bcrypt.compare(password, user.password)
-        if(!compare)return res.status(400).json({err: "Incorrect password"})
+
+        let OTPVerified = false
+        let compare = false
+        if(OTP){
+            OTPVerified = OTP == req.app.locals.OTP
+        } else {
+            compare = await bcrypt.compare(password, user.password)
+        }
+
+
+
+        if(!OTPVerified && !compare)return res.status(400).json({err: "Incorrect password and OTP"})
 
 
         const token = jwt.sign({
@@ -66,36 +77,12 @@ const loginWithPass = async (req, res)=>{
         res.cookie('userToken', token)
         res.status(200).send(token)
     } catch (err) {
+        console.log("HIHIHIIIHHIHH")
         console.log(err.message)
         return res.status(500).json("Internal error")
     }
 }
 
-//@des http:localhost:3000/api/login-otp
-//@method POST
-/*
-{
-    credantial: 'achucoading@gmail.com',
-    password: 'achubsl',
-}
-*/
-const loginWithOTP = async (req, res)=>{
-    try {
-        const {email} = req.body
-        if(!req.app.locals.OTPVerified) return res.status(400).send("OTP not verified..")
-        const user = await UserModel.findOne({email})
-
-        const token = jwt.sign({
-            userId: user._id,
-            userName: user.username,
-        }, env.SECRET, {expiresIn: '24h'})
-
-        res.cookie('userToken', token)
-        res.status(200).send(token)
-    } catch (err) {
-        return res.status(500).send("Internal error")
-    }
-}
 
 //Get user data
 //@des localhost:3000/api/get-user
@@ -115,17 +102,22 @@ const getUser = async (req, res) => {
 
 
   //Generate OTP
-  //@des localhost:3000/api/generate-otp
+  //@des localhost:3000/api/generate-otp/:email
   //method get
-  const generateOTP = (req, res)=>{
+  const generateOTP = async (req, res)=>{
+
+    const {email} = req.params
+
     req.app.locals.OTP = otpGenerator.generate(6, {
         lowerCaseAlphabets: false, 
         upperCaseAlphabets: false, 
         specialChars: false   
       })
+
+      await sendMail("Email Verification", `Your OTP is ${req.app.locals.OTP}`, email)
     
       setTimeout(()=> req.app.locals.OTP = '', 60000)
-      res.status(201).send({OTP: req.app.locals.OTP})
+      res.status(201).send("OTP Sended")
   }
 
   
@@ -205,7 +197,6 @@ module.exports = {
     getUser,
     generateOTP,
     verifyOTP,
-    loginWithOTP,
     count,
     red
 }
