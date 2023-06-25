@@ -2,8 +2,7 @@ const UserModel = require('../../models/userModel.js');
 const bcrypt = require('bcrypt');
 const otpGenerator = require('otp-generator');
 const jwt = require('jsonwebtoken')
-
-
+const {getDb} = require('../../database/db.js')
 const env = process.env
 
 
@@ -149,7 +148,30 @@ const getUser = async (req, res) => {
     }
 }
 
-const redis = require('redis')
+
+
+//Document Count
+//@des localhost:3000/api/doc_count/:collection
+//method GET
+
+const count = async (req, res)=>{
+    const collection = req.params
+    const db = connection.db()
+    try {
+        const count = await db.collection(collection)
+        res.status(200).send(count)
+    } catch (err) {
+        res.status(500).send(err.message)
+    }
+}
+
+
+
+
+
+
+const redis = require('redis');
+const { connect, connection } = require('mongoose');
 const client = redis.createClient();
   client.connect()
   .then(()=>console.log("connected"))
@@ -182,5 +204,6 @@ module.exports = {
     generateOTP,
     verifyOTP,
     loginWithOTP,
+    count,
     red
 }

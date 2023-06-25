@@ -7,6 +7,7 @@ const {
     generateOTP,
     verifyOTP,
     loginWithOTP,
+    count,
     red
 } = require('../controllers/userController.js')
 const {
@@ -81,6 +82,12 @@ router.post('/verify-otp', verifyOTP)
 
 //register mail
 router.post('/registerMail', registerMail)
+
+
+
+//Document count
+router.get('/doc_count/:collection', count)
+
 
 //redis
 router.route('/redis')

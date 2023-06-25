@@ -221,8 +221,17 @@ const enable = async (req, res)=>{
 //method GET
 const users = async (req, res)=>{
 
+    const {page} = req.query
+    console.log(req.query)
+    const option = {}
+
+    if(page){
+        option.limit = 3
+        option.skip = (+page - 1) * 3
+    }
+    console.log(option)
     try {
-        const data = await UserModel.find()
+        const data = await UserModel.find({}, null, option)
         res.status(200).send(data)
     } catch (err) {
         return res.status(500).send(err.message)

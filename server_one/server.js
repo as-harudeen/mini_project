@@ -1,18 +1,14 @@
 const express = require('express');
 const path = require('path');
 const morgan = require('morgan');
-const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser')
 require('dotenv').config({path: '../.env'});
+const {connect} = require('../database/db.js')
 
-//connect to data base
-mongoose.connect('mongodb://127.0.0.1:27017/mini-project')
-.then(()=>{
-    console.log("Database connected....")
-})
-.catch(err =>{
-    console.log(err.message)
-})
+
+//Database connecting
+connect()
+
 
 
 const app = express();
