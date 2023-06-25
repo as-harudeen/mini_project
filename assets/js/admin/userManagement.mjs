@@ -7,19 +7,31 @@ const limit = 3
 
 //pagenation
 const pagenation = document.querySelector('.pagenation')
+let pagenationBtns
 
 const pagenationBtnEventHandler = ()=>{
-    const pagenationBtns = pagenation.querySelectorAll('.page-btn')
+    pagenationBtns = pagenation.querySelectorAll('.page-btn')
     for(let btn of pagenationBtns){
         btn.addEventListener('click', ()=>{
             const prevBtn = pagenation.querySelector('.btn-outline-dark')
             prevBtn.classList.remove('btn-outline-dark')
             btn.classList.add('btn-outline-dark')
+
+            const prev_btn = pagenation.querySelector('#prev-btn')
+            const next_btn = pagenation.querySelector('#next-btn')
+            // const btnNum = 
+
+            if(btn.innerText == 1) prev_btn.disabled = true
+            else prev_btn.disabled = false
+            if(btn.innerText == pagenationBtns.length) next_btn.disabled = true
+            else next_btn.disabled = false
             fetch(+btn.innerText)
         })
     }
 }
-pagenationBtnEventHandler()
+
+
+
 
 
 //SEARCH
@@ -38,26 +50,40 @@ const searchInpEventHandler = async ()=>{
     const res = await fetchData(`/api/doc_count/users?option=${JSON.stringify(option)}`, 'GET')
     const count = await res.json()
 
-    if(!count) pagenation.innerHTML = ''
+    if(!count){
+        fetch()
+        pagenation.innerHTML = ''
+    } 
     else {
         //adding first page button (selected)
         pagenation.innerHTML = `
+        <button id="prev-btn" class="btn btn-dark" disabled>Prev</button>
         <button class="btn page-btn btn-outline-dark">1</button>
         `
         //adding rest of pages button
         for(let n = 1; n < Math.ceil(count / limit); n++){
             pagenation.innerHTML += `<button class="btn page-btn">${n + 1}</button>`
         }
+
+        pagenation.innerHTML += '<button id="next-btn" class="btn btn-dark">Next</button>'
     
         fetch()
         pagenationBtnEventHandler()
+        pagenation.querySelector('#prev-btn').addEventListener('click', ()=>{
+            const currBtn = pagenation.querySelector('.btn-outline-dark').innerText
+            console.log(currBtn)
+            pagenationBtns[+currBtn - 2].click()
+        })
+
+        pagenation.querySelector('#next-btn').addEventListener('click', ()=>{
+            const currBtn = pagenation.querySelector('.btn-outline-dark').innerText
+            console.log(currBtn)
+            pagenationBtns[+currBtn].click()
+        })
     }
 }
 searchInpEventHandler() //To build pagenation buttons
-
 searchInp.addEventListener('input', searchInpEventHandler)
-
-
 
 
 
