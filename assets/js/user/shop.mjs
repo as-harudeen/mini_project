@@ -28,7 +28,7 @@ categoryContainers.forEach(function(container) {
 let checkedSubCate = []
 const checkBoxes = document.querySelectorAll('.sub-check')
 
-for(let checkbox of checkBoxes){
+for(let checkbox of checkBoxes){//Sub category filtering
     console.log(checkbox.value)
     checkbox.addEventListener("change", ()=>{
         if(checkbox.checked) checkedSubCate.push(checkbox.value)
@@ -43,6 +43,14 @@ for(let checkbox of checkBoxes){
 
 
 const sortInp = document.getElementById('sortSelect')
+let sort = {}
+
+
+sortInp.addEventListener('change', ()=>{
+    sort = sortBy()
+    fetchProducts()
+})
+
 
 function sortBy (){
     const sortInpVal = sortInp.value
@@ -57,7 +65,6 @@ function sortBy (){
 const fetchProducts = async ()=>{
     
     let url = 'http://localhost:5000/get-products'
-    const sort = sortBy()
     const option = {}
     if(checkedSubCate.length) option.sub_category = {$in: checkedSubCate}
 
