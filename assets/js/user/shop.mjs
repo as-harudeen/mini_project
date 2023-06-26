@@ -1,4 +1,3 @@
-
 import fetchData from '../helper/fetchData.js'
 
 
@@ -41,7 +40,7 @@ for(let checkbox of checkBoxes){//Sub category filtering
 
 
 
-
+//Sort filter
 const sortInp = document.getElementById('sortSelect')
 let sort = {}
 
@@ -61,12 +60,26 @@ function sortBy (){
 }
 
 
+//Serching
+const searchInp = document.querySelector('.search')
+let searchVal = ''
+
+
+searchInp.addEventListener('keyup', ()=>{
+    
+    searchVal = searchInp.value.trim()
+    fetchProducts()
+
+})
+
 
 const fetchProducts = async ()=>{
     
     let url = 'http://localhost:5000/get-products'
     const option = {}
     if(checkedSubCate.length) option.sub_category = {$in: checkedSubCate}
+    //Adding new key to option if there is someting on searchbar
+    if(searchVal) option.product_name = {$regex: `^${searchVal}`, $options: 'i'}
 
 
     url += `?option=${JSON.stringify(option)}`//adding option query
