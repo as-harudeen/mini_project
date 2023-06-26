@@ -64,12 +64,15 @@ function sortBy (){
 const searchInp = document.querySelector('.search')
 let searchVal = ''
 
-
+let typingTimer
 searchInp.addEventListener('keyup', ()=>{
-    
-    searchVal = searchInp.value.trim()
-    fetchProducts()
 
+    clearTimeout(typingTimer)
+
+    typingTimer = setTimeout(()=>{
+        searchVal = searchInp.value.trim()
+        fetchProducts()
+    }, 1500)
 })
 
 
