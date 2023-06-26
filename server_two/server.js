@@ -1,9 +1,19 @@
 const express = require('express')
-const router = express.Router()
+const app = express()
+require('dotenv').config({path: '../.env'})
+const {connect} = require('../database/db.js')
+const cors = require('cors')
+
+const port = process.env.SECOND_PORT || 5001
+
+connect()
 
 
-router
-.route('/wisilist/add/:product_id')
-.put()
+app.use(cors())
 
-module.exports = router
+app.use('/', require('./routes/user.route.js'))
+
+
+
+
+app.listen(port, ()=> console.log(`Server is running on ${port}`))

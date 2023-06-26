@@ -80,6 +80,12 @@ router.post('/verify-otp', verifyOTP)
 router.get('/doc_count/:collection', count)
 
 
+router.get('/test', (req, res)=>{
+    console.log("HIHIHIIIHIHIIHIHIHIHIH")
+    res.send("OKNIIII")
+})
+
+
 //redis
 router.route('/redis')
 .get(red)

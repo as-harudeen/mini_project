@@ -4,6 +4,7 @@ const morgan = require('morgan');
 const cookieParser = require('cookie-parser')
 require('dotenv').config({path: '../.env'});
 const {connect} = require('../database/db.js')
+const cors = require('cors')
 
 
 //Database connecting
@@ -17,6 +18,8 @@ const port = process.env.PORT || 3001;
 //Using parse midleware
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
+// app.use(cors())
+
 
 //Using midlewares
 app.use(morgan('tiny'))

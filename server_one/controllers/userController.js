@@ -148,7 +148,6 @@ const getUser = async (req, res) => {
 
 const count = async (req, res)=>{
     const option = req.query.option ? JSON.parse(req.query.option) : {}
-    console.log(option)
     const {collection} = req.params
     const db = await getDb()
     try {
