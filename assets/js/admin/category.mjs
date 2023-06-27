@@ -2,7 +2,7 @@ import fetchData from "../helper/fetchData.js";
 
 
 const categoriesContiner = document.querySelector('.categories-container');
-const logoutBtn = document.getElementById('logout')
+const searchInp = document.getElementById('search')
 
 
 function subCatBtnClickHandler(categoryName, subcategoryName, button) {
@@ -27,12 +27,21 @@ function subCatBtnClickHandler(categoryName, subcategoryName, button) {
 
 //Building ui
 const fetch =  async ()=>{
-    const response = await fetchData('/admin/get-category', 'GET')
+    let url = '/admin/get-category'
+    if(searchInp.value.trim()){
+      let option = {category_name: {$regex: `^${searchInp.value.trim()}`,$options: 'i'}}
+
+      url += `?option=${JSON.stringify(option)}`
+    }
+    
+    const response = await fetchData(url, 'GET')
     const data = await response.json()
 
         const categories = document.getElementById('categories')
         const newDiv = document.createElement('div')
-        
+
+        categories.innerHTML = ''
+
         for(let ctr of data){
           const categoryDiv = document.createElement('div')
           categoryDiv.classList.add('mb-4')
@@ -115,9 +124,6 @@ const fetch =  async ()=>{
         }                    
 
          table.appendChild(tbody)
-
-
-
         
         newDiv.appendChild(categoryDiv)
         }
@@ -127,8 +133,19 @@ const fetch =  async ()=>{
 fetch()
 
 
-logoutBtn.addEventListener('click', async()=>{
-  const res = await fetchData('/admin/logout', 'DELETE')
-  if(res.ok) window.location.href = '/admin/login'
+
+
+
+let typeTimer
+searchInp.addEventListener("keyup", ()=>{
+  clearTimeout(typeTimer)
+
+  typeTimer = setTimeout(fetch, 1000)
 })
 
+
+const logout = document.getElementById('logout')
+logout.addEventListener('click', async ()=>{
+    const res = await fetchData('/admin/logout', 'DELETE')
+    if(res.ok) window.location.href = '/admin/login'
+})

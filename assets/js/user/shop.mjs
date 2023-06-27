@@ -13,7 +13,7 @@ function buildProducts (products){
         <div class="container bg-white ProductCard m-2 mx-4"
         data-category-id="${product._id}">
         <!-- image rendering  -->
-        <a href="/detaildView/${product._id}">
+        <a href="/api/products/${product._id}">
             <div class="cardImage mb-2 d-flex align-items-center justify-content-center">
                 <img src="/public/img/${product.product_images[0]}" alt="Product Image">
             </div>
@@ -80,6 +80,7 @@ for(let checkbox of checkBoxes){//Adding eventListner to every subcategory check
         else {
             checkedSubCate = checkedSubCate.filter(sub => sub != checkbox.value)
         }
+        rebuildPaginationBtn = true
         fetchProducts() //Once event emit refetch and showing
     })
 }
@@ -117,12 +118,15 @@ searchInp.addEventListener('keyup', ()=>{
     //By using this it will reduce the ammount of fetching
     typingTimer = setTimeout(()=>{
         searchVal = searchInp.value.trim()
+        rebuildPaginationBtn = true
         fetchProducts()
     }, 1500)
 })
 
 
 const limit = 3
+let rebuildPaginationBtn = true //for build first pagination buttons
+
 
 //fetching products with condition
 const fetchProducts = async (page = 1)=>{
@@ -147,7 +151,11 @@ const fetchProducts = async (page = 1)=>{
     const products = await response.json()
 
     buildProducts(products)
-    btnsCount(option)//build pagenation button
+    if(rebuildPaginationBtn) {
+        console.log("rebuilding")
+        rebuildPaginationBtn = false
+        btnsCount(option)//build pagenation button
+    }
 }
 
 fetchProducts()//For building first Time
@@ -192,8 +200,9 @@ let btns
 let selectedBtn
 
 function paginationBtnEventHandler(){
-    
+
     btns = paginationContainer.querySelectorAll('.page-btn')
+    selectedBtn = paginationContainer.querySelector(".btn-outline-dark")
     
     for(let btn of btns){
         btn.addEventListener('click', ()=>{
@@ -201,8 +210,8 @@ function paginationBtnEventHandler(){
             selectedBtn.classList.remove(className)
             btn.classList.add(className)
             selectedBtn = btn
-            prevAndNextDisableHandler()
             fetchProducts(+btn.value)
+            prevAndNextDisableHandler()
         })
     }
 }
@@ -212,9 +221,6 @@ let prev_btn
 let next_btn 
 
 function prevAndNextDisableHandler (){
-    
-    selectedBtn = paginationContainer.querySelector(".btn-outline-dark")
-
     if(selectedBtn.value == 1) prev_btn.disabled = true
     else prev_btn.disabled = false
     if(selectedBtn.value == btns.length) next_btn.disabled = true

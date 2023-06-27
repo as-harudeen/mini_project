@@ -119,3 +119,13 @@ subCategoryInp.addEventListener('keypress', (e) => {
         subCategoryInp.value = ''
     }
 });
+
+
+
+
+
+const logout = document.getElementById('logout')
+logout.addEventListener('click', async ()=>{
+    const res = await fetchData('/admin/logout', 'DELETE')
+    if(res.ok) window.location.href = '/admin/login'
+})

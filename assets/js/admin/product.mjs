@@ -16,9 +16,16 @@ filterInp.addEventListener('change', ()=>{
 const searchInp = document.getElementById('search')
 
 let searchVal 
+let typeTimer
 searchInp.addEventListener('keyup', ()=>{
-    searchVal = searchInp.value.trim()
-    build()
+
+    clearTimeout(typeTimer)
+
+    typeTimer = setTimeout(()=>{
+        searchVal = searchInp.value.trim()
+        build()
+    }, 1000)
+
 })
 
 
@@ -73,3 +80,11 @@ async function build(){
 
 }
 build()
+
+
+
+const logout = document.getElementById('logout')
+logout.addEventListener('click', async ()=>{
+    const res = await fetchData('/admin/logout', 'DELETE')
+    if(res.ok) window.location.href = '/admin/login'
+})

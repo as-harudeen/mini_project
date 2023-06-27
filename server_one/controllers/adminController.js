@@ -101,33 +101,16 @@ const addCategory = async (req, res)=>{
 //@des http:localhost:3000/admin/get-category
 //@method GET
 const getCategory = async (req, res)=>{
-    const {category_name} = req.query
-    console.log(category_name)
-    // const oneCategory = await redisClient.hGet('categories', category_name)
-    // if(oneCategory) return {category_name, subCategories: JSON.parse(oneCategory)}
-    
-    
-    // if(!category_name){
-    //     const allCategory = await redisClient.HGETALL('categories')
-    //     if(allCategory){
-    //         const data = []
-    //         for(let key in allCategory){
-    //             const subCate = await redisClient.hGet('categories', key)
-    //             data.push({category_name: key, subCategories: JSON.parse(subCate)})
-    //         }
-    //         // console.log(data, 'from redis')
-    //         return res.send(data)
-    //     }
-    // }
 
-    // if(!req.user) return res.status(400).send({msg: 'no token'})
+    let condition = {}
+    const {category_name} = req.query
+    if(req.query.option) condition = JSON.parse(req.query.option)
+    else if(category_name) condition.category_name = category_name
+
     try {
-        const condition = {}
-        if(category_name) condition.category_name = category_name
         const category = await CategoryModel.find(condition)
         if(category_name && !category) return res.status(400).send("Category not exist")
 
-        // categoryChaching('categories', category)
         res.status(200).send(category)
     } catch (err) {
         console.log(err.message)

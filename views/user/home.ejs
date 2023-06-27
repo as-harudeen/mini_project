@@ -51,7 +51,7 @@
 
                 <!-- view product -->
                 <div class="container d-flex p-3  justify-content-between ">
-                    <div class="textHeading fw-bold fs-4">Latest Women Wearing</div>
+                    <div class="textHeading fw-bold fs-4">Latest men Wearing</div>
                     <form action="/Shop" method="get">
                         <button class="productviewButton">view all products</button>
                     </form>
@@ -66,7 +66,7 @@
                             <div class="product-card">
                                 <div class="product-image">
                                     <span class="discount-tag">50% off</span><!--Product off-->
-                                    <a href="/detaildView/<%= data._id%>">
+                                    <a href="/api/products/<%= data._id%>">
                                         <img src="/public/img/<%=data.product_images[0] %>" class="product-thumb" alt="">
                                     </a>
                                     <button class="card-btn">add to wishlist</button>
@@ -97,7 +97,7 @@
 
                 <!-- view Accessory -->
                 <div class="container d-flex p-3  justify-content-between ">
-                    <div class="textHeading fw-bold fs-4">Latest Women Accessory</div>
+                    <div class="textHeading fw-bold fs-4">Latest Men Accessory</div>
                     <button class="productviewButton">view all products</button>
                 </div>
 
@@ -110,7 +110,7 @@
                             <div class="product-card">
                                 <div class="product-image">
                                     <span class="discount-tag">50% off</span>
-                                    <a href="/detaildView/<%= data._id%>">
+                                    <a href="/api/products/<%= data._id%>">
                                         <img src="/public/img/<%=data.product_images[0] %>" class="product-thumb" alt="">
                                     </a>
                                     <button class="card-btn">add to wishlist</button>

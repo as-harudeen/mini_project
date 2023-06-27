@@ -12,13 +12,21 @@ const loginGET = (req, res)=>{
     res.status(200).render('user_login')
 }
 
-//@des http:local:3000/api/
+//@des http:local:3000/api/products
 const productGET = async (req, res)=>{
     const product = await ProductModel.findOne()
     const user = await UserModel.findOne()
     res.render('user/productView', {product})
 
 }
+
+//@des http:localhost:3000/api/products/:product_id
+const productDetailGET = async (req, res)=>{
+    const {product_id} = req.params
+    const product = await ProductModel.findById(product_id)
+    res.status(200).render('user/productView', {product})
+}
+
 
 //@des http:local:3000/api/
 const homeGET = async (req, res)=>{
@@ -41,5 +49,6 @@ module.exports = {
     loginGET,
     productGET,
     homeGET,
-    shopGET
+    shopGET,
+    productDetailGET
 }

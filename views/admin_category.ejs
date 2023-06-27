@@ -44,7 +44,7 @@
                                 <span></span>
                                 <a href="#" class="text-decoration-none" style="color: #cdcdcd;">Banner</a></span>
                             </li>
-                            <li class="dashOther fw-bold p-1 ps-4 m-2">
+                            <li id="logout" class="dashOther fw-bold p-1 ps-4 m-2">
                                 <!-- <img src="/assets/admin/d6.png" alt="" class="img-fluid me-2"> -->
                                 <span></span>
                                 <a href="" class="text-decoration-none" style="color: #cdcdcd;">Logout</a></span>
@@ -52,7 +52,7 @@
                         </ul>
                     </div>
                     <div class=" container col-md-9  p-0 m-0">
-                        <div id="categories" class="container-fluid p-0 m-0">
+                        <div class="container-fluid p-0 m-0">
                             <!-- SEARCH -->
                             <div class="container-fluid saleTop bg-white d-flex align-items-center mb-3">
                                 <div class="container summary d-flex align-items-center justify-content-between p-4 "
@@ -64,7 +64,7 @@
                             </div>
                             <!-- OTHRT PART -->
                             <a class="btn" href="/admin/panel/category/add"></a>
-
+                            <div id="categories"></div>
 
                             </div>
                         </div>
@@ -75,8 +75,6 @@
     </div>
 
 
-    
-    <button id="logout">logout</button>
     <script type="module" src="/js/admin/category.mjs"></script>
     <%- include('./include/_adminFooter.ejs')%>
 

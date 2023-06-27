@@ -62,11 +62,13 @@
                         </div>
                         <h5 class="pt-2">Colors:</h5>
                         <% product.colors.forEach(color =>{ %>
-                            <div class="p_color"></div>
+                            <div class="p_color" style="background-color: <%= color %>;"></div>
                         <%}) %>
                         <h5 class="pt-2">Size:</h5>
                         <div class="d-flex p_Cart_Buy gap-4 pt-2">
-
+                            <% product.sizes.forEach(size =>{%>
+                                <div><%= size %></div>
+                            <%})%>
                         </div>
                         <p class="text-success fw-bold mt-4 " id="CartSuccMsg"></p>
                         <div class="pt-3">

@@ -83,7 +83,13 @@ const searchInpEventHandler = async ()=>{
     }
 }
 searchInpEventHandler() //To build pagenation buttons
-searchInp.addEventListener('input', searchInpEventHandler)
+
+let typingTimer
+searchInp.addEventListener('keyup', ()=>{
+    clearTimeout(typingTimer)
+
+    typingTimer = setTimeout(searchInpEventHandler, 1000)
+})
 
 
 
@@ -131,3 +137,11 @@ const fetch = async(page = 1)=>{
 }
 
 fetch()
+
+
+
+const logout = document.getElementById('logout')
+logout.addEventListener('click', async ()=>{
+    const res = await fetchData('/admin/logout', 'DELETE')
+    if(res.ok) window.location.href = '/admin/login'
+})

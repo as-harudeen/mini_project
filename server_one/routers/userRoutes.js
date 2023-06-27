@@ -14,7 +14,8 @@ const {
     loginGET,
     productGET,
     homeGET,
-    shopGET
+    shopGET,
+    productDetailGET
 } = require('../render/user.render.js')
 const {verifyUser} = require('../midlewares/user.midleware.js')
 
@@ -48,7 +49,7 @@ router
 //Produt details
 router
 .route('/products/:product_id')
-.get()
+.get(productDetailGET)
 
 //Cart
 router

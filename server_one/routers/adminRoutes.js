@@ -31,7 +31,7 @@ const {
     test
 } = require("../controllers/adminController.js")
 
-// const authenticate = require('../controllers/auth/adminAuth.js')
+const authenticate = require('../controllers/auth/adminAuth.js')
 
 
 router.use((req, res, next)=>{
@@ -44,7 +44,7 @@ router.use((req, res, next)=>{
 //multer
 const storage = multer.diskStorage({
     destination: (req, file, cb)=>{
-        cb(null, 'assets/public/img')
+        cb(null, '../assets/public/img')
     },
     filename: (req, file, cb)=>{
         cb(null, file.originalname)
@@ -62,7 +62,7 @@ router
 .post(login)
 
 
-// router.use(authenticate)
+router.use(authenticate)
 
 
 //Admin panel
