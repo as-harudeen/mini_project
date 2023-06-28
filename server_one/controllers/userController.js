@@ -77,7 +77,6 @@ const loginWithPass = async (req, res)=>{
         res.cookie('userToken', token)
         res.status(200).send(token)
     } catch (err) {
-        console.log("HIHIHIIIHHIHH")
         console.log(err.message)
         return res.status(500).json("Internal error")
     }

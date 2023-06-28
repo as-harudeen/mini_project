@@ -31,7 +31,7 @@ const {
     test
 } = require("../controllers/adminController.js")
 
-const authenticate = require('../controllers/auth/adminAuth.js')
+const authenticate = require('../middlewares/auth/adminAuth.js')
 
 
 router.use((req, res, next)=>{

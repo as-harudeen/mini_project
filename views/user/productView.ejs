@@ -33,15 +33,15 @@
                         </div>
                     </div>
                     <div class="right col-lg-4 col-md-4 col-12 gap-3 p-0">
-                        <h3 class="mt-2">
+                        <h3 id="product" data-value="<%= product._id %>" class="mt-2">
                             <%= product.product_name %>
                         </h3>
                         <div>
-                            <img src="/assets/product/star.png" alt="" class="img-fluid">
-                            <img src="/assets/product/star.png" alt="" class="img-fluid">
-                            <img src="/assets/product/star.png" alt="" class="img-fluid">
-                            <img src="/assets/product/star.png" alt="" class="img-fluid">
-                            <img src="/assets/product/star.png" alt="" class="img-fluid">
+                            <img src="/public/product/star.png" alt="" class="img-fluid">
+                            <img src="/public/product/star.png" alt="" class="img-fluid">
+                            <img src="/public/product/star.png" alt="" class="img-fluid">
+                            <img src="/public/product/star.png" alt="" class="img-fluid">
+                            <img src="/public/product/star.png" alt="" class="img-fluid">
                             <span>(150 reviews) &nbsp;| &nbsp;<span class="text-success">Instock</span></span>
                         </div>
                         <h2 class="mt-2 d-flex">
@@ -62,26 +62,26 @@
                         </div>
                         <h5 class="pt-2">Colors:</h5>
                         <% product.colors.forEach(color =>{ %>
-                            <div class="p_color" style="background-color: <%= color %>;"></div>
+                            <div data-value="<%= color %>" class="p_color" style="background-color: <%= color %>;"></div>
                         <%}) %>
                         <h5 class="pt-2">Size:</h5>
                         <div class="d-flex p_Cart_Buy gap-4 pt-2">
                             <% product.sizes.forEach(size =>{%>
-                                <div><%= size %></div>
+                                <div data-value="<%= size %>" class="p_size"><%= size %></div>
                             <%})%>
                         </div>
                         <p class="text-success fw-bold mt-4 " id="CartSuccMsg"></p>
                         <div class="pt-3">
-                            <div class="border border-dark p_Delivery_Border" style="max-width: 350px;">
-                                <div class="d-flex align-items-center p-3 gap-3">
-                                    <img class="img-fluid" src="/assets/product/icon-delivery.png" alt=""
-                                        style="width:40px">
-                                    <h6>Free Delivery</h6>
+                            <div class="border border-dark" style="max-width: 350px;">
+                                <div class="d-flex align-items-center p-3 gap-3" id="add_to_cart">
+                                    <!-- <img class="img-fluid" src="/assets/product/icon-delivery.png" alt="" -->
+                                        <!-- style="width:40px"> -->
+                                    <h6>Add to cart</h6>
                                 </div>
                                 <hr class="p-0 m-0 bg-dark">
                                 <div class="d-flex align-items-center p-3 gap-3">
-                                    <img class="img-fluid" src="/assets/product/Icon-return.png" alt=""
-                                        style="width:40px">
+                                    <!-- <img class="img-fluid" src="/assets/product/Icon-return.png" alt="" -->
+                                        <!-- style="width:40px"> -->
                                     <h6>Return Delivery</h6>
                                 </div>
                             </div>
@@ -98,8 +98,10 @@
     </div>
     </section>
     </div>
-    <script src="/zoom/zoom.js"></script>
-    <script src="/zoom/zoomsl.min.js"></script>
-    <script src="/js/P_Image.js"></script>
+    <!-- <script src="/zoom/zoom.js"></script> -->
+    <!-- <script src="/zoom/zoomsl.min.js"></script> -->
+    <!-- <script src="/js/P_Image.js"></script> -->
+    <script type="module" src="/js/user/productDetails.mjs"></script>
+
 
     <%- include("../include/_footer.ejs")%>

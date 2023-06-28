@@ -17,7 +17,7 @@ const {
     shopGET,
     productDetailGET
 } = require('../render/user.render.js')
-const {verifyUser} = require('../midlewares/user.midleware.js')
+const {verifyUser} = require('../middlewares/user.midleware.js')
 
 
 //Register
@@ -27,7 +27,7 @@ router
 .post(register)
 
 
-//Login with OTP
+//Login 
 router
 .route('/login')
 .get(loginGET)

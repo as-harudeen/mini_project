@@ -18,6 +18,8 @@ const getProduct = async(req, res)=>{
 }
 
 
+//localhost:5000/update_user/
+
 module.exports = {
     getProduct
 }

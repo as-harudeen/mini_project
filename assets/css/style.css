@@ -1401,3 +1401,16 @@ border-radius: 14px;
   right: 8px;
 }
 
+
+
+.selected_color {
+  border: 1px solid white;
+  transform: scale(1.4);
+  transition: transform 1s ease;
+}
+
+
+.selected_size {
+  transform: scale(1.4);
+  border-radius: 2px solid black;
+}

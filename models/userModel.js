@@ -1,5 +1,21 @@
 const mongoose = require('mongoose');
 
+const cartSchema = new mongoose.Schema({
+  product_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true
+  },
+  color: {
+    type: String,
+    required: true
+  },
+  size: {
+    type: String,
+    required: true
+  }
+})
+
+
 const userSchema = new mongoose.Schema({
   username: {
     type: String,
@@ -12,6 +28,9 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true
+  },
+  cart: {
+    type: [cartSchema]
   },
   isBlocked: {
     type: Boolean
