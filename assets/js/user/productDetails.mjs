@@ -1,3 +1,6 @@
+import fetchData from '../helper/fetchData.js'
+
+
 //Seting initial stage
 const colors = document.querySelectorAll('.p_color')
 colors[0].classList.add('selected_color')
@@ -37,3 +40,18 @@ addToCart.addEventListener('click', ()=>{
 
 
 const product_id = document.getElementById('product').dataset.value
+
+//Checking.. if this product already exist in cart or not
+// function isExistInCart (){
+//     let url = 'http://localhost:5000'
+// } 
+
+const cart = {}
+
+const fetchCartData = async ()=>{
+    const res = await fetchData(`http://localhost:5000/cart/${product_id}`, 'GET')
+    const data = await res.json()
+    
+    console.log(data)
+}
+fetchCartData()

@@ -15,10 +15,11 @@ const {
     productGET,
     homeGET,
     shopGET,
-    productDetailGET
+    productDetailGET,
+    cartGET
 } = require('../render/user.render.js')
 const {verifyUser} = require('../middlewares/user.midleware.js')
-
+const authenticateUser = require('../middlewares/auth/userAuth.js')
 
 //Register
 router
@@ -51,9 +52,13 @@ router
 .route('/products/:product_id')
 .get(productDetailGET)
 
+
+router.use(authenticateUser)
+
 //Cart
 router
 .route('/cart')
+.get(cartGET)
 
 
 //Checkout

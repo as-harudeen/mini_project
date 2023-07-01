@@ -43,6 +43,13 @@ const shopGET = async (req, res)=>{
 }
 
 
+//@des http:localhost:3000/api/cart
+const cartGET = async (req, res)=>{
+    const user = await UserModel.findById(req.user.userId)
+    console.log(user)
+    res.send(user)
+}
+
 
 module.exports = {
     registerGET,
@@ -50,5 +57,6 @@ module.exports = {
     productGET,
     homeGET,
     shopGET,
-    productDetailGET
+    productDetailGET,
+    cartGET
 }

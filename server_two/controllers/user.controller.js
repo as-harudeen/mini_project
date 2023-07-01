@@ -1,4 +1,6 @@
 const ProductModel = require('../../models/product.model.js')
+const UserModel = require('../../models/userModel.js')
+
 
 //localhost:5000/get-product
 //QUERY   option & sort
@@ -18,8 +20,24 @@ const getProduct = async(req, res)=>{
 }
 
 
+//localhost:5000/cart/:userId
+//method GET
+const userCart = async(req, res)=>{
+    const {userId} = req.params
+    try {
+        const user = await UserModel.find(userId)
+        console.log(user)
+        res.status(200).json(user)
+    } catch (err) {
+        res.status(500).send(err.message)
+    }
+}
+
+
+
 //localhost:5000/update_user/
 
 module.exports = {
-    getProduct
+    getProduct,
+    userCart
 }

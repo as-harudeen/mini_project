@@ -2,7 +2,8 @@ const router = require('express').Router()
 const auth = require('../middlewares/auth.js')
 
 const {
-    getProduct
+    getProduct,
+    userCart
 } = require('../controllers/user.controller.js')
 
 // router.use(auth)
@@ -11,6 +12,10 @@ const {
 router
 .get('/get-products', getProduct)
 
+
+//User cart
+router
+.get('/cart/:userId', userCart)
 
 
 
