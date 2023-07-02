@@ -21,6 +21,7 @@ for(let color of colors){
         color.classList.add('selected_color')
         selected_color = color
         isUIDExist()
+        // console.log(id)
     })
 }
 
@@ -33,16 +34,18 @@ for(let size of sizes){
         size.classList.add('selected_size')
         selected_size = size
         isUIDExist()
+        // console.log(id)
     })
 }
 
 const token = getToken()
 const isExsting = {}
+const pipeline = [{$project: { _id: 0, cart: 1}}]
 //fetching user cart with using token
-const res = await fetchData('http://localhost:5000/cart', 'GET', null, token)
+const res = await fetchData(`http://localhost:5000/cart?pipeline=${JSON.stringify(pipeline)}`, 'GET', null, token)
 const data = await res.json()
 
-for(let item of data.cart){//building exist cart item id
+for(let item of data[0].cart){//building exist cart item id
     isExsting[item.cart_item_id] = true
 }
 
@@ -51,8 +54,11 @@ const addToCart = document.getElementById('add_to_cart')
 let id
 
 async function isUIDExist (){
+    console.log(selected_color.dataset.value)
+    console.log(selected_size.dataset.value)
     const name = product_id + selected_color.dataset?.value + selected_size.dataset?.value
     id = await generateUniqueId(name)
+    
     if(isExsting[id]){
         addToCart.disabled = true
         addToCart.innerText = 'Already in cart'
@@ -68,6 +74,7 @@ isUIDExist()//for first checking
 
 addToCart.addEventListener('click', async()=>{
     const url = 'http://localhost:5000/cart/update'
+    console.log(id)
     const body = {
         product_id,
         color: selected_color.dataset.value,

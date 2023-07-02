@@ -1,3 +1,4 @@
+const { pipeline } = require('nodemailer/lib/xoauth2/index.js')
 const ProductModel = require('../../models/product.model.js')
 const UserModel = require('../../models/userModel.js')
 
@@ -24,13 +25,21 @@ const getProduct = async(req, res)=>{
 //method GET
 const userCart = async(req, res)=>{
     try {
-        const user = await UserModel.findOne(
-            {_id: req.user.userId},
-            {_id: 0, cart: 1}
-        )
-        console.log(user)
+
+        let pipeline = []
+
+        if(req.query.pipeline){
+            pipeline = JSON.parse(req.query.pipeline)
+        }
+
+
+        pipeline.unshift({$match: {username: 'admin'}})
+
+        const user = await UserModel.aggregate(pipeline);
+
         res.status(200).json(user)
     } catch (err) {
+        console.log(err.message)
         res.status(500).send(err.message)
     }
 }
@@ -41,9 +50,15 @@ const userCart = async(req, res)=>{
 const updateCart = async (req, res)=>{
     const {userId} = req.user
     try {
+        const findBy = {$and: [{_id: userId}]}
+
+        if(req.query.findBy) {
+            findBy.$and.push(JSON.parse(req.query.findBy))
+        }
+
         const option = req.body
         await UserModel.updateOne(
-            {_id: userId},
+            findBy,
             option
             )
         res.status(200).send("Updated")
