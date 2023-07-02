@@ -1,4 +1,4 @@
-const fetchData = async (url, method, body) => {
+const fetchData = async (url, method, body, token) => {
     const options = {
       method,
       headers: {
@@ -10,6 +10,8 @@ const fetchData = async (url, method, body) => {
       options.body = JSON.stringify(body);
     }
   
+    if(token) options.headers.Authorization = 'Bearer ' + token
+
     const response = await fetch(url, options);
   
     return response;

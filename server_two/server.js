@@ -7,6 +7,8 @@ const cors = require('cors')
 const port = process.env.SECOND_PORT || 5001
 
 connect()
+app.use(express.json())
+app.use(express.urlencoded({extended: true}))
 
 
 app.use(cors())

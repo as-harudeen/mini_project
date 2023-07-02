@@ -1,4 +1,7 @@
 import fetchData from '../helper/fetchData.js'
+import getToken from '../helper/getToken.js'
+import generateUniqueId from '../helper/generateId.js'
+
 
 
 //Seting initial stage
@@ -17,6 +20,7 @@ for(let color of colors){
         selected_color.classList.remove('selected_color')
         color.classList.add('selected_color')
         selected_color = color
+        isUIDExist()
     })
 }
 
@@ -28,30 +32,60 @@ for(let size of sizes){
         selected_size.classList.remove('selected_size')
         size.classList.add('selected_size')
         selected_size = size
+        isUIDExist()
     })
 }
 
+const token = getToken()
+const isExsting = {}
+//fetching user cart with using token
+const res = await fetchData('http://localhost:5000/cart', 'GET', null, token)
+const data = await res.json()
 
+for(let item of data.cart){//building exist cart item id
+    isExsting[item.cart_item_id] = true
+}
+
+const product_id = document.getElementById('product').dataset.value
 const addToCart = document.getElementById('add_to_cart')
+let id
 
-addToCart.addEventListener('click', ()=>{
-    
+async function isUIDExist (){
+    const name = product_id + selected_color.dataset?.value + selected_size.dataset?.value
+    id = await generateUniqueId(name)
+    if(isExsting[id]){
+        addToCart.disabled = true
+        addToCart.innerText = 'Already in cart'
+        return true
+    } else {
+        addToCart.disabled = false
+        addToCart.innerText = "Add to cart"
+        return false
+    }
+}
+isUIDExist()//for first checking
+
+
+addToCart.addEventListener('click', async()=>{
+    const url = 'http://localhost:5000/cart/update'
+    const body = {
+        product_id,
+        color: selected_color.dataset.value,
+        size: selected_size.dataset.value,
+        quantity: 1,
+        cart_item_id: id
+    }
+    const option = {
+        $push: {cart: body}
+    }
+    const res = await fetchData(url, 'PUT', option, token)
+    if(res.ok) {
+        isExsting[id] = true
+        addToCart.disabled = true
+        addToCart.innerText = 'Item Added'
+    }
 })
 
 
-const product_id = document.getElementById('product').dataset.value
 
-//Checking.. if this product already exist in cart or not
-// function isExistInCart (){
-//     let url = 'http://localhost:5000'
-// } 
 
-const cart = {}
-
-const fetchCartData = async ()=>{
-    const res = await fetchData(`http://localhost:5000/cart/${product_id}`, 'GET')
-    const data = await res.json()
-    
-    console.log(data)
-}
-fetchCartData()

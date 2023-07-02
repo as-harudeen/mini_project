@@ -3,19 +3,26 @@ const auth = require('../middlewares/auth.js')
 
 const {
     getProduct,
+    updateCart,
     userCart
 } = require('../controllers/user.controller.js')
 
-// router.use(auth)
 
 //Get products
 router
 .get('/get-products', getProduct)
 
 
+router.use(auth)
+
+
 //User cart
 router
-.get('/cart/:userId', userCart)
+.get('/cart/', userCart)
+
+//cart add
+router
+.put("/cart/update", updateCart)
 
 
 
