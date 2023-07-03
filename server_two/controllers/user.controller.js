@@ -72,8 +72,13 @@ const updateCart = async (req, res)=>{
 //method PUT
 const updateProfile = async (req, res)=>{
     const {userId} = req.user
-
     const option = req.body
+
+    const findBy = {$and: [{_id: userId}]}
+
+    if(req.query.findBy) {
+        findBy.$and.push(JSON.parse(req.query.findBy))
+    }
 
 
     try {
@@ -86,8 +91,7 @@ const updateProfile = async (req, res)=>{
         }
 
         console.log(option)
-        await UserModel.updateOne(
-            {_id: userId},option)
+        await UserModel.updateOne(findBy,option)
     
         res.status(200).send(JSON.stringify(option))
     } catch (err) {
