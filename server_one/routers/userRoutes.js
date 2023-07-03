@@ -17,7 +17,8 @@ const {
     shopGET,
     productDetailGET,
     cartGET,
-    profileGET
+    profileGET,
+    addressGET
 } = require('../render/user.render.js')
 const {verifyUser} = require('../middlewares/user.midleware.js')
 const authenticateUser = require('../middlewares/auth/userAuth.js')
@@ -72,6 +73,17 @@ router
 router
 .route('/profile')
 .get(profileGET)
+
+//User Address
+router
+.route('/profile/address')
+.get(addressGET)
+
+//Edit Address
+router
+.route('/profile/address/edit/:address_id')
+.get()
+
 
 //Get user
 router.post('/get-user', getUser)

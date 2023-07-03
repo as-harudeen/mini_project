@@ -75,6 +75,7 @@ const updateProfile = async (req, res)=>{
 
     const option = req.body
 
+
     try {
         if(option.password){
             const oldPass = await UserModel.findById(userId, {password: 1, _id: 0})
@@ -83,6 +84,8 @@ const updateProfile = async (req, res)=>{
             delete option.oldPassword
             option.password = await bcrypt.hash(option.password, 10)
         }
+
+        console.log(option)
         await UserModel.updateOne(
             {_id: userId},option)
     
@@ -95,9 +98,26 @@ const updateProfile = async (req, res)=>{
     }
 }
 
+
+
+//localhost:5000/user
+const getUser = async (req, res)=>{
+    const {userId} = req.user
+    try {
+        const option = req.query.option ? JSON.parse(req.query.option) : {}
+        const user = await UserModel.findById(userId, option)
+        res.status(200).send(user)
+    } catch (err) {
+        console.log(err.message)
+        res.status(500).send(err.message)
+    }
+}
+
+
 module.exports = {
     getProduct,
     userCart,
     updateCart,
-    updateProfile
+    updateProfile,
+    getUser
 }

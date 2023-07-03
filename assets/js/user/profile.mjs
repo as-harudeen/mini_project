@@ -14,10 +14,16 @@ const errDisplay = document.querySelector('#err-display')
 const token = getToken()
 let oldUsername = username.value
 let oldEmail = email.value
+let emailVerified = false
 let newPass, confirmPass
 
 form.addEventListener('submit', async (e)=>{
     e.preventDefault()
+
+    setSuccess(errDisplay)
+    setSuccess(oldPassword)
+    setSuccess(email)
+    setSuccess(username)
 
     const currUsername = username.value.trim()
     const currEmail = email.value.trim()
@@ -25,12 +31,14 @@ form.addEventListener('submit', async (e)=>{
     const url = 'http://localhost:5000/profile/update'
     const body = {}
 
-    if(currEmail != oldEmail) body.email = currEmail
+    if(emailVerified) body.email = currEmail
+    else {
+        if(oldEmail != currEmail) setError(email, "Not verified")
+    }
     if(currUsername != oldUsername) body.username = currUsername
     if(newPass){
         if(validatePass(newPass)){
             if(isConfirmPassCorrect()){
-                console.log("Hi")
                 body.password = newPass
                 body.oldPassword = oldPassword.value.trim()
             }
@@ -40,10 +48,6 @@ form.addEventListener('submit', async (e)=>{
 
     if(!Object.keys(body).length) setError(errDisplay, 'No change')
     else {
-        setSuccess(errDisplay)
-        setSuccess(oldPassword)
-        setSuccess(email)
-        setSuccess(username)
         const res = await fetchData(url, 'PUT', body, token)
         if(res.ok){
             topName.innerHTML = currUsername
@@ -123,15 +127,18 @@ function validatePass(pass){
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const sendOTPBtn = document.getElementById('send-otp-btn')
 const verifyOTPBtn = document.getElementById('verify-otp-btn')
+const otpInp = document.getElementById('verify-otp-inp')
 const otpContainer = document.querySelector('.otp-btn-container')
 
 email.addEventListener("keyup", ()=>{
+    emailVerified = false
+    if(!sendOTPBtn.classList.contains('d-none')){
+        sendOTPBtn.classList.add('d-none')
+    }
     const currEmail = email.value.trim()
-    sendOTPBtn.disabled = true
-    verifyOTPBtn.disabled = true
     if(currEmail != oldEmail){
         if(emailRegex.test(currEmail)){
-            sendOTPBtn.disabled = false
+            sendOTPBtn.classList.remove('d-none')
         }
     }
 })
@@ -148,12 +155,29 @@ sendOTPBtn.addEventListener('click', async ()=>{
             otpContainer.removeChild(p)
         }, 3000)
 
-        verifyOTPBtn.disabled = false
+        otpContainer.classList.remove('d-none')
     }
 })
 
 
-const verifyContainer = document.getElementById('verify-otp-container')
-verifyOTPBtn.addEventListener('click', ()=>{
-    verifyContainer.classList.toggle('d-none')
+verifyOTPBtn.addEventListener('click', async ()=>{
+    setSuccess(otpInp)
+    const res = await fetchData('verify-otp', 'POST', {OTP: otpInp.value.trim()})
+    if(res.ok){
+        emailVerified = true
+        sendOTPBtn.classList.add('d-none')
+        sendOTPBtn.classList.add('d-none')
+        const p = document.createElement('p')
+        p.innerText = "Verified success"
+
+        otpContainer.appendChild(p)
+
+        setTimeout(()=>{
+            otpContainer.removeChild(p)
+        }, 3000)
+    } else {
+        setError(otpInp, "Inccorect OTP")
+    }
 })
+
+

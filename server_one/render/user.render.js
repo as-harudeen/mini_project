@@ -54,6 +54,22 @@ const profileGET= async (req, res)=>{
     res.status(200).render('user/profile', {userData: user})
 }
 
+//@des http://localhost:3000/api/profile/address
+const addressGET = async (req, res)=>{
+    const user = await UserModel.findOne({_id: req.user.userId})
+    res.status(200).render('user/address', {userAddress: user.address, userData: user})
+}
+
+
+//@des http://localhost:3000/api/profile/address/edit/:address_id
+const editAddressGET = async (req, res)=>{
+    const {address_id} = req.params
+    const address = await UserModel.findOne({_id: req.user.userId},
+        { address: { $elemMatch: { id: address_id } } })
+
+    res.status(200).render('user/edit_address', {address})
+}
+
 
 module.exports = {
     registerGET,
@@ -63,5 +79,6 @@ module.exports = {
     shopGET,
     productDetailGET,
     cartGET,
-    profileGET
+    profileGET,
+    addressGET
 }

@@ -29,9 +29,7 @@
                                     <p class="p-0 m-0">Email : <span class="top-email"><%=userData.email%></span></p>
                                 </div>
                             </div>
-                            <div id="verify-otp-container" class="">
-                                Hi whats up
-                            </div>
+
                             <form id="form" action="" method="post">
                                 <div class="conatiner profile_info p-3 mt-3">
                                     <div class="container px-5 pt-4">
@@ -48,8 +46,13 @@
                                             <label for="" class="py-1">Email</label>
                                             <input type="email" name="email" id="email" value="<%=userData.email%>" style="font-size: 13px; color: #939393;">
                                             <div class="otp-btn-container pt-3">
-                                                <button type="button" id="send-otp-btn" class="btn btn-sm btn-outline-dark" disabled>send OTP</button>
-                                                <button type="button" id="verify-otp-btn" class="btn btn-sm btn-dark" disabled>verify OTP</button>
+                                                <button type="button" id="send-otp-btn" class="btn btn-sm btn-outline-dark d-none">send OTP</button>
+                                                <!-- <button type="button" id="verify-otp-btn" class="btn btn-sm btn-dark" disabled>verify OTP</button> -->
+                                                <div id="verify-otp-container" class="pt-3 d-none">
+                                                    <input type="text" name="verify-otp-inp" id="verify-otp-inp">
+                                                    <button type="button" id="verify-otp-btn" class="btn btn-sm btn-dark">verify</button>
+                                                    <p class="err"></p>
+                                                </div>
                                             </div>
                                             <p class="err text-danger"></p>
                                         </div>

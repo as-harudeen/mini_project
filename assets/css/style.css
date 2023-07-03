@@ -1475,9 +1475,27 @@ border-radius: 14px;
 }
 
 
-#verify-otp-container {
-  /* width: max(50vw, 100px);
-  height: max(50vh, 200px); */
+/* #verify-otp-container {
   position: absolute;
   background-color: #002442;
+} */
+
+.address {
+  border: 1px solid black;
+  position: relative;
+  border-radius: 6px;
+}
+
+.address .edit-btn {
+  position: absolute;
+  top: 2px;
+  right: 34px;
+  width: 30px;
+}
+
+.address .del-btn {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 30px;
 }

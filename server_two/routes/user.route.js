@@ -5,7 +5,8 @@ const {
     getProduct,
     updateCart,
     userCart,
-    updateProfile
+    updateProfile,
+    getUser
 } = require('../controllers/user.controller.js')
 
 
@@ -16,6 +17,9 @@ router
 
 router.use(auth)
 
+
+//get user
+router.get('/user', getUser)
 
 //User cart
 router
