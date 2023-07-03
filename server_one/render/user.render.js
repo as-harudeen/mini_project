@@ -48,6 +48,12 @@ const cartGET = async (req, res)=>{
     res.status(200).render('user/cart')
 }
 
+//@des http:localhost:3000/api/profile
+const profileGET= async (req, res)=>{
+    const user = await UserModel.findOne({_id: req.user.userId})
+    res.status(200).render('user/profile', {userData: user})
+}
+
 
 module.exports = {
     registerGET,
@@ -56,5 +62,6 @@ module.exports = {
     homeGET,
     shopGET,
     productDetailGET,
-    cartGET
+    cartGET,
+    profileGET
 }

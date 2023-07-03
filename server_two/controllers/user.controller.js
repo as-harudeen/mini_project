@@ -1,4 +1,4 @@
-const { pipeline } = require('nodemailer/lib/xoauth2/index.js')
+const bcrypt = require('bcrypt')
 const ProductModel = require('../../models/product.model.js')
 const UserModel = require('../../models/userModel.js')
 
@@ -68,10 +68,36 @@ const updateCart = async (req, res)=>{
     }
 }
 
-//localhost:5000/update_user/
+//localhost:5000/profile/update
+//method PUT
+const updateProfile = async (req, res)=>{
+    const {userId} = req.user
+
+    const option = req.body
+
+    try {
+        if(option.password){
+            const oldPass = await UserModel.findById(userId, {password: 1, _id: 0})
+            const checkingOldPass = await bcrypt.compare(option.oldPassword, oldPass.password)
+            if(!checkingOldPass) return res.status(400).send("Password incorrect")
+            delete option.oldPassword
+            option.password = await bcrypt.hash(option.password, 10)
+        }
+        await UserModel.updateOne(
+            {_id: userId},option)
+    
+        res.status(200).send(JSON.stringify(option))
+    } catch (err) {
+        if(err.code == 11000){
+            return res.status(400).send("already exist")
+        }
+        res.status(500).send(err)
+    }
+}
 
 module.exports = {
     getProduct,
     userCart,
-    updateCart
+    updateCart,
+    updateProfile
 }

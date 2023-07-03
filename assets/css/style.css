@@ -1473,3 +1473,11 @@ border-radius: 14px;
   right: 0;
   background-color: rgb(143, 255, 151);
 }
+
+
+#verify-otp-container {
+  /* width: max(50vw, 100px);
+  height: max(50vh, 200px); */
+  position: absolute;
+  background-color: #002442;
+}

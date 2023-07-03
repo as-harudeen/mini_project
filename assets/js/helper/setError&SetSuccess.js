@@ -1,4 +1,10 @@
 const setError = (element, message)=>{
+
+
+    console.log(element, "    element")
+    console.log(message, "    message")
+
+
     const inputControl = element.parentElement
     const errorDisplay = inputControl.querySelector('.err')
 

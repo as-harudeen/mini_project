@@ -4,7 +4,8 @@ const auth = require('../middlewares/auth.js')
 const {
     getProduct,
     updateCart,
-    userCart
+    userCart,
+    updateProfile
 } = require('../controllers/user.controller.js')
 
 
@@ -23,6 +24,10 @@ router
 //cart add
 router
 .put("/cart/update", updateCart)
+
+//Profile update
+router
+.put("/profile/update", updateProfile)
 
 
 
