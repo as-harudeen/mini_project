@@ -42,7 +42,7 @@ form.addEventListener('submit', async(e)=>{
         }
 
         const res = await fetchData('http://localhost:5000/profile/update', 'PUT', body, token)
-        if(res.ok) console.log("All okey")
+        if(res.ok) buildAddress()
     }
 
 })
@@ -116,10 +116,15 @@ async function buildAddress (){
                 <Span>Ph :${address.phone},</Span>
                 <Span>Pin :${address.pincode}</Span>
                 </span>
-                <button  class="edit-btn btn btn-sm btn-dark">edit</button>
+                <a href="/api/profile/address/edit/${address._id}" class="edit-btn btn btn-sm btn-dark"><i class="fa-solid fa-pen-to-square"></i></a>
                 <button class="del-btn btn btn-sm btn-danger">x</button>
-                
                 `
+
+                newAddress.querySelector('.del-btn').addEventListener('click', ()=>{
+
+                })
+
+
     
             address_container.appendChild(newAddress)
         }

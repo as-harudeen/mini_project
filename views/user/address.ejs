@@ -7,7 +7,7 @@
                         <div class="container bg-white profile_left p-5">
                             <div class="mb-4 d-flex flex-column">
                                 <h6>Manage My Account</h6>
-                                <a href="/profile" class="text-decoration-none">My Profile</a>
+                                <a href="/api/profile" class="text-decoration-none">My Profile</a>
                             </div>
                             <div class="mb-4 d-flex flex-column">
                                 <h6>My Orders</h6>
@@ -38,33 +38,11 @@
                                                     </lottie-player>
 
                                                 </div>
-                                                <%}else{%> -->
+                                                <%}%> -->
                                                     <div class="bg-white p-2 address_container">
-                                                        <!-- <% userAddress.forEach((data,index)=>{%>
-                                                        <div class="d-flex align-items-center gap-2">
-                                                            <input type="radio" name="selectedAddress" value="<%=data._id%>">
-                                                            <h6>Select Address</h6>
-                                                        </div>
-                                                        <div class="address p-2 px-3">
-                                                            <span style="color: #9a9a9a; font-size: 13.5px;">
-                                                                <Span><%=data.full_name%>, </Span>
-                                                                <Span><%=data.house_name%>, </Span>
-                                                                <Span><%=data.street%>,</Span>
-                                                                <Span><%=data.city%>,</Span>
-                                                                <br>
-                                                                <Span>Ph :<%=data.phone%>,</Span>
-                                                                <Span>Pin :<%=data.pincode%></Span>
-                                                            </span>
-                                                        </div>
-                                                        <%})%> -->
+              
                                                     </div>
-                                                    <!-- <%}%> -->
                                               </div>
-                                            <div class="pt-3 address_view d-flex justify-content-end">
-                                                <button class="btn btn-danger p-2" type="submit">
-                                                    Edit Address
-                                                </button>
-                                            </div>
                                         </form>
                                     </div>
                                 </div>
