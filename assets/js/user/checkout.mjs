@@ -78,3 +78,31 @@ closeDialogBtn.addEventListener('click', ()=>{
     selectAddress.close()
 })
 
+
+
+//Confirm section
+
+const proceedBtn = document.getElementById('proceed-btn')
+const confirmDialog = document.getElementById('confirm-dialog')
+const cancelBtn = document.getElementById('cancel-btn')
+const confirmBtn = document.getElementById('confirm-btn')
+
+proceedBtn.addEventListener('click', ()=>{
+    buildConfirmcontainer()
+    confirmDialog.showModal()
+})
+
+cancelBtn.addEventListener('click', ()=>{
+    confirmDialog.close()
+})
+const totalPrice = document.getElementById('total-price').innerHTML
+const confirmContainer = document.getElementById('confirm-container')
+
+function buildConfirmcontainer(){
+    confirmContainer.innerHTML = ''
+    confirmContainer.innerHTML = '<h6>address</h6>'
+    confirmContainer.innerHTML += selectedAddressDiv.innerHTML
+    confirmContainer.innerHTML += '<h6 class="mt-3">Payment method</h6>'
+    confirmContainer.innerHTML += '<p>Cash on delivery.</p>'
+    confirmContainer.innerHTML += totalPrice
+}

@@ -9,7 +9,7 @@
                                 <div class="py-3 pt-4">
                                     <h5 class=" fw-bold">Checkout</h5>
                                 </div>
-
+                                <% let total = 0 %>
                                 <% for(let product of data){ %>
                                     <div class="checkout-item d-flex align-items-center p-3 justify-content-between p-2 gap-2 mt-3">
                                         <img class="checkout-item-img" width="100px" src="/public/img/<%= product.product_images[0] %>" alt="">
@@ -19,15 +19,19 @@
                                             <div><%= product.size %></div>
                                             <div><%= product.quantity %></div>
                                             <div>Rs <%= product.quantity * product.product_price %> </div>
+                                            <% total += product.quantity * product.product_price %>
                                             <button type="button" class="del-btn btn btn-danger">x</button>
                                     </div>
                                 <%}%>
 
             
                             <div class="row f-flex align-items-end">
-                                <div class="p-2 col-lg-6 billing_button">
-                                    <button class="btn btn-danger p-2" type="submit">
-                                       select payment
+                                <div class="p-2 col-md-6">
+                                    <span class="fw-semi-bold">Total </span> <span id="total-price"> Rs <%= total %></span>
+                                </div>
+                                <div class="p-2 col-md-6 billing_button">
+                                    <button id="proceed-btn" class="btn btn-danger p-2" type="submit">
+                                       proceed
                                     </button>
                                     <div id="msg-display"></div>
                                 </div>
@@ -44,17 +48,7 @@
                             <div class="mb-4 d-flex flex-column">
                             </div>
                             <div class="mb-4 d-flex flex-column">
-                                <div  id="curr-address" class="mb-3">
-                                    <span style="color: #9a9a9a; font-size: 13.5px;">
-                                        <Span class="address-full-name"></Span>
-                                        <Span class="address-house-name"></Span>
-                                        <Span class="address-street"></Span>
-                                        <Span class="address-city"></Span>
-                                        <br>
-                                        <Span class="address-phone"></Span>
-                                        <Span class="address-pincode"></Span>
-                                    </span>
-                                </div>
+                                <div  id="curr-address" class="mb-3"></div>
                                 <button id="select-address-btn" class="btn btn-outline-danger">select address</button>
                             </div>
                         </div>
@@ -62,6 +56,15 @@
                 </div>
             </div>
     </div>
+
+
+
+    <dialog id="confirm-dialog">
+        <div id="confirm-container"></div>
+        <button id="cancel-btn">cancel</button>
+        <button id="confirm-btn">confirm</button>
+    </dialog>
+
 
 
     <dialog id="select-address-dialog">
