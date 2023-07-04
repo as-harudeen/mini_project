@@ -19,7 +19,8 @@ const {
     cartGET,
     profileGET,
     addressGET,
-    editAddressGET
+    editAddressGET,
+    checkoutGET
 } = require('../render/user.render.js')
 const {verifyUser} = require('../middlewares/user.midleware.js')
 const authenticateUser = require('../middlewares/auth/userAuth.js')
@@ -67,7 +68,7 @@ router
 //Checkout
 router
 .route('/checkout')
-.get()
+.get(checkoutGET)
 
 
 //User Account

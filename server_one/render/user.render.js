@@ -1,6 +1,7 @@
 const ProductModel = require('../../models/product.model.js')
 const UserModel = require('../../models/userModel.js')
 const CategoryModel = require('../../models/categoryModel.js')
+const {encryptData} = require('../../modules/secure.js')
 
 
 //@des http:localhost:3000/api/register
@@ -77,6 +78,66 @@ const editAddressGET = async (req, res)=>{
 }
 
 
+//@des http://localhost:3000/api/checkout?products="[]"
+const checkoutGET = async (req, res)=>{
+
+    if(!req.query.products) return res.status(400).redirect('/api')
+    
+    try {
+        console.log("point")
+        const products = JSON.parse(req.query.products)
+        console.log("point")
+        console.log(typeof products)
+        if(typeof products != 'object') return res.status(400).redirect('/api')
+        console.log("point")
+        if(!products[0]) return res.status(400).redirect('/api')
+        console.log("point")
+
+
+        /**
+         [
+            {
+                product_id: id......,
+                color: black,
+                size: M,
+                quantity: 1
+            }
+         ]
+         */
+
+        const data = []
+        for(let productOBJ of products){
+            const product  = await ProductModel.findById(
+                productOBJ.product_id,
+                {
+                    _id: 0, 
+                    product_name: 1, 
+                    product_price: 1,
+                    product_images: {$slice: 1}
+                })
+
+            productOBJ = Object.assign(productOBJ, product)
+            data.push(productOBJ)
+        }
+
+        const encrypted = encryptData(JSON.stringify(data), process.env.SUPER_SECRET)
+
+        console.log(encrypted)
+        res.status(200).send({data, encrypted})
+
+    } catch (err) {
+        if(err instanceof SyntaxError && err.name == 'SyntaxError'){
+            console.log("NOT a json")
+            return res.status(400).redirect('/api')
+        } else {
+            return res.status(500).send(err.message)
+        }
+    }
+}
+
+
+
+
 module.exports = {
     registerGET,
     loginGET,
@@ -87,5 +148,6 @@ module.exports = {
     cartGET,
     profileGET,
     addressGET,
-    editAddressGET
+    editAddressGET,
+    checkoutGET
 }
