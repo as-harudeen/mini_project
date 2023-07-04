@@ -2,7 +2,10 @@ const ProductModel = require('../../models/product.model.js')
 const UserModel = require('../../models/userModel.js')
 const CategoryModel = require('../../models/categoryModel.js')
 const {encryptData} = require('../../modules/secure.js')
+const {LocalStorage} = require('node-localstorage')
 
+
+const localStorage = new LocalStorage('../config')
 
 //@des http:localhost:3000/api/register
 const registerGET = (req, res)=>{
@@ -81,17 +84,16 @@ const editAddressGET = async (req, res)=>{
 //@des http://localhost:3000/api/checkout?products="[]"
 const checkoutGET = async (req, res)=>{
 
+    //Redirecting to a home page when user try to access checkout directly
     if(!req.query.products) return res.status(400).redirect('/api')
     
     try {
-        console.log("point")
+        
         const products = JSON.parse(req.query.products)
-        console.log("point")
-        console.log(typeof products)
+        //Redirection if the data not valide
         if(typeof products != 'object') return res.status(400).redirect('/api')
-        console.log("point")
+        //Redirection if the data is empty
         if(!products[0]) return res.status(400).redirect('/api')
-        console.log("point")
 
 
         /**
@@ -105,8 +107,10 @@ const checkoutGET = async (req, res)=>{
          ]
          */
 
+         //intializig array for store data
         const data = []
-        for(let productOBJ of products){
+        for(let productOBJ of products){//Itrating through all products
+            //take some nessesary data
             const product  = await ProductModel.findById(
                 productOBJ.product_id,
                 {
@@ -116,14 +120,19 @@ const checkoutGET = async (req, res)=>{
                     product_images: {$slice: 1}
                 })
 
-            productOBJ = Object.assign(productOBJ, product)
+            //assigning 
+            productOBJ = Object.assign(productOBJ, product.toObject())
             data.push(productOBJ)
         }
 
+        //encrypting data for secure
         const encrypted = encryptData(JSON.stringify(data), process.env.SUPER_SECRET)
 
-        console.log(encrypted)
-        res.status(200).send({data, encrypted})
+        //storing in data for resuse or reduce the request to database
+        localStorage.setItem('checkout', JSON.stringify(encrypted))
+
+        console.log(data)
+        res.status(200).render('user/checkout',{data})
 
     } catch (err) {
         if(err instanceof SyntaxError && err.name == 'SyntaxError'){

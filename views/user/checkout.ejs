@@ -1,0 +1,90 @@
+<%- include('../include/_header.ejs') %>
+    <div class="container-fluid p-0 min-vh-100" style="margin-top: 6%;">
+        <%-include('../include/navbar.ejs') %>
+            <div class="container ">
+                <div class="row p-4 mb-4">
+                    <div class="container col-md-9 py-3 p-0 m-0">
+                        <div class="container-fluid bg-white profile_Right p-4">
+                            <div class="row px-3">
+                                <div class="py-3 pt-4">
+                                    <h5 class=" fw-bold">Checkout</h5>
+                                </div>
+
+                                <% for(let product of data){ %>
+                                    <div class="checkout-item d-flex align-items-center p-3 justify-content-between p-2 gap-2 mt-3">
+                                        <img class="checkout-item-img" width="100px" src="/public/img/<%= product.product_images[0] %>" alt="">
+                                            <div class="checkout-item-name"><%= product.product_name %></div>
+                                            <div class="checout-item">Rs <%= product.product_price %></div>
+                                            <div class="cart-item-color" style='background-color: <%= product.color %>;'></div>
+                                            <div><%= product.size %></div>
+                                            <div><%= product.quantity %></div>
+                                            <div>Rs <%= product.quantity * product.product_price %> </div>
+                                            <button type="button" class="del-btn btn btn-danger">x</button>
+                                    </div>
+                                <%}%>
+
+            
+                            <div class="row f-flex align-items-end">
+                                <div class="p-2 col-lg-6 billing_button">
+                                    <button class="btn btn-danger p-2" type="submit">
+                                       select payment
+                                    </button>
+                                    <div id="msg-display"></div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container col-lg-3 col-md-3 col-12 p-3 m-0">
+                        <div class="container bg-white profile_left p-5">
+                            <div class="mb-4 d-flex gap-3 flex-column payment-method-container">
+                                <div class="p-2 selected-payment payment-method">Cash on delivery</div>
+                                <div class="p-2 payment-method">Razopay</div>
+                            </div>
+                            <div class="mb-4 d-flex flex-column">
+                            </div>
+                            <div class="mb-4 d-flex flex-column">
+                                <div  id="curr-address" class="mb-3">
+                                    <span style="color: #9a9a9a; font-size: 13.5px;">
+                                        <Span class="address-full-name"></Span>
+                                        <Span class="address-house-name"></Span>
+                                        <Span class="address-street"></Span>
+                                        <Span class="address-city"></Span>
+                                        <br>
+                                        <Span class="address-phone"></Span>
+                                        <Span class="address-pincode"></Span>
+                                    </span>
+                                </div>
+                                <button id="select-address-btn" class="btn btn-outline-danger">select address</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+
+
+    <dialog id="select-address-dialog">
+        <h6>Select address</h6>
+        <div class="select-address-container d-flex gap-3 flex-column p-3"></div>
+        <button id="close-dialog-btn" class="btn btn-danger btn-sm">X</button>
+
+        <button>add new one</button>
+    </dialog>
+
+    <template id="select-address-temp">
+        <div class="address p-3">
+            <span style="color: #9a9a9a; font-size: 13.5px;">
+                <Span class="address-full-name"></Span>
+                <Span class="address-house-name"></Span>
+                <Span class="address-street"></Span>
+                <Span class="address-city"></Span>
+                <br>
+                <Span class="address-phone"></Span>
+                <Span class="address-pincode"></Span>
+            </span>
+        </div>
+    </template>
+
+    <script type="module" src="/js/user/checkout.mjs"></script>
+    <%-include('../include/_footer.ejs') %>

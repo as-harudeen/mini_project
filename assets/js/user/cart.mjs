@@ -4,6 +4,8 @@ import getToken from "../helper/getToken.js"
 const cartContainer = document.getElementById('cart-container')
 const token = getToken()
 
+let dataToCheckout = []
+
 const fetchCartDetails = async ()=>{
 
 //for retrive cart data with some products fields
@@ -45,12 +47,11 @@ const fetchCartDetails = async ()=>{
     ]
 
 
-
-
-
     const res = await fetchData(`http://localhost:5000/cart?pipeline=${JSON.stringify(pipeline)}`, 'GET', null, token)
     const data = await res.json()
     const cart = data[0].cart
+
+    dataToCheckout = cart
 
     console.log(cart)
 
@@ -79,12 +80,12 @@ const fetchCartDetails = async ()=>{
         const subBtn = cartItem.querySelector('.sub-btn')
         const addBtn = cartItem.querySelector('.add-btn')
 
-
-
+        
         subBtn.addEventListener('click', async()=>{
             const cart_item_id = item.cart_item_id
             const quantityInp = cartItem.querySelector('.quantity')
             quantityInp.value--
+
 
             const findBy = {
                 'cart.cart_item_id': cart_item_id
@@ -100,6 +101,7 @@ const fetchCartDetails = async ()=>{
         addBtn.addEventListener('click', async()=>{
             const cart_item_id = item.cart_item_id
             const quantityInp = cartItem.querySelector('.quantity')
+            quantityInp.value++
 
             const findBy = {
                 'cart.cart_item_id': cart_item_id
@@ -109,8 +111,7 @@ const fetchCartDetails = async ()=>{
             }
             const url = `http://localhost:5000/cart/update?findBy=${JSON.stringify(findBy)}`
             const res = await fetchData(url, 'PUT', body, token)
-            
-            if(res.ok) quantityInp.value++
+          
             if(quantityInp.value == 1) subBtn.disabled = true
         })
 
@@ -123,3 +124,9 @@ const fetchCartDetails = async ()=>{
 fetchCartDetails()
 
 
+
+const checkoutBtn = document.getElementById('checkout-btn')
+
+checkoutBtn.addEventListener('click', ()=>{
+  location.href = `http://localhost:3000/api/checkout?products=${JSON.stringify(dataToCheckout)}`
+})
