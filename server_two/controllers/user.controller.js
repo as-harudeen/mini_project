@@ -1,6 +1,8 @@
 const bcrypt = require('bcrypt')
+const mongoose = require('mongoose')
 const ProductModel = require('../../models/product.model.js')
 const UserModel = require('../../models/userModel.js')
+
 
 
 //localhost:5000/get-product
@@ -26,14 +28,17 @@ const getProduct = async(req, res)=>{
 const userCart = async(req, res)=>{
     try {
 
+        const {userId} = req.user
+        console.log(userId)
+        const _id = new mongoose.Types.ObjectId(userId)
+
         let pipeline = []
 
         if(req.query.pipeline){
             pipeline = JSON.parse(req.query.pipeline)
         }
-
-
-        pipeline.unshift({$match: {username: 'admin'}})
+        
+        pipeline.unshift({$match: {_id}})
 
         const user = await UserModel.aggregate(pipeline);
 
@@ -90,7 +95,7 @@ const updateProfile = async (req, res)=>{
             option.password = await bcrypt.hash(option.password, 10)
         }
 
-        console.log(option)
+
         await UserModel.updateOne(findBy,option)
     
         res.status(200).send(JSON.stringify(option))
@@ -116,6 +121,8 @@ const getUser = async (req, res)=>{
         res.status(500).send(err.message)
     }
 }
+
+
 
 
 module.exports = {

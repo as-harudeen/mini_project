@@ -45,6 +45,8 @@ const pipeline = [{$project: { _id: 0, cart: 1}}]
 const res = await fetchData(`http://localhost:5000/cart?pipeline=${JSON.stringify(pipeline)}`, 'GET', null, token)
 const data = await res.json()
 
+console.log(data)
+
 for(let item of data[0].cart){//building exist cart item id
     isExsting[item.cart_item_id] = true
 }

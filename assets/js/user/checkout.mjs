@@ -106,3 +106,8 @@ function buildConfirmcontainer(){
     confirmContainer.innerHTML += '<p>Cash on delivery.</p>'
     confirmContainer.innerHTML += totalPrice
 }
+
+confirmBtn.addEventListener('click', ()=>{
+    const body = {}
+    
+})

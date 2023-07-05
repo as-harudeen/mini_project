@@ -3,6 +3,7 @@ import getToken from "../helper/getToken.js"
 
 const cartContainer = document.getElementById('cart-container')
 const token = getToken()
+console.log(token)
 
 let dataToCheckout = []
 
@@ -51,11 +52,20 @@ const fetchCartDetails = async ()=>{
     const data = await res.json()
     const cart = data[0].cart
 
-    dataToCheckout = cart
+    dataToCheckout = []
 
+    
     console.log(cart)
 
     for(let item of cart){
+
+        dataToCheckout.push({
+          product_id: item.product_id,
+          color: item.color,
+          size: item.size,
+          quantity: item.quantity
+        })
+
         const cartItem = document.createElement('div')
         cartItem.classList.add('cart-item', 
         'p-4', 'd-flex', 'justify-content-between', 
@@ -119,6 +129,8 @@ const fetchCartDetails = async ()=>{
         cartItem.dataset.value = item.cart_item_id
         cartContainer.appendChild(cartItem)
     }
+console.log(dataToCheckout)
+
 }
 
 fetchCartDetails()
@@ -126,7 +138,6 @@ fetchCartDetails()
 
 
 const checkoutBtn = document.getElementById('checkout-btn')
-
 checkoutBtn.addEventListener('click', ()=>{
   location.href = `http://localhost:3000/api/checkout?products=${JSON.stringify(dataToCheckout)}`
 })

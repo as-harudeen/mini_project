@@ -7,7 +7,8 @@ const {
     generateOTP,
     verifyOTP,
     count,
-    red
+    red,
+    order
 } = require('../controllers/userController.js')
 const {
     registerGET,
@@ -24,6 +25,8 @@ const {
 } = require('../render/user.render.js')
 const {verifyUser} = require('../middlewares/user.midleware.js')
 const authenticateUser = require('../middlewares/auth/userAuth.js')
+const orderAuth = require('../middlewares/auth/orderAuth.js')
+
 
 //Register
 router
@@ -100,6 +103,9 @@ router.post('/verify-otp', verifyOTP)
 
 //Document count
 router.get('/doc_count/:collection', count)
+
+//Order
+router.get('/order', orderAuth, order)
 
 
 router.get('/test', (req, res)=>{
