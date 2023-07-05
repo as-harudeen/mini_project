@@ -1,12 +1,17 @@
 const UserModel = require('../../models/userModel.js');
+const ProductModel = require('../../models/product.model.js')
+const OrderModel = require('../../models/orderModel.js')
 const bcrypt = require('bcrypt');
 const otpGenerator = require('otp-generator');
 const jwt = require('jsonwebtoken')
 const {getDb} = require('../../database/db.js')
 const sendMail = require('../controllers/mailer.js')
 const env = process.env
+// const {LocalStorage} = require('node-localstorage')
+// const {decryptData} = require('../../modules/secure.js')
 
 
+// const localStorage = new LocalStorage('../config')
 
 
 //@des http:localhost:3000/api/register
@@ -158,6 +163,56 @@ const count = async (req, res)=>{
 }
 
 
+//Order
+//@des localhost:3000/api/order
+//mthod PUT
+const order = async (req, res)=>{
+
+    const {checkoutData} = req.order
+    // console.log(checkoutData)
+    const {userId} = req.user
+    const ex = {
+        product_id: '6496efad25feea7f58f2378e',
+        address_id: '64a2a6338d63dbaf15a66175',
+        color: 'Red',
+        size: 'M',
+        quantity: 5,
+        payment_method: 'COD'
+    }
+
+    const {product_id, color, size, quantity, payment_method, address_id} = ex
+
+
+    try {
+        const product = await ProductModel.findById(product_id, {product_price: 1, product_stock: 1, _id: 0, product_images: 1, sizes: 1})
+
+        if(!product.sizes.includes(size)) throw new Error('Size not valid')
+
+        const isValidAddress = await UserModel.findOne({_id: userId, 'address._id': address_id}, {_id: 1})
+    
+        if(!isValidAddress) throw new Error('Invalid address..')
+
+        const totalAmount = product.product_price * quantity
+    
+        // const order = await OrderModel.create({
+        //     user_id: userId,
+        //     product_id,
+        //     address_id,
+        //     quantity,
+        //     color,
+        //     size,
+        //     payment_method,
+        //     payment_status: payment_method === 'COD' ? 'Pending' : 'Paid',
+        //     total_amount: totalAmount
+        // })
+
+        res.status(200).json(order)
+    } catch (err) {
+        console.log(err.message)
+        return res.status(500).send(err.message)
+    }
+}
+
 
 
 
@@ -195,5 +250,6 @@ module.exports = {
     generateOTP,
     verifyOTP,
     count,
-    red
+    red,
+    order
 }
