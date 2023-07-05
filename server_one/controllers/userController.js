@@ -165,48 +165,32 @@ const count = async (req, res)=>{
 
 //Order
 //@des localhost:3000/api/order
-//mthod PUT
+//mthod POST
 const order = async (req, res)=>{
 
-    const {checkoutData} = req.order
-    // console.log(checkoutData)
+    const {checkoutData} = req.order//take the checkoutdata
+    const {address_id, payment_method} = req.body //taking address and payment method
     const {userId} = req.user
-    const ex = {
-        product_id: '6496efad25feea7f58f2378e',
-        address_id: '64a2a6338d63dbaf15a66175',
-        color: 'Red',
-        size: 'M',
-        quantity: 5,
-        payment_method: 'COD'
+    
+    const isValidAddress = await UserModel.findOne({_id: userId, 'address._id': address_id}, {_id: 1})
+    if(!isValidAddress) throw new Error('Invalid address..')
+
+    //Assigning address and payment method with products
+    for(let product of checkoutData){
+        product.user_id = userId,
+        product.address_id = address_id,
+        product.payment_method = payment_method,
+        product.payment_status = payment_method == 'COD' ? 'Pending' : 'Paid'
     }
 
-    const {product_id, color, size, quantity, payment_method, address_id} = ex
+    console.log(checkoutData)
 
 
     try {
-        const product = await ProductModel.findById(product_id, {product_price: 1, product_stock: 1, _id: 0, product_images: 1, sizes: 1})
 
-        if(!product.sizes.includes(size)) throw new Error('Size not valid')
-
-        const isValidAddress = await UserModel.findOne({_id: userId, 'address._id': address_id}, {_id: 1})
-    
-        if(!isValidAddress) throw new Error('Invalid address..')
-
-        const totalAmount = product.product_price * quantity
-    
-        // const order = await OrderModel.create({
-        //     user_id: userId,
-        //     product_id,
-        //     address_id,
-        //     quantity,
-        //     color,
-        //     size,
-        //     payment_method,
-        //     payment_status: payment_method === 'COD' ? 'Pending' : 'Paid',
-        //     total_amount: totalAmount
-        // })
-
-        res.status(200).json(order)
+        const orders = await OrderModel.insertMany(checkoutData)
+        console.log(orders)
+        res.status(200).json("OK")
     } catch (err) {
         console.log(err.message)
         return res.status(500).send(err.message)

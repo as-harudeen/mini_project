@@ -5,10 +5,11 @@ const getToken = ()=>{
     if(userTokenIdx == -1 ) return window.location.href = '/api/login'
     let token = ''
     for(let i = userTokenIdx + 10; i < cookies.length; i++){
-        token += cookies[i]
         if(cookies[i] == ';') break
+        token += cookies[i]
     }
 
+    console.log(token)
     return token
 }
 

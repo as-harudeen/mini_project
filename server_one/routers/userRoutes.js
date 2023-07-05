@@ -105,7 +105,7 @@ router.post('/verify-otp', verifyOTP)
 router.get('/doc_count/:collection', count)
 
 //Order
-router.get('/order', orderAuth, order)
+router.post('/order', orderAuth, order)
 
 
 router.get('/test', (req, res)=>{

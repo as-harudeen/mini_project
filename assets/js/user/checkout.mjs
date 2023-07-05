@@ -23,6 +23,7 @@ const token = getToken()
 
 const currAddressContainer = document.getElementById('curr-address')
 function buildAddress (){
+    console.log(selectedAddressDiv.dataset.addressId)
     currAddressContainer.innerHTML = selectedAddressDiv.innerHTML
 }
 
@@ -52,6 +53,7 @@ for(let adrs of data.address){
         selectedAddressDiv.classList.remove('selected-address')
         addressDiv.classList.add('selected-address')
         selectedAddressDiv = addressDiv
+        selectedAddressDiv.dataset.addressId = adrs._id
         selectAddress.close()
         buildAddress()
     })
@@ -62,6 +64,7 @@ for(let adrs of data.address){
 
 selectedAddressDiv = selectAddressContainer.querySelector('.address')
 selectedAddressDiv.classList.add('selected-address')
+selectedAddressDiv.dataset.addressId = data.address[0]._id
 buildAddress()
 
 
@@ -107,7 +110,13 @@ function buildConfirmcontainer(){
     confirmContainer.innerHTML += totalPrice
 }
 
-confirmBtn.addEventListener('click', ()=>{
-    const body = {}
-    
+confirmBtn.addEventListener('click', async ()=>{
+    const body = {
+        address_id: selectedAddressDiv.dataset.addressId,
+        payment_method: 'COD'
+    }
+
+    const res = await fetchData('/api/order', 'POST', body)
+    if(res.ok) console.log("OK")
+
 })

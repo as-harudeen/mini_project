@@ -42,15 +42,6 @@ const orderSchema = new mongoose.Schema({
     },
     payment_status: {
         type: String
-    },
-    total_amount: {
-        type: Number,
-        validate: {
-            validator: function(value){
-                return value > 0
-            },
-            message: 'Total amount not valid'
-        }
     }
 }, {timestamps: true})
 

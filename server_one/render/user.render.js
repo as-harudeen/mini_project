@@ -83,7 +83,7 @@ const checkoutGET = async (req, res)=>{
 
     //Redirecting to a home page when user try to access checkout directly
     if(!req.query.products) return res.status(400).redirect('/api')
-    console.log(req.user)
+    
 
     try {
         
@@ -93,6 +93,7 @@ const checkoutGET = async (req, res)=>{
         //Redirection if the data is empty
         if(!products[0]) return res.status(400).redirect('/api')
 
+        console.log(products)
 
         /**
          [
@@ -107,8 +108,16 @@ const checkoutGET = async (req, res)=>{
 
          //intializig array for store data
         const data = []
+        const checkoutData = []
         for(let productOBJ of products){//Itrating through all products
 
+
+            checkoutData.push({
+                product_id: productOBJ.product_id,
+                color: productOBJ.color,
+                size: productOBJ.size,
+                quantity: productOBJ.quantity,
+            })
 
             //validating products array
             if(!productOBJ.product_id) throw new Error("product Not valid")
@@ -131,12 +140,14 @@ const checkoutGET = async (req, res)=>{
             data.push(productOBJ)
         }
 
+
+
         const playload = {
             user: req.user.userId,
-            checkoutData: products
+            checkoutData
         }
         const orderToken = jwt.sign(playload, process.env.SUPER_SECRET,  {expiresIn: '15m'})
-        console.log(orderToken)
+        // console.log(orderToken)
         const expirationTime = new Date(Date.now() + 15 * 60 * 1000); 
         res.cookie('orderToken', orderToken, {expires: expirationTime})
 
