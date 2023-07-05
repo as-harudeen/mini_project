@@ -1,11 +1,8 @@
 const ProductModel = require('../../models/product.model.js')
 const UserModel = require('../../models/userModel.js')
 const CategoryModel = require('../../models/categoryModel.js')
-const {encryptData} = require('../../modules/secure.js')
-const {LocalStorage} = require('node-localstorage')
+const jwt = require('jsonwebtoken')
 
-
-const localStorage = new LocalStorage('../config')
 
 //@des http:localhost:3000/api/register
 const registerGET = (req, res)=>{
@@ -86,7 +83,8 @@ const checkoutGET = async (req, res)=>{
 
     //Redirecting to a home page when user try to access checkout directly
     if(!req.query.products) return res.status(400).redirect('/api')
-    
+    console.log(req.user)
+
     try {
         
         const products = JSON.parse(req.query.products)
@@ -110,6 +108,14 @@ const checkoutGET = async (req, res)=>{
          //intializig array for store data
         const data = []
         for(let productOBJ of products){//Itrating through all products
+
+
+            //validating products array
+            if(!productOBJ.product_id) throw new Error("product Not valid")
+            if(!productOBJ.color) throw new Error("product Not valid")
+            if(!productOBJ.size) throw new Error("product Not valid")
+            if(!productOBJ.quantity) throw new Error("product Not valid")
+
             //take some nessesary data
             const product  = await ProductModel.findById(
                 productOBJ.product_id,
@@ -125,13 +131,15 @@ const checkoutGET = async (req, res)=>{
             data.push(productOBJ)
         }
 
-        //encrypting data for secure
-        const encrypted = encryptData(JSON.stringify(data), process.env.SUPER_SECRET)
+        const playload = {
+            user: req.user.userId,
+            checkoutData: products
+        }
+        const orderToken = jwt.sign(playload, process.env.SUPER_SECRET,  {expiresIn: '15m'})
+        console.log(orderToken)
+        const expirationTime = new Date(Date.now() + 15 * 60 * 1000); 
+        res.cookie('orderToken', orderToken, {expires: expirationTime})
 
-        //storing in data for resuse or reduce the request to database
-        localStorage.setItem('checkout', JSON.stringify(encrypted))
-
-        console.log(data)
         res.status(200).render('user/checkout',{data})
 
     } catch (err) {
@@ -139,6 +147,7 @@ const checkoutGET = async (req, res)=>{
             console.log("NOT a json")
             return res.status(400).redirect('/api')
         } else {
+            console.log(err.message)
             return res.status(500).send(err.message)
         }
     }
