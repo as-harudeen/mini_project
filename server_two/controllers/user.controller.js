@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt')
 const mongoose = require('mongoose')
 const ProductModel = require('../../models/product.model.js')
 const UserModel = require('../../models/userModel.js')
-
+const OrderModel = require('../../models/orderModel.js')
 
 
 //localhost:5000/get-product
@@ -123,6 +123,32 @@ const getUser = async (req, res)=>{
 }
 
 
+//localhost:5000/profile/my_order
+const my_order = async (req, res)=>{
+    console.time("orderGET")
+    const {userId} = req.user
+
+    try {
+        const user = await UserModel.findOne({_id: userId}, {orders: 1, _id: 0})
+        const data = []
+        for(let orderId of user.orders){
+
+            let order = await OrderModel.findById(orderId.order_id)
+            console.log(order)
+            const product = await ProductModel.findById(order.product_id, {product_name: 1, _id: 0, product_images: 1, product_price: 1})
+            data.push({...order.toObject(), ...product.toObject()})
+    
+        }
+
+    
+        console.timeEnd('orderGET')
+        res.status(200).json(data)
+    } catch (err) {
+        console.log(err.message)
+        res.status(500).send(err.message)
+    }
+}
+
 
 
 module.exports = {
@@ -130,5 +156,6 @@ module.exports = {
     userCart,
     updateCart,
     updateProfile,
-    getUser
+    getUser,
+    my_order
 }

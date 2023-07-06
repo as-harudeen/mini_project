@@ -193,6 +193,22 @@ const orderGET = async (req, res)=>{
 }
 
 
+//@des http://localhost:3000/api/profile/order/:order_id
+const orderViewGET = async (req, res)=>{
+    const {order_id} = req.params
+    
+    const order = await OrderModel.findById(order_id)
+    const product = await ProductModel.findById(order.product_id, {
+        product_name: 1,
+        product_des: 1,
+        product_images: 1,
+        product_price: 1,
+        _id: 0
+    })
+
+    res.status(200).render('user/orderView')
+    // res.status(200).json({...order.toObject(), ...product.toObject()})
+}
 
 
 module.exports = {
@@ -207,5 +223,6 @@ module.exports = {
     addressGET,
     editAddressGET,
     checkoutGET,
-    orderGET
+    orderGET,
+    orderViewGET
 }

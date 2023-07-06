@@ -6,7 +6,8 @@ const {
     updateCart,
     userCart,
     updateProfile,
-    getUser
+    getUser,
+    my_order
 } = require('../controllers/user.controller.js')
 
 
@@ -33,6 +34,10 @@ router
 router
 .put("/profile/update", updateProfile)
 
+
+//Order detailes
+router
+.get("/profile/my_order", my_order)
 
 
 

@@ -22,7 +22,8 @@ const {
     addressGET,
     editAddressGET,
     checkoutGET,
-    orderGET
+    orderGET,
+    orderViewGET
 } = require('../render/user.render.js')
 const {verifyUser} = require('../middlewares/user.midleware.js')
 const authenticateUser = require('../middlewares/auth/userAuth.js')
@@ -90,11 +91,15 @@ router
 .route('/profile/address/edit/:address_id')
 .get(editAddressGET)
 
-//Order
+//My Order
 router
 .route('/profile/order')
 .get(orderGET)
 
+//Order view
+router
+.route('/profile/order/:order_id')
+.get(orderViewGET)
 
 
 //Get user
@@ -113,6 +118,9 @@ router.get('/doc_count/:collection', count)
 
 //Order
 router.post('/order', orderAuth, order)
+
+
+
 
 
 router.get('/test', (req, res)=>{

@@ -42,6 +42,10 @@ const orderSchema = new mongoose.Schema({
     },
     payment_status: {
         type: String
+    },
+    isCancelled: {
+        type: String,
+        default: false
     }
 }, {timestamps: true})
 

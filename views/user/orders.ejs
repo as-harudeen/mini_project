@@ -44,57 +44,7 @@
                                                         <th class="third p-3"><span>Order</span></th>
                                                     </tr>
                                                 </thead>
-                                                <tbody>
-                                                    <% data.forEach((order,index)=>{ %>
-                                                        <tr class="mt-2">
-                                                            <th scope="col" class="px-4"
-                                                                style="font-size: 13px; color:#959595">
-                                                                <%= index+1 %>
-                                                            </th>
-                                                            <th scope="col " class="t_Image px-3"
-                                                                style="width: 40px; height: 20px;">
-                                                                <img src="/public/img/<%= order.product_images[0]%>"
-                                                                    alt="" width="60px">
-                                                            </th>
-                                                            <td scope="col" class="px-3">
-                                                                <%if(order.status == "Processing"){%>
-                                                                <span class=" badge rounded-pill bg-warning">
-                                                                    <%= order.order_status%>
-                                                                </span>
-                                                                <%}else{%>
-                                                                    <span class=" badge rounded-pill bg-info">
-                                                                        <%= order.order_status%>
-                                                                    </span>
-                                                                <%}%>
-                                                            </td>
-                                                            <td scope="col" class="tablefont px-3">
-                                                                <span class="couponListFont" style="color:#959595">
-                                                                    <%= order.quantity %>
-                                                                </span>
-                                                            </td>
-                                                            <td scope="col" class="px-3">
-                                                                <span class="couponListFont"
-                                                                    style="color:#959595">₹<span>&nbsp;</span>
-                                                                    <%= order.quantity * order.product_price %>
-                                                                </span>
-                                                            </td>
-                                                            <td scope="col" class="px-3">
-                                                                <span class="couponListFont fw-bold"
-                                                                    style="font-size: 14px;color:#959595">
-                                                                    cupon
-                                                                </span>
-                                                            </td>
-                                                            <td scope="col"
-                                                                class="TableButton d-flex align-items-center py-5 d-flex flex-column gap-2">
-                                                                <form action="/profile/orderStatus/<%=order._id%>" method="post" onsubmit="return ">
-                                                                    <button class="btn btn-success text" style="font-size: 11px;"type="submit">
-                                                                        View
-                                                                    </button>
-                                                                </form>
-                                                            </td>
-                                                        </tr>
-                                                        <%})%>
-                                                </tbody>
+                                                <tbody id="order-tbody"></tbody>
                                             </table>
                                         </div>
                                     </div>
@@ -113,6 +63,8 @@
                 </div>
             </div>
     </div>
+    <%- include('../component/orderedItemRow.ejs') %>
+    <script type="module" src="/js/user/myOrder.mjs"></script>
     <%-include('../include/_footer.ejs') %>
 
     
