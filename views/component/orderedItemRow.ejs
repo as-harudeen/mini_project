@@ -1,0 +1,38 @@
+<template id="order_item_tr">
+    <tr class="mt-2">
+        <th class="order-no px-4" scope="col"
+            style="font-size: 13px; color:#959595">
+            no
+        </th>
+        <th scope="col " class="t_Image px-3"
+            style="width: 40px; height: 20px;">
+            <img class="order-img" src="/public/img/"
+                alt="" width="60px">
+        </th>
+        <td scope="col" class="px-3">
+            <span class="order-status-processing badge rounded-pill bg-warning"></span>
+            <span class="order-status-shipped" class=" badge rounded-pill bg-info"></span>
+        </td>
+        <td scope="col" class="tablefont px-3">
+            <span class="order-quantity couponListFont" style="color:#959595"></span>
+        </td>
+        <td scope="col" class="px-3">
+            <span class="couponListFont"
+                style="color:#959595">₹<span class="order-amount">&nbsp;</span>
+            </span>
+        </td>
+        <td scope="col" class="px-3">
+            <span class="couponListFont fw-bold order-data"
+                style="font-size: 14px;color:#959595">
+            </span>
+        </td>
+        <td scope="col"
+            class="TableButton d-flex align-items-center py-5 d-flex flex-column gap-2">
+            <form action="/profile/orderStatus/" method="post" onsubmit="return ">
+                <button class="btn btn-success text" style="font-size: 11px;"type="submit">
+                    view
+                </button>
+            </form>
+        </td>
+    </tr>
+</template>
