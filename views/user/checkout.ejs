@@ -1,8 +1,8 @@
 <%- include('../include/_header.ejs') %>
     <div class="container-fluid p-0 min-vh-100" style="margin-top: 6%;">
         <%-include('../include/navbar.ejs') %>
-            <div class="container ">
-                <div class="row p-4 mb-4">
+            <div class="container">
+                <div id="checkout-content-div"  class="row p-4 mb-4">
                     <div class="container col-md-9 py-3 p-0 m-0">
                         <div class="container-fluid bg-white profile_Right p-4">
                             <div class="row px-3">
@@ -54,8 +54,10 @@
                         </div>
                     </div>
                 </div>
+                <div id="success-container"></div>
+                <%- include('../component/success.ejs') %>
             </div>
-    </div>
+        </div>
 
 
 
@@ -88,6 +90,9 @@
             </span>
         </div>
     </template>
+
+
+
 
     <script type="module" src="/js/user/checkout.mjs"></script>
     <%-include('../include/_footer.ejs') %>

@@ -9,8 +9,8 @@ const orderSchema = new mongoose.Schema({
         type: mongoose.Types.ObjectId,
         required: true
     },
-    address_id: {
-        type: mongoose.Types.ObjectId,
+    address: {
+        type: Object,
         required: true
     },
     quantity: {

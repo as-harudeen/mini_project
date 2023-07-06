@@ -1578,3 +1578,11 @@ dialog button {
   border-radius: 3px;
   cursor: pointer;
 }
+
+
+/* #success-container{
+  position: absolute;
+  top: 50vh;
+  right: 50vw;
+  transform: translate(50%, 50%);
+} */

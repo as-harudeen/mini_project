@@ -110,13 +110,33 @@ function buildConfirmcontainer(){
     confirmContainer.innerHTML += totalPrice
 }
 
+const curUrl = location.href
+const contentDiv = document.getElementById('checkout-content-div')
+const successContainer = document.getElementById('success-container')
+const successTemp = document.getElementById('success-temp')
+
+
 confirmBtn.addEventListener('click', async ()=>{
     const body = {
         address_id: selectedAddressDiv.dataset.addressId,
         payment_method: 'COD'
     }
-
-    const res = await fetchData('/api/order', 'POST', body)
-    if(res.ok) console.log("OK")
+    let url = 'order'
+    if(curUrl.includes('fromCart')) url += '?fromCart="true"'
+    const res = await fetchData(url, 'POST', body)
+    if(res.ok){
+        cancelBtn.click()
+        contentDiv.innerHTML = ""
+        const success = successTemp.content.cloneNode(true)
+        console.log(success)
+        success.querySelector('.success-msg').innerText = 'Order successfully'
+        const navigator = success.querySelector('.success-navigator')
+        navigator.href = '/api/'
+        navigator.innerText = "Home page."
+        successContainer.appendChild(success)
+    }
 
 })
+
+
+

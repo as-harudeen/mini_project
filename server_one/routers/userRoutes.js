@@ -21,7 +21,8 @@ const {
     profileGET,
     addressGET,
     editAddressGET,
-    checkoutGET
+    checkoutGET,
+    orderGET
 } = require('../render/user.render.js')
 const {verifyUser} = require('../middlewares/user.midleware.js')
 const authenticateUser = require('../middlewares/auth/userAuth.js')
@@ -88,6 +89,12 @@ router
 router
 .route('/profile/address/edit/:address_id')
 .get(editAddressGET)
+
+//Order
+router
+.route('/profile/order')
+.get(orderGET)
+
 
 
 //Get user

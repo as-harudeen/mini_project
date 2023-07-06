@@ -172,30 +172,42 @@ const order = async (req, res)=>{
     const {address_id, payment_method} = req.body //taking address and payment method
     const {userId} = req.user
     
-    const isValidAddress = await UserModel.findOne({_id: userId, 'address._id': address_id}, {_id: 1})
-    if(!isValidAddress) throw new Error('Invalid address..')
+    const address = await UserModel.findOne({_id: userId, 'address._id': address_id}, {'address.$': 1})
+    console.log(address)
+    if(!address) throw new Error('Invalid address..')
 
     //Assigning address and payment method with products
     for(let product of checkoutData){
         product.user_id = userId,
-        product.address_id = address_id,
+        product.address = address.address[0],
         product.payment_method = payment_method,
         product.payment_status = payment_method == 'COD' ? 'Pending' : 'Paid'
     }
 
-    console.log(checkoutData)
+    // console.log(checkoutData)
 
 
     try {
 
         const orders = await OrderModel.insertMany(checkoutData)
-        console.log(orders)
+        
+        const orderId = []
+        orders.forEach(order => {
+            console.log(order._id)
+            orderId.push({order_id: order._id})
+        })
+        if(req.query.fromCart){
+            await UserModel.updateOne({_id: userId}, {$unset: {cart: ""}, $push: {
+                orders: {$each: orderId}
+            }})
+        }
+
         res.status(200).json("OK")
     } catch (err) {
         console.log(err.message)
         return res.status(500).send(err.message)
     }
-}
+} 
 
 
 

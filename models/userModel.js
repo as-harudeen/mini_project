@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+const addressSchema = require('./schema/address.schema.js')
+
 
 const cartSchema = new mongoose.Schema({
   product_id: {
@@ -24,32 +26,7 @@ const cartSchema = new mongoose.Schema({
 })
 
 
-const addressSchema = new mongoose.Schema({
-  full_name: {
-    type: String,
-    required: true
-  },
-  house_name: {
-    type: String,
-    required: true
-  },
-  street: {
-    type: String,
-    required: true
-  },
-  city: {
-    type: String,
-    required: true
-  },
-  phone: {
-    type: Number,
-    required: true
-  },
-  pincode: {
-    type: String,
-    required: true
-  }
-})
+
 
 
 const userSchema = new mongoose.Schema({
@@ -70,6 +47,13 @@ const userSchema = new mongoose.Schema({
   },
   address: {
     type: [addressSchema]
+  },
+  orders: {
+    type: [{
+      order_id: {
+        type: mongoose.Types.ObjectId
+      }
+    }]
   },
   isBlocked: {
     type: Boolean

@@ -54,8 +54,7 @@ const fetchCartDetails = async ()=>{
 
     dataToCheckout = []
 
-    
-    console.log(cart)
+    if(!cart) return false
 
     for(let item of cart){
 
@@ -139,5 +138,5 @@ fetchCartDetails()
 
 const checkoutBtn = document.getElementById('checkout-btn')
 checkoutBtn.addEventListener('click', ()=>{
-  location.href = `http://localhost:3000/api/checkout?products=${JSON.stringify(dataToCheckout)}`
+  location.href = `http://localhost:3000/api/checkout?products=${JSON.stringify(dataToCheckout)}&fromCart="true"`
 })

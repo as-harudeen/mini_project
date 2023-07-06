@@ -45,19 +45,18 @@ const pipeline = [{$project: { _id: 0, cart: 1}}]
 const res = await fetchData(`http://localhost:5000/cart?pipeline=${JSON.stringify(pipeline)}`, 'GET', null, token)
 const data = await res.json()
 
-console.log(data)
-
-for(let item of data[0].cart){//building exist cart item id
-    isExsting[item.cart_item_id] = true
+if(data[0].cart){
+    for(let item of data[0].cart){//building exist cart item id
+        isExsting[item.cart_item_id] = true
+    }
 }
+
 
 const product_id = document.getElementById('product').dataset.value
 const addToCart = document.getElementById('add_to_cart')
 let id
 
 async function isUIDExist (){
-    console.log(selected_color.dataset.value)
-    console.log(selected_size.dataset.value)
     const name = product_id + selected_color.dataset?.value + selected_size.dataset?.value
     id = await generateUniqueId(name)
     

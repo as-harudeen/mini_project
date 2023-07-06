@@ -1,6 +1,7 @@
 const ProductModel = require('../../models/product.model.js')
 const UserModel = require('../../models/userModel.js')
 const CategoryModel = require('../../models/categoryModel.js')
+const OrderModel = require('../../models/orderModel.js')
 const jwt = require('jsonwebtoken')
 
 
@@ -83,7 +84,6 @@ const checkoutGET = async (req, res)=>{
 
     //Redirecting to a home page when user try to access checkout directly
     if(!req.query.products) return res.status(400).redirect('/api')
-    
 
     try {
         
@@ -165,6 +165,34 @@ const checkoutGET = async (req, res)=>{
 }
 
 
+//@des http://localhost:3000/api/profile/order
+const orderGET = async (req, res)=>{
+    console.time("orderGET")
+    const {userId} = req.user
+
+    try {
+        const user = await UserModel.findOne({_id: userId}, {orders: 1, _id: 0})
+        const data = []
+        for(let orderId of user.orders){
+
+            let order = await OrderModel.findById(orderId.order_id)
+            console.log(order)
+            const product = await ProductModel.findById(order.product_id, {product_name: 1, _id: 0, product_images: 1, product_price: 1})
+            data.push({...order.toObject(), ...product.toObject()})
+    
+        }
+
+
+    
+        console.timeEnd('orderGET')
+        res.status(200).render('user/orders', {data})
+    } catch (err) {
+        console.log(err.message)
+        res.status(500).send(err.message)
+    }
+}
+
+
 
 
 module.exports = {
@@ -178,5 +206,6 @@ module.exports = {
     profileGET,
     addressGET,
     editAddressGET,
-    checkoutGET
+    checkoutGET,
+    orderGET
 }
