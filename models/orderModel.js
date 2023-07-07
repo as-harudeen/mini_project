@@ -1,5 +1,11 @@
 const mongoose = require('mongoose')
 
+const twoDayLater = ()=>{
+    const twoDayMS = 2 * 24 * 60 * 60 * 1000
+    return Date.now() + twoDayMS
+}
+
+
 const orderSchema = new mongoose.Schema({
     user_id: {
         type: mongoose.Types.ObjectId,
@@ -44,8 +50,13 @@ const orderSchema = new mongoose.Schema({
         type: String
     },
     isCancelled: {
-        type: String,
+        type: Boolean,
         default: false
+    },
+    delivery_date: {
+        type: Date,
+        default: twoDayLater
+
     }
 }, {timestamps: true})
 
