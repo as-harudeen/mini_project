@@ -22,7 +22,12 @@ if(res.ok){
         } else order_item_tr.querySelector('.order-status-shipped').innerText = 'Shipped'
         order_item_tr.querySelector('.order-quantity').innerText = order.quantity
         order_item_tr.querySelector('.order-amount').innerText = order.product_price * order.quantity
-        order_item_tr.querySelector('.order-data').innerText = '20/06/2003'
+        const date = new Date(order.delivery_date)
+        const day = date.getDate()
+        const month = date.getMonth() + 1
+        const year = date.getFullYear()
+        order_item_tr.querySelector('.order-date').innerText = `${day}/${month}/${year}`
+        order_item_tr.querySelector('.view-btn').href = `/api/profile/order/${order._id}`
 
         order_tbody.appendChild(order_item_tr)
     }

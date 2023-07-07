@@ -26,7 +26,7 @@
                                 <div class="container pt-4">
                                     <!-- Title -->
                                     <div class="d-flex justify-content-between align-items-center py-3">
-                                        <h3 class="h5 mb-0"><span class="text-danger">ORDER ID</span> : <span style="font-size: 14px; color: #959595;">#<%=order._id%></span></h3>
+                                        <h3 data-order_id="<%= order._id %>" id="order_id" class="h5 mb-0"><span class="text-danger">ORDER ID</span> : <span style="font-size: 14px; color: #959595;">#<%=order._id%></span></h3>
                                     </div>
                                     <!-- Main content -->
                                     <div class="row">
@@ -38,21 +38,21 @@
                                                         <div class="mx-2">
                                                             <span class="me-3 fw-bold" style="font-size: 13px;color: #959595;"><span>Order Date :</span><%= orderedOn %></span>
                                                             <span class="me-3 fw-bold" style="font-size: 13px;color: #959595;"><span>Delivery Date :</span> <%= expectedDate %> </span>
-                                                            <%if(order.isCancelled === false){%>
-                                                                <%if(order.order_status == "Deliverd"){%>
-                                                                    <span class="badge rounded-pill bg-success">Deliverd</span>
-                                                                <%}else if(order.order_status == "Processing"){%>
-                                                                    <span class="badge rounded-pill bg-warning">Processing</span>
-                                                                <%}else{%>
-                                                                    <span class="badge rounded-pill bg-info"><%= order.order_status %></span>
+                                                            <span id="order_status">
+                                                                <%if(order.isCancelled === false){%>
+                                                                    <%if(order.order_status == "Deliverd"){%>
+                                                                        <span class="badge rounded-pill bg-success">Deliverd</span>
+                                                                    <%}else if(order.order_status == "Processing"){%>
+                                                                        <span class="badge rounded-pill bg-warning">Processing</span>
+                                                                    <%} else if ( order.order_status == 'requested for cancel') {%>
+                                                                        <span class="badge rounded-pill bg-warning">Cancel Requested</span>
+                                                                    <%}else{%>
+                                                                        <span class="badge rounded-pill bg-info"><%= order.order_status %></span>
+                                                                    <%}%>
+                                                                <%}else {%>
+                                                                    <span class="badge rounded-pill bg-danger">Canceld</span>  
                                                                 <%}%>
-                                                            <%}else if(orderCanceld === true){%>
-                                                                <%if(orderStatus == "Canceled"){%>
-                                                                    <span class="badge rounded-pill bg-danger">Canceld</span>
-                                                                <%}else{%>
-                                                                    <span class="badge rounded-pill bg-warning">Cancel Requested</span>
-                                                                <%}%>
-                                                            <%}%>
+                                                            </span>
                                                         </div>
                                                         <div >
                                                             <span class="badge rounded-pill bg-primary ">
@@ -130,20 +130,19 @@
                                                 </div>
                                             </div>
 
-                                            <div>
+                                            <div id="cancel-order-btn-container">
                                                <%if(order.isCancelled == false){%>
-                                                    <%if(order.order_status == "Deliverd"){%>
-                                                        <form action="/Shop" method="get">
-                                                            <button class="btn btn-success" style="width: 100%; border-radius: 10px;font-size: 13px;">Order Again</button>
-                                                         </form>
+                                                <%if(order.order_status == "Deliverd"){%>
+                                                    <form action="/api/Shop" method="get">
+                                                        <button class="btn btn-success" style="width: 100%; border-radius: 10px;font-size: 13px;">Order Again</button>
+                                                    </form>
                                                     <%}else{%>
-                                                        <button id="cancel-btn" class="btn btn-danger" style="width: 100%; border-radius: 10px;font-size: 13px;">Cancel Order</button>
-                                                        
+                                                        <button id="order-cancel-btn" class="btn btn-danger" style="width: 100%; border-radius: 10px;font-size: 13px;">Cancel Order</button>
                                                     <%}%>
                                                <%}else{%>
-                                                <form action="/Shop" method="get">
+                                                <form action="/api/Shop" method="get">
                                                     <button class="btn btn-success" style="width: 100%; border-radius: 10px;font-size: 13px;">Order Again</button>
-                                                 </form>
+                                                </form>
                                                 <%}%>
                                             </div>
                                         </div>
@@ -155,6 +154,8 @@
                 </div>
             </div>
     </div>
+
+    <%- include('../include/confirmDialog.ejs') %>
     <script type="module" src="/js/user/orderView.mjs"></script>
 <%- include('../include/_footer.ejs') %>
 

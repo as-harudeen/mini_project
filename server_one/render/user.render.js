@@ -3,6 +3,7 @@ const UserModel = require('../../models/userModel.js')
 const CategoryModel = require('../../models/categoryModel.js')
 const OrderModel = require('../../models/orderModel.js')
 const jwt = require('jsonwebtoken')
+const moment = require('moment')
 
 
 //@des http:localhost:3000/api/register
@@ -172,6 +173,7 @@ const orderGET = async (req, res)=>{
 
     try {
         const user = await UserModel.findOne({_id: userId}, {orders: 1, _id: 0})
+        // console.log(orders)
         const data = []
         for(let orderId of user.orders){
 
@@ -195,6 +197,7 @@ const orderGET = async (req, res)=>{
 
 //@des http://localhost:3000/api/profile/order/:order_id
 const orderViewGET = async (req, res)=>{
+    const {userId} = req.user
     const {order_id} = req.params
     
     const order = await OrderModel.findById(order_id)
@@ -206,8 +209,11 @@ const orderViewGET = async (req, res)=>{
         _id: 0
     })
 
-    res.status(200).render('user/orderView')
-    // res.status(200).json({...order.toObject(), ...product.toObject()})
+    const orderedOn = moment(order.createdAt).format('DD/MM/YYYY')
+    const expectedDate = moment(order.delivery_date).format('DD/MM/YYYY')
+    const address = await UserModel.findOne({_id: userId, 'address._id': order.address}, {'address.$': 1, _id: 0})
+
+    res.status(200).render('user/orderView', {address: address.address[0], order: {...order.toObject(), ...product.toObject()}, orderedOn, expectedDate})
 }
 
 
