@@ -7,7 +7,8 @@ const {
     userCart,
     updateProfile,
     getUser,
-    my_order
+    my_order,
+    cancelRequest
 } = require('../controllers/user.controller.js')
 
 
@@ -38,6 +39,11 @@ router
 //Order detailes
 router
 .get("/profile/my_order", my_order)
+
+
+//Cancel order request
+router
+.put("/order/cancelrequest/:orderID", cancelRequest)
 
 
 

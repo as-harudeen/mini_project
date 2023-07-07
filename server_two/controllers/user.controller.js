@@ -150,6 +150,29 @@ const my_order = async (req, res)=>{
 }
 
 
+//localhost:5000/profile/order/cancelrequest/:orderID
+const cancelRequest = async (req, res)=>{
+    const {orderID} = req.params
+    console.log(orderID)
+    const {userId} = req.user
+
+    try {
+        const user = await UserModel.findOne({_id: userId, 'orders.order_id': orderID})
+        if(!user){
+            res.status(401)
+            throw new Error("Forbiden")
+        }
+    
+        const order = await OrderModel.updateOne({_id: orderID}, {order_status: 'requested for cancel'})
+    
+        res.status(200).send("OK")
+    } catch (err) {
+        console.log("Here?")
+        console.log(err.message)
+        return res.status(500).send(err.message)
+    }
+}
+
 
 module.exports = {
     getProduct,
@@ -157,5 +180,6 @@ module.exports = {
     updateCart,
     updateProfile,
     getUser,
-    my_order
+    my_order,
+    cancelRequest
 }
