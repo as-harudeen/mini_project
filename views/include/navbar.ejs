@@ -10,7 +10,7 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/">Home</a>
+                        <a class="nav-link active" aria-current="page" href="/api">Home</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">About</a>
@@ -31,7 +31,7 @@
                         <a href="/WhishList" class="link-dark text-center" style="position: relative;">
                             <i class="fa-regular fa-heart"></i>
                         </a>
-                        <a href="/cart" class="link-light text-center" style="position: relative;">
+                        <a href="/api/cart" class="link-light text-center" style="position: relative;">
                             <i class="fa-solid fa-cart-shopping "></i>
                             <% if(locals.cartCount){%>
                                 <span id="cartItemCount"
@@ -53,7 +53,7 @@
                     <%}%>
                     <div class="d-flex flex-column align-items-center">
                         <div class="iconP ">
-                             <a href="/profile"><i class="fa-regular fa-user text-dark"></i></a>
+                             <a href="/api/profile"><i class="fa-regular fa-user text-dark"></i></a>
                         </div>
                         <span class="text-danger fw-bold ">
                             <%= locals.user?user:"" %>

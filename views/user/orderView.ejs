@@ -1,7 +1,7 @@
 <%- include('../include/_header.ejs') %>
     <div class="container-fluid p-0 min-vh-100" style="margin-top: 6%;">
-        <%-include('../include/navbar.ejs') %>
-        <div class="container ">
+        <%-include('../include/navBar.ejs') %>
+            <div class="container ">
                 <div class="row p-4 mb-4">
                     <div class="container col-lg-3 col-md-3 col-12 p-3 m-0">
                         <div class="container bg-white profile_left p-5">
@@ -21,43 +21,133 @@
                         </div>
                     </div>
                     <div class="container col-lg-9 col-md-9 col-12 py-3 p-0 m-0">
-                        <div class="container-fluid bg-white profile_Right">
-                            <div class="container summary d-flex align-items-center justify-content-between pt-3"
-                                id="product">
-                                <h6 class="p-3 ps-4">My Order</h6>
-                                <input type="text" placeholder="what are you looking for?" class="text-center"
-                                    id="myOrder">
-                            </div>
-                            <div class="container  p-2 m-0 mb-2">
-                                <h4 class="my-4">Product details</h4>
-                                <div class="row">
-                                    <img class="col-md-4" src="/public/img/Shirt.jpg" alt="">
-                                    <div class="col-md-8 d-flex flex-column">
-                                        <h5>product name</h5>
-                                        <p>description</p>
-                                        <p>color</p>
-                                        <p>size</p>
-                                        <h6>Rs price</h6>
-                                        <h6>Quantity: 1</h6>
+                        <div class="container-fluid bg-white profile_Right pb-4">
+                            <div class="container-fluid">
+                                <div class="container pt-4">
+                                    <!-- Title -->
+                                    <div class="d-flex justify-content-between align-items-center py-3">
+                                        <h3 class="h5 mb-0"><span class="text-danger">ORDER ID</span> : <span style="font-size: 14px; color: #959595;">#<%=order._id%></span></h3>
                                     </div>
-                                </div>
-                                <h4 class="my-4">Order details</h4>
-                                <div>
-                                    <h6>Payment method: Cash On delivery</h6>
-                                    <h6>Payment status: Pending</h6>
-                                    <h6>Amount to pay: Rs 599</h6>
-                                    <h6>Order status: Processing</h6>
-                                    <p>Delivery to              
-                                        <span style="color: #9a9a9a; font-size: 13.5px;">
-                                        <Span>Asharudeen alikt, </Span>
-                                        <Span>keralamthodi, </Span>
-                                        <Span>mankada,</Span>
-                                        <Span>mankada,</Span>
-                                        <br>
-                                        <Span>Ph : 755637333,</Span>
-                                        <Span>Pin : 336737</Span>
-                                        </span>
-                                    </p>
+                                    <!-- Main content -->
+                                    <div class="row">
+                                        <div class="col-lg-8">
+                                            <!-- Details -->
+                                            <div class="mb-4 profile_info ">
+                                                <div class="card-body">
+                                                    <div class="mt-3 d-flex justify-content-between">
+                                                        <div class="mx-2">
+                                                            <span class="me-3 fw-bold" style="font-size: 13px;color: #959595;"><span>Order Date :</span><%= orderedOn %></span>
+                                                            <span class="me-3 fw-bold" style="font-size: 13px;color: #959595;"><span>Delivery Date :</span> <%= expectedDate %> </span>
+                                                            <%if(order.isCancelled === false){%>
+                                                                <%if(order.order_status == "Deliverd"){%>
+                                                                    <span class="badge rounded-pill bg-success">Deliverd</span>
+                                                                <%}else if(order.order_status == "Processing"){%>
+                                                                    <span class="badge rounded-pill bg-warning">Processing</span>
+                                                                <%}else{%>
+                                                                    <span class="badge rounded-pill bg-info"><%= order.order_status %></span>
+                                                                <%}%>
+                                                            <%}else if(orderCanceld === true){%>
+                                                                <%if(orderStatus == "Canceled"){%>
+                                                                    <span class="badge rounded-pill bg-danger">Canceld</span>
+                                                                <%}else{%>
+                                                                    <span class="badge rounded-pill bg-warning">Cancel Requested</span>
+                                                                <%}%>
+                                                            <%}%>
+                                                        </div>
+                                                        <div >
+                                                            <span class="badge rounded-pill bg-primary ">
+                                                                <a class="text-decoration-none text-white" href="/profile/invoice?id"><span class="text">Invoice</span></a>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <table class="table table-borderless">
+                                                        <tbody >
+                                                            <tr>
+                                                                <td>
+                                                                    <div class="d-flex mb-2">
+                                                                        <div class="flex-shrink-0" ">
+                                                                            <img src="/public/img/<%=order.product_images[0]%>"
+                                                                                alt="" width="35" class="img-fluid"  >
+                                                                        </div>
+                                                                        <div class="flex-lg-grow-1 ms-3">
+                                                                            <h6 class="small mb-0"  style="font-size: 14px;">
+                                                                                <a href="#"class="text-reset text-decoration-none">
+                                                                                    <%=order.product_name%>
+                                                                                </a>
+                                                                            </h6>
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                                <td  style="font-size: 13px;"><%=order.quantity%></td>
+                                                                <td class="text-end fw-bold"  style="font-size: 14px;">₹ <%=order.product_price%></td>
+                                                                <td> <%= order.size %></td>
+                                                                <td>color</td>
+                                                                
+                                                            </tr>
+                                                        </tbody>
+                                                            <tfoot class=" pt-2" style="border-radius: 10px;">
+                                                                <tr>
+                                                                    <td colspan="2" class="fw-bold" style="color: #959595;">Subtotal</td>
+                                                                    <td class="text-end"style="color: #959595;">₹ <%= order.product_price * order.quantity %></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td colspan="2" class="fw-bold" style="color: #959595;">Shipping</td>
+                                                                    <td class="text-end text-success fw-bold" style="color: green;">Free</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td colspan="2" class="fw-bold" style="color: #959595;">Payment Method</td>
+                                                                    <td class="text-end fw-bold" style="color: #959595;"><%=order.payment_method %></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td colspan="2" class="fw-bold" style="color: #959595;">Discount</td>
+                                                                    <td class="text-danger text-end" style="opacity: 80%;">₹0</td>
+                                                                </tr>
+                                                                <tr class="fw-bold">
+                                                                    <td colspan="2">TOTAL</td>
+                                                                    <td class="text-end">₹ <%= order.product_price * order.quantity %></td>
+                                                                </tr>
+                                                            </tfoot>   
+                                                    </table>
+                                                </div>
+                                            </div>
+                                         
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="profile_info mb-4">
+                                                <!-- Shipping information -->
+                                                <div class="card-body ">
+                                                    <h6 class="fw-bold pt-3">Shipping Information</h6>
+                                                    <span class="fw-bold" style="font-size: 14px; opacity: 70%;">Payment Method : <span class="badge bg-success rounded-pill"><%=order.payment_method %></span></span>
+                                                    <hr>
+                                                    <h6 class="fw-bold ">Address</h6>
+                                                    <address style="font-size: 14px; opacity: 70%;">
+                                                        <label class="fw-bold" style="font-size: 14px; opacity: 70%;"><%=address.full_name%></label><br>
+                                                        <%=address.house_name%>, <%=address.street%><br>
+                                                        <%=address.city%>,<br>
+                                                        Ph : <%=address.phone%><br>
+                                                        Pin : <%=address.pincode%>
+                                                    </address>
+                                                </div>
+                                            </div>
+
+                                            <div>
+                                               <%if(order.isCancelled == false){%>
+                                                    <%if(order.order_status == "Deliverd"){%>
+                                                        <form action="/Shop" method="get">
+                                                            <button class="btn btn-success" style="width: 100%; border-radius: 10px;font-size: 13px;">Order Again</button>
+                                                         </form>
+                                                    <%}else{%>
+                                                        <button id="cancel-btn" class="btn btn-danger" style="width: 100%; border-radius: 10px;font-size: 13px;">Cancel Order</button>
+                                                        
+                                                    <%}%>
+                                               <%}else{%>
+                                                <form action="/Shop" method="get">
+                                                    <button class="btn btn-success" style="width: 100%; border-radius: 10px;font-size: 13px;">Order Again</button>
+                                                 </form>
+                                                <%}%>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -65,4 +155,7 @@
                 </div>
             </div>
     </div>
-    <%-include('../include/_footer.ejs') %>
+    <script type="module" src="/js/user/orderView.mjs"></script>
+<%- include('../include/_footer.ejs') %>
+
+

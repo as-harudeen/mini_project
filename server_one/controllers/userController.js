@@ -163,7 +163,7 @@ const count = async (req, res)=>{
 }
 
 
-//Order
+//Confirm SOrder
 //@des localhost:3000/api/order
 //mthod POST
 const order = async (req, res)=>{
