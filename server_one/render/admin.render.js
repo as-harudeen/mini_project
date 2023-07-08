@@ -1,6 +1,10 @@
 const jwt = require('jsonwebtoken')
 const CategoryModel = require('../../models/categoryModel.js')
 const ProductModel = require('../../models/product.model.js')
+const OrderModel = require('../../models/orderModel.js')
+const UserModel = require('../../models/userModel.js')
+const moment = require('moment')
+
 
 //@des http:localhost:3000/admin/login
 const loginGET = (req, res)=>{
@@ -82,6 +86,29 @@ const editProductGET = async (req, res)=>{
     res.status(200).render('admin/editProduct', {product})
 }
 
+
+//@des http/localhost:3000/admin/panel/orders
+const ordersGET = async (req, res)=>{
+    res.status(200).render('admin/orders')
+}
+
+
+//@des http://localhost:3000/amdin/panel/orders/:order_id
+const orderDetailsGET = async (req, res)=>{
+    const {order_id} = req.params
+    const fetchedOrders = req.session.orders
+
+    if(!fetchedOrders) return res.redirect('/admin/panel/orders')
+    const currOrder = fetchedOrders[order_id]
+    if(!currOrder) return res.redirect('/admin/panel/orders')
+
+    const orderedOn = moment(currOrder.createdAt).format('DD/MM/YYYY')
+    const deliveryDate = moment(currOrder.delevery_date).format('DD/MM/YYYY')
+
+    res.status(200).render('admin/orderDetails', {order: currOrder, orderedOn, deliveryDate})
+}
+
+
 module.exports = {
     loginGET,
     panelGET,
@@ -91,5 +118,7 @@ module.exports = {
     userManagementGET,
     addProductGET,
     productsGET,
-    editProductGET
+    editProductGET,
+    ordersGET,
+    orderDetailsGET
 }
