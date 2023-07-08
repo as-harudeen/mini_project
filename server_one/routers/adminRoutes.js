@@ -9,7 +9,9 @@ const {
     userManagementGET,
     addProductGET,
     productsGET,
-    editProductGET
+    editProductGET,
+    ordersGET,
+    orderDetailsGET
 } = require('../render/admin.render.js')
 const {
     login,
@@ -28,7 +30,9 @@ const {
     editProduct,
     listProduct,
     unlistProduct,
-    test
+    test,
+    getOrders,
+    updateOrderStatus
 } = require("../controllers/adminController.js")
 
 const authenticate = require('../middlewares/auth/adminAuth.js')
@@ -136,14 +140,14 @@ router
 router.get('/get-products', getAllProducts)
 
 
-//Get All product
+//Get one product
 router.get('/get-product/:product_id', getProduct)
 
 
-//list product
+//list product (UPDATE)
 router.put('/list/:product_id', listProduct)
 
-//unlist product
+//unlist product (UPDATE)
 router.put('/unlist/:product_id', unlistProduct)
 
 
@@ -160,10 +164,7 @@ router
 .get()
 .put()
 
-//Delete user
-router
-.route('panel/user_management/delete_user/:user_id')
-.delete()
+
 
 //Get all users
 router
@@ -184,8 +185,29 @@ router
 
 //Orders
 router
-.route('panel/orders')
-.get()
+.route('/panel/orders')
+.get(ordersGET)
+
+
+//order Details
+router
+.route('/panel/orders/:order_id')
+.get(orderDetailsGET)
+.put(updateOrderStatus)
+
+//GET orders
+router
+.get('/getorders', getOrders)
+
+
+router
+.get('/panel/order/:order_id', (req, res)=>{
+    console.log("IVedddnnnnnn")
+    console.log(req.session.order)
+    res.send("OK")
+})
+
+
 
 //Edit order
 router

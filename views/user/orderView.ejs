@@ -131,7 +131,7 @@
                                             </div>
 
                                             <div id="cancel-order-btn-container">
-                                               <%if(order.isCancelled == false){%>
+                                               <%if(order.isCanceled == false){%>
                                                 <%if(order.order_status == "Deliverd" || order.order_status == "requested for cancel"){%>
                                                     <form action="/api/Shop" method="get">
                                                         <button class="btn btn-success" style="width: 100%; border-radius: 10px;font-size: 13px;">Order Again</button>

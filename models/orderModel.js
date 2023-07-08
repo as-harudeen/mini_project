@@ -49,7 +49,7 @@ const orderSchema = new mongoose.Schema({
     payment_status: {
         type: String
     },
-    isCancelled: {
+    isCanceled: {
         type: Boolean,
         default: false
     },

@@ -4,7 +4,7 @@ const morgan = require('morgan');
 const cookieParser = require('cookie-parser')
 require('dotenv').config({path: '../.env'});
 const {connect} = require('../database/db.js')
-const cors = require('cors')
+const session = require('express-session')
 
 
 //Database connecting
@@ -24,6 +24,11 @@ app.use(express.urlencoded({extended: true}));
 //Using midlewares
 app.use(morgan('tiny'))
 app.use(cookieParser())
+app.use(session({
+    secret: process.env.SECRET,
+    resave: false,
+    saveUninitialized: false
+  }));
 
 //Setting static files
 app.use("/css", express.static(path.resolve(__dirname, '../assets/css')));

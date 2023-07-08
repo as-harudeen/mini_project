@@ -4,6 +4,7 @@ const mongoose = require('mongoose')
 const CategoryModel = require('../../models/categoryModel.js')
 const UserModel = require('../../models/userModel.js')
 const ProductModel = require('../../models/product.model.js')
+const OrderModel = require('../../models/orderModel.js')
 const sharp = require('sharp')
 const fs = require('fs')
 
@@ -399,6 +400,84 @@ const test = async (req, res) => {
  }
  
 
+
+//get orders
+const getOrders = async (req, res)=>{
+    const {page, limit} = req.query
+    const skip = (+page - 1) * +limit
+
+    const orders = await OrderModel.find().limit(+limit).skip(skip)
+
+    const producstId = {}//stroring products id for retriving products
+    const usersId = {}//storing user id for retriving users
+
+    orders.forEach(order => {//building productId and userId
+        if(!producstId[order.product_id]) producstId[order.product_id] = true
+        if(!usersId[order.user_id]) usersId[order.user_id] = true
+    })
+
+    //stroting products and users
+    const products = await ProductModel.find({_id: {$in: Object.keys(producstId)}}, { 
+        product_images: 1, 
+        product_name: 1,
+        product_price: 1
+    })
+    const users = await UserModel.find({_id: {$in: Object.keys(usersId)}}, {username: 1})
+
+
+    const productsOBJ = {}//for constant retrive product by Id
+    products.forEach(product=> productsOBJ[product._id] = product.toObject())
+
+    const usersOBJ = {}//for constant retrive user by Id
+    users.forEach(user => usersOBJ[user._id] = user.toObject())
+    
+    req.session.orders = {}//storing order data to session storage for reuse
+    //by storing order data we don't fetch data again when we check order details
+    //of individual
+
+
+    //manpulating orders object and add some neccessary data from
+    //both products and users
+    for (let idx in orders) {
+        orders[idx] = orders[idx].toObject()
+        const order = orders[idx]
+        const product = productsOBJ[order.product_id.toString()];
+        const user = usersOBJ[order.user_id.toString()];
+
+        order['product_name'] = product.product_name
+        order['product_price'] = product.product_price
+        order.product_images = product.product_images; 
+        order.username = user.username;
+
+        req.session.orders[order._id] = order
+      }
+
+
+     
+    res.status(200).send(orders)
+} 
+
+
+//update order
+const updateOrderStatus = async (req, res)=>{
+    const {order_id} = req.params
+    const status = req.body.status
+
+    const option = {$set: {order_status: status}}
+    option.$set.isCanceled = status == 'Canceled'
+    
+    // if(!status || (status != 'Processing' && status != 'Shipped' && status != 'requested for cancel')
+
+    if(!status) throw new Error("Status")
+    const order = await OrderModel.findByIdAndUpdate(order_id, option)
+    res.status(200).send({isCanceled: order.isCanceled, order_status: order.order_status})
+
+}
+
+
+
+
+
 module.exports = {
     login,
     addCategory,
@@ -416,5 +495,7 @@ module.exports = {
     editProduct,
     listProduct,
     unlistProduct,
-    test
+    test,
+    getOrders,
+    updateOrderStatus
 }
