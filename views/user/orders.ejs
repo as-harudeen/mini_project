@@ -22,14 +22,11 @@
                     </div>
                     <div class="container col-lg-9 col-md-9 col-12 py-3 p-0 m-0">
                         <div class="container-fluid bg-white profile_Right">
-                            <!-- <div class="container summary d-flex align-items-center justify-content-between pt-3"
+                            <div class="container summary d-flex align-items-center justify-content-between pt-3"
                                 id="product">
                                 <h6 class="p-3 ps-4">My Order</h6>
-                                <input type="text" placeholder="what are you looking for?" class="text-center"
-                                    id="myOrder">
-                            </div> -->
+                            </div>
                             <div class="container  p-2 m-0 mb-2">
-                                <%if(data.length>0){%>
                                     <div class="Cart_list">
                                         <div class="px-2">
                                             <table style="width:100%;">
@@ -48,15 +45,30 @@
                                             </table>
                                         </div>
                                     </div>
-                                    <%}else{%>
-                                        <div class="d-flex align-items-center justify-content-center">
-                                            <lottie-player
-                                                src="https://assets10.lottiefiles.com/packages/lf20_3VDN1k.json"
-                                                background="transparent" speed="5"
-                                                style="width: 300px; height: 300px; opacity: 80%;" loop autoplay>
-                                            </lottie-player>
+                            </div>
+                            <div class="container-fluid bg-white profile_Right p-4 mt-4">
+                                <div class="p-3">
+                                    <h5 class=" fw-bold">Order History</h5>
+                                </div>
+                                <div class="container  p-2 m-0 mb-2">
+                                        <div class="Cart_list">
+                                            <div class="px-2">
+                                                <table style="width:100%;">
+                                                    <thead class="cartTop" style="position:sticky; top: 0; z-index: 1;">
+                                                        <tr class="cart_table">
+                                                            <th class="first p-3 px-4"><span>ID</span></th>
+                                                            <th class="p-3"><span>Product</span></th>
+                                                            <th class="p-3"><span>Status</span></th>
+                                                            <th class="p-3"><span>Quantity</span></th>
+                                                            <th class="p-3"><span>Price</span></th>
+                                                            <th class="third p-3"><span>Return Availability</span></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="order_hist_tbody"></tbody>
+                                                </table>
+                                            </div>
                                         </div>
-                                <%}%>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -64,6 +76,7 @@
             </div>
     </div>
     <%- include('../component/orderedItemRow.ejs') %>
+    <%- include('../component/my_order/history.ejs') %>
     <script type="module" src="/js/user/myOrder.mjs"></script>
     <%-include('../include/_footer.ejs') %>
 
