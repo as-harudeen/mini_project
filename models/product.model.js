@@ -37,6 +37,10 @@ const productSchema = new mongoose.Schema({
         type: [String],
         required: true
     },
+    orderedCount: {
+        type: Number,
+        default: 0
+    },
     isDeleted: {
         type: Boolean,
         required: true

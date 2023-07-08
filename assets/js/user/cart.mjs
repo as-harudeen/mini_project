@@ -6,6 +6,7 @@ const token = getToken()
 console.log(token)
 
 let dataToCheckout = []
+let dataToCheckoutOBJ = {}
 
 const fetchCartDetails = async ()=>{
 
@@ -13,17 +14,17 @@ const fetchCartDetails = async ()=>{
     const data = await res.json()
     const cart = data[0].cart
 
-    dataToCheckout = []
+    dataToCheckoutOBJ = {}
 
     if(!cart) return false
     for(let item of cart){
 
-        dataToCheckout.push({
+        dataToCheckoutOBJ[item.cart_item_id] = {
           product_id: item.product_id,
           color: item.color,
           size: item.size,
           quantity: item.quantity
-        })
+        }
 
         const cartItem = document.createElement('div')
         cartItem.classList.add('cart-item', 
@@ -39,7 +40,7 @@ const fetchCartDetails = async ()=>{
         <div>${item.size}</div>
         <div class="cart-item-action d-flex">
           <button type="button" class="btn btn-light sub-btn">-</button>
-          <input value="${item.quantity}" type="number" name="quantity" class="quantity">
+          <input disabled value="${item.quantity}" type="text" name="quantity" class="quantity">
           <button type="button" class="btn btn-light add-btn">+</button>
         </div>
         <button type="button" class="del-btn btn btn-danger">x</button>
@@ -49,13 +50,14 @@ const fetchCartDetails = async ()=>{
         const subBtn = cartItem.querySelector('.sub-btn')
         if(item.quantity == 1) subBtn.disabled = true
         const addBtn = cartItem.querySelector('.add-btn')
+        if(item.quantity == 10) addBtn.disabled = true
+        
+        const cart_item_id = item.cart_item_id
+        const quantityInp = cartItem.querySelector('.quantity')
 
         
         subBtn.addEventListener('click', async()=>{
-            const cart_item_id = item.cart_item_id
-            const quantityInp = cartItem.querySelector('.quantity')
             quantityInp.value--
-
 
             const findBy = {
                 'cart.cart_item_id': cart_item_id
@@ -65,12 +67,14 @@ const fetchCartDetails = async ()=>{
             }
             const url = `http://localhost:5000/cart/update?findBy=${JSON.stringify(findBy)}`
             const res = await fetchData(url, 'PUT', body, token)
+            dataToCheckoutOBJ[item.cart_item_id].quantity--
             if(quantityInp.value == 1) subBtn.disabled = true
+            if(quantityInp.value < 10) addBtn.disabled = false
         })
         
         addBtn.addEventListener('click', async()=>{
-            const cart_item_id = item.cart_item_id
-            const quantityInp = cartItem.querySelector('.quantity')
+            // const cart_item_id = item.cart_item_id
+            // const quantityInp = cartItem.querySelector('.quantity')
             quantityInp.value++
 
             const findBy = {
@@ -81,8 +85,10 @@ const fetchCartDetails = async ()=>{
             }
             const url = `http://localhost:5000/cart/update?findBy=${JSON.stringify(findBy)}`
             const res = await fetchData(url, 'PUT', body, token)
-          
+
+            dataToCheckoutOBJ[item.cart_item_id].quantity++
             if(quantityInp.value > 1) subBtn.disabled = false
+            if(quantityInp.value >= 10) addBtn.disabled = true
         })
 
 
@@ -90,6 +96,7 @@ const fetchCartDetails = async ()=>{
         cartContainer.appendChild(cartItem)
     }
 console.log(dataToCheckout)
+console.log(dataToCheckoutOBJ)
 
 }
 
@@ -99,5 +106,8 @@ fetchCartDetails()
 
 const checkoutBtn = document.getElementById('checkout-btn')
 checkoutBtn.addEventListener('click', ()=>{
+  dataToCheckout = []
+  for(let value of Object.values(dataToCheckoutOBJ)) dataToCheckout.push(value)
+  console.log(dataToCheckout)
   location.href = `http://localhost:3000/api/checkout?products=${JSON.stringify(dataToCheckout)}&fromCart="true"`
 })

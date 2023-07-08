@@ -184,22 +184,29 @@ const order = async (req, res)=>{
         product.payment_status = payment_method == 'COD' ? 'Pending' : 'Paid'
     }
 
-    // console.log(checkoutData)
 
 
     try {
 
         const orders = await OrderModel.insertMany(checkoutData)
         
-        const orderId = []
+        const orderId = []//for adding to user's orders field
+        const productCount = {}//for update product orderedcount
         orders.forEach(order => {
-            console.log(order._id)
-            orderId.push({order_id: order._id})
+            //taking the count
+            if(productCount[order.product_id]) productCount[order.product_id] += order.quantity
+            else productCount[order.product_id] = order.quantity
+            orderId.push({order_id: order._id})//collecting as a order_id
+
         })
-        if(req.query.fromCart){
+        if(req.query.fromCart){ //clearing cart and adding all order Id to user model
             await UserModel.updateOne({_id: userId}, {$unset: {cart: ""}, $push: {
                 orders: {$each: orderId}
             }})
+        }
+
+        for(let _id of Object.keys(productCount)){//incresing orderedcount
+            await ProductModel.findByIdAndUpdate(_id, {$inc: {orderedCount: productCount[_id]}})
         }
 
         res.status(200).json("OK")
