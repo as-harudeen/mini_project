@@ -40,13 +40,14 @@ for(let size of sizes){
 
 const token = getToken()
 const isExsting = {}
-const pipeline = [{$project: { _id: 0, cart: 1}}]
+const option = {cart: 1, _id: 0}
 //fetching user cart with using token
-const res = await fetchData(`http://localhost:5000/cart?pipeline=${JSON.stringify(pipeline)}`, 'GET', null, token)
+const res = await fetchData(`http://localhost:5000/user?option=${JSON.stringify(option)}`, 'GET', null, token)
 const data = await res.json()
 
-if(data[0].cart){
-    for(let item of data[0].cart){//building exist cart item id
+console.log(data)
+if(data.cart){
+    for(let item of data.cart){//building exist cart item id
         isExsting[item.cart_item_id] = true
     }
 }

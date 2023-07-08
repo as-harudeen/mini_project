@@ -32,13 +32,49 @@ const userCart = async(req, res)=>{
         console.log(userId)
         const _id = new mongoose.Types.ObjectId(userId)
 
-        let pipeline = []
+        let pipeline = [
+            {$match: {_id}},
+            {
+                $lookup: {
+                  from: "products",
+                  localField: "cart.product_id",
+                  foreignField: "_id",
+                  as: "cartItems"
+                }
+            },
+            {
+                $addFields: {
+                  cart: {
+                    $map: {
+                      input: "$cart",
+                      as: "cartItem",
+                      in: {
+                        $mergeObjects: [
+                          "$$cartItem",
+                          {
+                            $arrayElemAt: [
+                              "$cartItems",
+                              { $indexOfArray: ["$cartItems._id", "$$cartItem.product_id"] }
+                            ]
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              },
+            // {
+            //     $project: {
+            //       cart: 1
+            //     }
+            // }
+        ]
 
-        if(req.query.pipeline){
-            pipeline = JSON.parse(req.query.pipeline)
-        }
+        // if(req.query.pipeline){
+        //     pipeline = JSON.parse(req.query.pipeline)
+        // }
         
-        pipeline.unshift({$match: {_id}})
+        // pipeline.unshift({$match: {_id}})
 
         const user = await UserModel.aggregate(pipeline);
 
@@ -62,10 +98,13 @@ const updateCart = async (req, res)=>{
         }
 
         const option = req.body
+
+        // if(option.isBl)
         await UserModel.updateOne(
             findBy,
             option
             )
+            console.log("Updated")
         res.status(200).send("Updated")
     } catch (err) {
         console.log(err.message)
@@ -109,11 +148,20 @@ const updateProfile = async (req, res)=>{
 
 
 
+const sanitizingGETUSER = (option)=>{
+    if(option.password) delete option.password
+    if(option.isBlocked) delete option.isBlocked
+    return option
+}
+
 //localhost:5000/user
 const getUser = async (req, res)=>{
     const {userId} = req.user
     try {
-        const option = req.query.option ? JSON.parse(req.query.option) : {}
+        let option = req.query.option ? JSON.parse(req.query.option) : {}
+
+        //sanitizing
+        option = sanitizingGETUSER(option)
         const user = await UserModel.findById(userId, option)
         res.status(200).send(user)
     } catch (err) {

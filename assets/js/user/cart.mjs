@@ -9,53 +9,13 @@ let dataToCheckout = []
 
 const fetchCartDetails = async ()=>{
 
-//for retrive cart data with some products fields
-    const pipeline = [
-        {
-            $lookup: {
-              from: "products",
-              localField: "cart.product_id",
-              foreignField: "_id",
-              as: "cartItems"
-            }
-        },
-        {
-            $addFields: {
-              cart: {
-                $map: {
-                  input: "$cart",
-                  as: "cartItem",
-                  in: {
-                    $mergeObjects: [
-                      "$$cartItem",
-                      {
-                        $arrayElemAt: [
-                          "$cartItems",
-                          { $indexOfArray: ["$cartItems._id", "$$cartItem.product_id"] }
-                        ]
-                      }
-                    ]
-                  }
-                }
-              }
-            }
-          },
-        {
-            $project: {
-              cartItems: 0
-            }
-        }
-    ]
-
-
-    const res = await fetchData(`http://localhost:5000/cart?pipeline=${JSON.stringify(pipeline)}`, 'GET', null, token)
+    const res = await fetchData(`http://localhost:5000/cart`, 'GET', null, token)
     const data = await res.json()
     const cart = data[0].cart
 
     dataToCheckout = []
 
     if(!cart) return false
-
     for(let item of cart){
 
         dataToCheckout.push({
@@ -87,6 +47,7 @@ const fetchCartDetails = async ()=>{
 
 
         const subBtn = cartItem.querySelector('.sub-btn')
+        if(item.quantity == 1) subBtn.disabled = true
         const addBtn = cartItem.querySelector('.add-btn')
 
         
@@ -121,7 +82,7 @@ const fetchCartDetails = async ()=>{
             const url = `http://localhost:5000/cart/update?findBy=${JSON.stringify(findBy)}`
             const res = await fetchData(url, 'PUT', body, token)
           
-            if(quantityInp.value == 1) subBtn.disabled = true
+            if(quantityInp.value > 1) subBtn.disabled = false
         })
 
 
