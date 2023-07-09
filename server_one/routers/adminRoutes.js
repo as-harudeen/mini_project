@@ -33,11 +33,12 @@ const {
     unlistProduct,
     test,
     getOrders,
-    updateOrderStatus
+    updateOrderStatus,
+    addCoupon,
+    err
 } = require("../controllers/adminController.js")
 
 const authenticate = require('../middlewares/auth/adminAuth.js')
-const errHandler = require('../middlewares/err.handler.middleware.js')
 
 
 router.use((req, res, next)=>{
@@ -45,7 +46,8 @@ router.use((req, res, next)=>{
     next()
 })
 
-router.use(errHandler)
+
+
 
 
 //multer
@@ -209,7 +211,9 @@ router
 router
 .route('/panel/coupon/add')
 .get(addCouponGET)
-.post()
+.post(addCoupon)
+
+router.get("/err", err)
 
 
 

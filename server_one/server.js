@@ -5,6 +5,8 @@ const cookieParser = require('cookie-parser')
 require('dotenv').config({path: '../.env'});
 const {connect} = require('../database/db.js')
 const session = require('express-session')
+const errHandler = require('./middlewares/err.handler.middleware.js')
+
 
 
 //Database connecting
@@ -43,7 +45,7 @@ app.set('view engine', 'ejs')
 //Using routers
 app.use("/api", require('./routers/userRoutes.js'));
 app.use("/admin", require('./routers/adminRoutes.js'));
-
+app.use(errHandler)
 
 
 // const Redis = require('redis')
