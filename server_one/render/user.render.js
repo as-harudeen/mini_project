@@ -2,6 +2,7 @@ const ProductModel = require('../../models/product.model.js')
 const UserModel = require('../../models/userModel.js')
 const CategoryModel = require('../../models/categoryModel.js')
 const OrderModel = require('../../models/orderModel.js')
+const CouponModel = require('../../models/coupon.model.js')
 const jwt = require('jsonwebtoken')
 const moment = require('moment')
 
@@ -94,7 +95,6 @@ const checkoutGET = async (req, res)=>{
         //Redirection if the data is empty
         if(!products[0]) return res.status(400).redirect('/api')
 
-        console.log(products)
 
         /**
          [
@@ -113,19 +113,13 @@ const checkoutGET = async (req, res)=>{
         for(let productOBJ of products){//Itrating through all products
 
 
-            checkoutData.push({
-                product_id: productOBJ.product_id,
-                color: productOBJ.color,
-                size: productOBJ.size,
-                quantity: productOBJ.quantity,
-            })
-
+            
             //validating products array
             if(!productOBJ.product_id) throw new Error("product Not valid")
             if(!productOBJ.color) throw new Error("product Not valid")
             if(!productOBJ.size) throw new Error("product Not valid")
             if(!productOBJ.quantity) throw new Error("product Not valid")
-
+            
             //take some nessesary data
             const product  = await ProductModel.findById(
                 productOBJ.product_id,
@@ -135,7 +129,14 @@ const checkoutGET = async (req, res)=>{
                     product_price: 1,
                     product_images: {$slice: 1}
                 })
-
+                
+            checkoutData.push({
+                product_id: productOBJ.product_id,
+                color: productOBJ.color,
+                size: productOBJ.size,
+                quantity: productOBJ.quantity,
+                total_price: product.product_price * productOBJ.quantity
+            })
             //assigning 
             productOBJ = Object.assign(productOBJ, product.toObject())
             data.push(productOBJ)
@@ -152,7 +153,10 @@ const checkoutGET = async (req, res)=>{
         const expirationTime = new Date(Date.now() + 15 * 60 * 1000); 
         res.cookie('orderToken', orderToken, {expires: expirationTime})
 
-        res.status(200).render('user/checkout',{data})
+
+        const coupons = await CouponModel.find({used_users: {$ne: req.user.userId}})
+
+        res.status(200).render('user/checkout',{data, coupons})
 
     } catch (err) {
         if(err instanceof SyntaxError && err.name == 'SyntaxError'){
@@ -169,7 +173,7 @@ const checkoutGET = async (req, res)=>{
 //@des http://localhost:3000/api/profile/order
 const orderGET = async (req, res)=>{
     const orderHist = await OrderModel.find()
-    res.status(200).render('user/orders', {orderHist})
+    res.status(200).render('user/orders')
 }
 
 
@@ -183,7 +187,6 @@ const orderViewGET = async (req, res)=>{
         product_name: 1,
         product_des: 1,
         product_images: 1,
-        product_price: 1,
         _id: 0
     })
 

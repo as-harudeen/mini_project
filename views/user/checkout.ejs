@@ -24,8 +24,10 @@
                                     </div>
                                 <%}%>
 
-            
-                            <div class="row f-flex align-items-end">
+
+
+
+                            <!-- <div class="row f-flex align-items-end">
                                 <div class="p-2 col-md-6">
                                     <span class="fw-semi-bold">Total </span> <span id="total-price"> Rs <%= total %></span>
                                 </div>
@@ -35,7 +37,7 @@
                                     </button>
                                     <div id="msg-display"></div>
                                 </div>
-                            </div>
+                            </div> -->
                             </div>
                         </div>
                     </div>
@@ -52,6 +54,63 @@
                                 <button id="select-address-btn" class="btn btn-outline-danger">select address</button>
                             </div>
                         </div>
+
+
+
+
+
+                        <div class="d-flex flex-column col-lg-7 p-0"> 
+                            <div class="container p-2 billing_coupon gap-2 col-lg-12 col-12 d-flex">
+                                <input type="text" name="coupon" id="apply-coupon" placeholder="Coupon Code">
+                                <button class="btn btn-danger p-2" id="couponButton" type="button">Apply</button>
+                                
+                            </div>
+                            <span id="coupon-apply-msg"></span>
+                            <span class="px-2 p-1 col-lg-12 col-12" style="font-size: 14px; color: #9a9a9a;">
+                                Available Coupons?
+                                <a href="#" id="openModalBtn" class="text-decoration-none text-danger">
+                                    Click Here
+                                </a>
+                            </span>
+                            <dialog  id="coupon-dialog">
+                                <!-- <div class="modal-content"> -->
+                                    <div class="modalWrapper">
+                                        <div class="modelWrapper2">
+                                            <span class="close">&times;</span>
+                                            <h4 class="mb-4 text-dark fw-bold ms-3">Select your Coupon</h4>
+                                            <ul  id="couponList" style="list-style: none; color: #9a9a9a;"></ul>
+                                        </div>
+                                    </div>
+                                <!-- </div> -->
+                            </dialog> 
+                        </div>
+
+
+
+                        <div class="p-5 border mt-3 billing_Totall d-flex">
+                            <div class="col-lg-6">
+                                <h6 class="fw-bold">Total </h6>
+                                <h6 class="fw-bold">Discount </h6>
+                                <h6 class="fw-bold">Shipping </h6>
+                                <h6 class="fw-bold">Grant Total </h6>
+                            </div>
+                            <div class="col-lg-6">
+                                <h6>: <span >₹ <span id="total_price"><%= total %></span></span></h6>
+                                <h6>: <span >₹ <span id="discount_price">0</span></span></h6>
+                                <h6>:<span> Free</span></h6>
+                                <h6>: <span >₹<span id="grant_total"><%= total %></span></span></h6>
+                            </div>
+                        </div>
+                        <div class="p-2 col-md-6 billing_button">
+                            <button id="proceed-btn" class="btn btn-danger p-2" type="submit">
+                               proceed
+                            </button>
+                            <div id="msg-display"></div>
+                        </div>
+
+
+
+
                     </div>
                 </div>
                 <div id="success-container"></div>
@@ -92,6 +151,14 @@
     </template>
 
 
+    <template id="coupon-temp">
+        <div class="d-flex align-items-center justify-content-between mb-2">
+            <li class="text-uppercase fw-bold coupon-no"></li>
+            <li class="text-uppercase fw-bold coupon-name"></li>
+            <li class=" fw-bold coupon-value"></li>
+            <li class=" fw-bold coupon-expiry"></li>
+        </div>
+    </template>
 
 
     <script type="module" src="/js/user/checkout.mjs"></script>

@@ -1,6 +1,7 @@
 const UserModel = require('../../models/userModel.js');
 const ProductModel = require('../../models/product.model.js')
 const OrderModel = require('../../models/orderModel.js')
+const CouponModel = require('../../models/coupon.model.js')
 const bcrypt = require('bcrypt');
 const otpGenerator = require('otp-generator');
 const jwt = require('jsonwebtoken')
@@ -169,21 +170,34 @@ const count = async (req, res)=>{
 const order = async (req, res)=>{
 
     const {checkoutData} = req.order//take the checkoutdata
-    const {address_id, payment_method} = req.body //taking address and payment method
+    const {address_id, payment_method, coupon_id} = req.body //taking address, payment method and coupon id
     const {userId} = req.user
     
     const address = await UserModel.findOne({_id: userId, 'address._id': address_id}, {'address.$': 1})
     console.log(address)
     if(!address) throw new Error('Invalid address..')
 
+    let dis_amount = 0
+    let totalProduct = checkoutData.length
+    if(coupon_id){
+        const coupon = await CouponModel.findOneAndUpdate({_id: coupon_id, used_users: {$ne: userId}}, {$push: {used_users: userId}})
+        if(coupon){
+            if(totalProduct >= coupon.coupon_value) dis_amount = 1
+            else dis_amount = Math.floor(coupon.coupon_value / checkoutData.length)
+        }
+    }
+
     //Assigning address and payment method with products
     for(let product of checkoutData){
         product.user_id = userId,
         product.address = address.address[0],
         product.payment_method = payment_method,
-        product.payment_status = payment_method == 'COD' ? 'Pending' : 'Paid'
+        product.discount_price = dis_amount
+        totalProduct--
+        if(totalProduct <= 0) dis_amount = 0
     }
 
+    console.log(checkoutData)
 
 
     try {

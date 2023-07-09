@@ -19,7 +19,7 @@ async function buildOrders(){
                     order.product_images[0], 
                     status, 
                     order.quantity,
-                    order.product_price,
+                    order.total_price - order.discount_price,
                     order.delivery_date,
                     order._id
                 )
@@ -28,7 +28,7 @@ async function buildOrders(){
                     order._id,
                     status,
                     order.product_images[0],
-                    order.product_price,
+                    order.total_price - order.discount_price,
                     order.quantity
                 )
             }

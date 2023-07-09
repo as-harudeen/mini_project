@@ -46,8 +46,13 @@ const orderSchema = new mongoose.Schema({
             message: "Payment should be COD or Razopay"
         }
     },
-    payment_status: {
-        type: String
+    total_price: {
+        type: String,
+        required: true
+    },
+    discount_price: {
+        type: String,
+        required: true
     },
     isCanceled: {
         type: Boolean,

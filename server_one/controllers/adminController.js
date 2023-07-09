@@ -429,8 +429,7 @@ const getOrders = async (req, res)=>{
         //stroting products and users
         const products = await ProductModel.find({_id: {$in: Object.keys(producstId)}}, { 
             product_images: 1, 
-            product_name: 1,
-            product_price: 1
+            product_name: 1
         })
     const users = await UserModel.find({_id: {$in: Object.keys(usersId)}}, {username: 1})
 

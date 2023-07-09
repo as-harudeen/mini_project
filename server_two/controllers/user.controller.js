@@ -3,6 +3,7 @@ const mongoose = require('mongoose')
 const ProductModel = require('../../models/product.model.js')
 const UserModel = require('../../models/userModel.js')
 const OrderModel = require('../../models/orderModel.js')
+const CouponModel = require('../../models/coupon.model.js')
 
 
 //localhost:5000/get-product
@@ -183,7 +184,7 @@ const my_order = async (req, res)=>{
 
             let order = await OrderModel.findById(orderId.order_id)
             console.log(order)
-            const product = await ProductModel.findById(order.product_id, {product_name: 1, _id: 0, product_images: 1, product_price: 1})
+            const product = await ProductModel.findById(order.product_id, {product_name: 1, _id: 0, product_images: {$slice: 1}})
             data.push({...order.toObject(), ...product.toObject()})
     
         }
@@ -221,6 +222,20 @@ const cancelRequest = async (req, res)=>{
 }
 
 
+//http://localhost:5000/getcoupons
+const getCoupons = async (req, res)=>{
+    const {userId} = req.user
+
+    try {
+        const coupons = await CouponModel.find({used_users: {$ne: userId}})
+        res.status(200).send(coupons)
+    } catch (err) {
+        return res.status(500).send(err.message)
+    }
+
+}
+
+
 module.exports = {
     getProduct,
     userCart,
@@ -228,5 +243,6 @@ module.exports = {
     updateProfile,
     getUser,
     my_order,
-    cancelRequest
+    cancelRequest,
+    getCoupons
 }

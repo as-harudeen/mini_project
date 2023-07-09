@@ -8,7 +8,8 @@ const {
     updateProfile,
     getUser,
     my_order,
-    cancelRequest
+    cancelRequest,
+    getCoupons
 } = require('../controllers/user.controller.js')
 
 
@@ -44,6 +45,10 @@ router
 //Cancel order request
 router
 .put("/order/cancelrequest/:orderID", cancelRequest)
+
+//GET AVAILABLE COUPONS
+router
+.get('/getcoupons', getCoupons)
 
 
 

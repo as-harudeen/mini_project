@@ -79,7 +79,7 @@
                                                                     </div>
                                                                 </td>
                                                                 <td  style="font-size: 13px;"><%=order.quantity%></td>
-                                                                <td class="text-end fw-bold"  style="font-size: 14px;">₹ <%=order.product_price%></td>
+                                                                <td class="text-end fw-bold"  style="font-size: 14px;">₹ <%=order.total_price / order.quantity %></td>
                                                                 <td> <%= order.size %></td>
                                                                 <td>color</td>
                                                                 
@@ -88,7 +88,7 @@
                                                             <tfoot class=" pt-2" style="border-radius: 10px;">
                                                                 <tr>
                                                                     <td colspan="2" class="fw-bold" style="color: #959595;">Subtotal</td>
-                                                                    <td class="text-end"style="color: #959595;">₹ <%= order.product_price * order.quantity %></td>
+                                                                    <td class="text-end"style="color: #959595;">₹ <%= order.total_price %></td>
                                                                 </tr>
                                                                 <tr>
                                                                     <td colspan="2" class="fw-bold" style="color: #959595;">Shipping</td>
@@ -100,11 +100,11 @@
                                                                 </tr>
                                                                 <tr>
                                                                     <td colspan="2" class="fw-bold" style="color: #959595;">Discount</td>
-                                                                    <td class="text-danger text-end" style="opacity: 80%;">₹0</td>
+                                                                    <td class="text-danger text-end" style="opacity: 80%;">₹ <%= order.discount_price %></td>
                                                                 </tr>
                                                                 <tr class="fw-bold">
                                                                     <td colspan="2">TOTAL</td>
-                                                                    <td class="text-end">₹ <%= order.product_price * order.quantity %></td>
+                                                                    <td class="text-end">₹ <%= order.total_price - order.discount_price %></td>
                                                                 </tr>
                                                             </tfoot>   
                                                     </table>
