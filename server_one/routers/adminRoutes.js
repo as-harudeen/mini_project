@@ -12,7 +12,8 @@ const {
     editProductGET,
     ordersGET,
     orderDetailsGET,
-    addCouponGET
+    addCouponGET,
+    couponsGET
 } = require('../render/admin.render.js')
 const {
     login,
@@ -35,7 +36,7 @@ const {
     getOrders,
     updateOrderStatus,
     addCoupon,
-    err
+    deleteCoupon
 } = require("../controllers/adminController.js")
 
 const authenticate = require('../middlewares/auth/adminAuth.js')
@@ -209,13 +210,19 @@ router
 
 //Add coupon
 router
-.route('/panel/coupon/add')
+.route('/panel/coupons/add')
 .get(addCouponGET)
 .post(addCoupon)
 
-router.get("/err", err)
+//Coupons
+router
+.route('/panel/coupons')
+.get(couponsGET)
 
-
+//Delete coupon
+router
+.route('/panel/coupons/delete/:coupon_id')
+.put(deleteCoupon)
 
 
 //Logout

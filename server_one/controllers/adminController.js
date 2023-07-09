@@ -5,7 +5,9 @@ const CategoryModel = require('../../models/categoryModel.js')
 const UserModel = require('../../models/userModel.js')
 const ProductModel = require('../../models/product.model.js')
 const OrderModel = require('../../models/orderModel.js')
+const CouponModel = require('../../models/coupon.model.js')
 const sharp = require('sharp')
+const moment = require('moment')
 const fs = require('fs')
 
 
@@ -406,36 +408,44 @@ const getOrders = async (req, res)=>{
     const {page, limit} = req.query
     const skip = (+page - 1) * +limit
 
-    const orders = await OrderModel.find().limit(+limit).skip(skip)
 
-    const producstId = {}//stroring products id for retriving products
-    const usersId = {}//storing user id for retriving users
+    try {
 
-    orders.forEach(order => {//building productId and userId
-        if(!producstId[order.product_id]) producstId[order.product_id] = true
-        if(!usersId[order.user_id]) usersId[order.user_id] = true
-    })
+        const option = req.query.option ? JSON.parse(req.query.option) : {}
+        console.log(option)
 
-    //stroting products and users
-    const products = await ProductModel.find({_id: {$in: Object.keys(producstId)}}, { 
-        product_images: 1, 
-        product_name: 1,
-        product_price: 1
-    })
+        const orders = await OrderModel.find(option).limit(+limit).skip(skip)
+        
+        // console.log(orders)
+        
+        const producstId = {}//stroring products id for retriving products
+        const usersId = {}//storing user id for retriving users
+        
+        orders.forEach(order => {//building productId and userId
+            if(!producstId[order.product_id]) producstId[order.product_id] = true
+            if(!usersId[order.user_id]) usersId[order.user_id] = true
+        })
+        
+        //stroting products and users
+        const products = await ProductModel.find({_id: {$in: Object.keys(producstId)}}, { 
+            product_images: 1, 
+            product_name: 1,
+            product_price: 1
+        })
     const users = await UserModel.find({_id: {$in: Object.keys(usersId)}}, {username: 1})
 
 
     const productsOBJ = {}//for constant retrive product by Id
     products.forEach(product=> productsOBJ[product._id] = product.toObject())
-
+    
     const usersOBJ = {}//for constant retrive user by Id
     users.forEach(user => usersOBJ[user._id] = user.toObject())
     
     req.session.orders = {}//storing order data to session storage for reuse
     //by storing order data we don't fetch data again when we check order details
     //of individual
-
-
+    
+    
     //manpulating orders object and add some neccessary data from
     //both products and users
     for (let idx in orders) {
@@ -443,18 +453,20 @@ const getOrders = async (req, res)=>{
         const order = orders[idx]
         const product = productsOBJ[order.product_id.toString()];
         const user = usersOBJ[order.user_id.toString()];
-
+        
         order['product_name'] = product.product_name
         order['product_price'] = product.product_price
         order.product_images = product.product_images; 
         order.username = user.username;
-
+        
         req.session.orders[order._id] = order
-      }
-
-
-     
+    }
+    
     res.status(200).send(orders)
+} catch (err) {
+    console.log(err.message)
+    return res.status(500).send(err.message)
+}
 } 
 
 
@@ -462,7 +474,7 @@ const getOrders = async (req, res)=>{
 const updateOrderStatus = async (req, res)=>{
     const {order_id} = req.params
     const status = req.body.status
-
+    
     const option = {$set: {order_status: status}}
     option.$set.isCanceled = status == 'Canceled'
     
@@ -475,6 +487,57 @@ const updateOrderStatus = async (req, res)=>{
 }
 
 
+
+//@des localhost:3000/admin/panel/coupon/add
+//method POST
+const addCoupon = async(req, res)=>{
+    const {coupon_name, coupon_value, expiry_date} = req.body
+
+    if(coupon_value <= 0) {
+        res.status(400)
+        throw new Error("coupon value should greater than 0")
+    }
+    else if(coupon_value >= 1000){
+        res.status(400)
+        throw new Error("Coupon value can't be more than 999")
+    }
+
+    const [year, month, day] = expiry_date.split('-');
+    const expiry = new Date(year, month-1, day).getTime()
+
+    const twoDayLater = new Date().getTime() + 2 * 24 * 45 * 60 * 1000
+
+    if(expiry <= twoDayLater) {
+        res.status(400)
+        throw new Error("Expiry date should be at least 2 day")
+    }
+
+    try {
+        const coupon = await CouponModel.create({
+            coupon_name,
+            coupon_value,
+            expiry_date
+        })
+        console.log("coupon added success")
+
+        res.status(200).send(coupon)
+    } catch (err) {
+        return res.status(400).send("coupon name exist")
+    }
+
+
+
+
+}
+
+
+//@des localhost:3000/admin/panel/coupons/delete/:coupon_id
+const deleteCoupon = async(req, res)=>{
+    const {coupon_id} = req.params
+    const coupon = await CouponModel.findByIdAndDelete({_id: coupon_id})
+    if(!coupon) return res.status(400).send("coupon not found")
+    res.status(200).send("Deleted")
+}
 
 
 
@@ -497,5 +560,7 @@ module.exports = {
     unlistProduct,
     test,
     getOrders,
-    updateOrderStatus
+    updateOrderStatus,
+    addCoupon,
+    deleteCoupon
 }
