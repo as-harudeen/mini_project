@@ -11,7 +11,8 @@ const {
     productsGET,
     editProductGET,
     ordersGET,
-    orderDetailsGET
+    orderDetailsGET,
+    addCouponGET
 } = require('../render/admin.render.js')
 const {
     login,
@@ -36,6 +37,7 @@ const {
 } = require("../controllers/adminController.js")
 
 const authenticate = require('../middlewares/auth/adminAuth.js')
+const errHandler = require('../middlewares/err.handler.middleware.js')
 
 
 router.use((req, res, next)=>{
@@ -43,6 +45,7 @@ router.use((req, res, next)=>{
     next()
 })
 
+router.use(errHandler)
 
 
 //multer
@@ -200,25 +203,15 @@ router
 .get('/getorders', getOrders)
 
 
+//===========COUPON==============//
+
+//Add coupon
 router
-.get('/panel/order/:order_id', (req, res)=>{
-    console.log("IVedddnnnnnn")
-    console.log(req.session.order)
-    res.send("OK")
-})
+.route('/panel/coupon/add')
+.get(addCouponGET)
+.post()
 
 
-
-//Edit order
-router
-.route('panel/orders/edit_order/:order_id')
-.get()
-.put()
-
-//Delete order
-router
-.route('/panel/orders/delete_orders/:orders_id')
-.delete()
 
 
 //Logout
