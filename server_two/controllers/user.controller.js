@@ -99,6 +99,7 @@ const updateCart = async (req, res)=>{
         }
 
         const option = req.body
+        console.log(option)
 
         // if(option.isBl)
         await UserModel.updateOne(
@@ -125,7 +126,7 @@ const updateProfile = async (req, res)=>{
         findBy.$and.push(JSON.parse(req.query.findBy))
     }
 
-
+    console.log(option)
     try {
         if(option.password){
             const oldPass = await UserModel.findById(userId, {password: 1, _id: 0})
@@ -134,15 +135,19 @@ const updateProfile = async (req, res)=>{
             delete option.oldPassword
             option.password = await bcrypt.hash(option.password, 10)
         }
+        
+        console.log(option)
 
-
-        await UserModel.updateOne(findBy,option)
-    
-        res.status(200).send(JSON.stringify(option))
+        const user = await UserModel.findOneAndUpdate(findBy,option, {returnOriginal: false})
+        const data = {...user.toObject()}
+        delete data.isBlocked
+        delete data.password
+        res.status(200).send("Ok")
     } catch (err) {
         if(err.code == 11000){
             return res.status(400).send("already exist")
         }
+        console.log(err.message)
         res.status(500).send(err)
     }
 }
@@ -236,6 +241,30 @@ const getCoupons = async (req, res)=>{
 }
 
 
+
+//http:localhost:5000/address/:update
+const addressUpdate = async (req, res)=>{
+    const {update} = req.params
+    const {userId} = req.user
+    const option = {}
+    if(update == 'add'){
+        option.$push = {address: req.body}
+    } else if (update == 'delete'){
+        option.$pull  = {address: {_id: req.body.address_id}}
+    } else return res.status(500).send('Invalid param')
+
+    try {
+        const user = await UserModel.findOneAndUpdate({_id: userId}, option, {returnOriginal: false})
+        console.log(user.address)
+        res.status(200).send(user.address)
+    } catch (err) {
+        console.log(err.message)
+        return res.status(500).send(err.message)
+    }
+
+}
+
+
 module.exports = {
     getProduct,
     userCart,
@@ -244,5 +273,6 @@ module.exports = {
     getUser,
     my_order,
     cancelRequest,
-    getCoupons
+    getCoupons,
+    addressUpdate
 }

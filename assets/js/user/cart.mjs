@@ -92,6 +92,15 @@ const fetchCartDetails = async ()=>{
         })
 
 
+        const deleteBtn = cartItem.querySelector('.del-btn')
+        
+        deleteBtn.addEventListener("click", ()=>{
+           item_todelete.id = item.cart_item_id
+           item_todelete.item = cartItem
+           confirmDialog.showModal()
+        })
+
+
         cartItem.dataset.value = item.cart_item_id
         cartContainer.appendChild(cartItem)
     }
@@ -110,4 +119,28 @@ checkoutBtn.addEventListener('click', ()=>{
   for(let value of Object.values(dataToCheckoutOBJ)) dataToCheckout.push(value)
   console.log(dataToCheckout)
   location.href = `http://localhost:3000/api/checkout?products=${JSON.stringify(dataToCheckout)}&fromCart="true"`
+})
+
+
+
+const confirmDialog = document.getElementById('confirm-dialog')
+confirmDialog.querySelector('.confirm-dialog-head').innerText = 'Deleting cart item'
+confirmDialog.querySelector('.confirm-dialog-body').innerText = "Do you really want to delete this item from cart"
+const confirmBtn = confirmDialog.querySelector('.confirm-btn')
+const cancelBtn = confirmDialog.querySelector('.cancel-btn')
+let item_todelete = {}
+
+cancelBtn.addEventListener("click", ()=>{
+    confirmDialog.close()
+})
+
+confirmBtn.addEventListener("click", async ()=>{
+    const url = 'http://localhost:5000/cart/update'
+    const body = {$pull: {cart:{cart_item_id: item_todelete.id}}}
+    const res = await fetchData(url, 'PUT', body, token)
+    if(res.ok) {
+        delete dataToCheckoutOBJ[item_todelete.id]
+        cartContainer.removeChild(item_todelete.item)
+        confirmDialog.close()
+    }
 })

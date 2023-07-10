@@ -1,0 +1,16 @@
+<template id="address-temp">
+    <div class="address p-3 pt-4 mt-3">
+        <span style="color: #9a9a9a; font-size: 13.5px;">
+            <Span class="full_name">, </Span>
+            <Span class="house_name">, </Span>
+            <Span class="street">,</Span>
+            <Span class="city">,</Span>
+            <br>
+            <Span>Ph :<span class="phone"></span>,</Span>
+            <Span>Pin :<span class="pinccode"></span> </Span>
+        </span>
+        <a href="/api/profile/address/edit/${address_id}" class="edit-btn btn btn-sm btn-dark"><i class="fa-solid fa-pen-to-square"></i></a>
+        <button  type="button" class="del-btn btn btn-sm btn-danger">x</button>
+            
+    </div>
+</template>

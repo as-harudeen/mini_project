@@ -9,7 +9,8 @@ const {
     getUser,
     my_order,
     cancelRequest,
-    getCoupons
+    getCoupons,
+    addressUpdate
 } = require('../controllers/user.controller.js')
 
 
@@ -35,6 +36,11 @@ router
 //Profile update
 router
 .put("/profile/update", updateProfile)
+
+//update address
+router
+.put("/address/:update", addressUpdate)
+
 
 
 //Order detailes

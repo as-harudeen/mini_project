@@ -3,6 +3,7 @@ const CategoryModel = require('../../models/categoryModel.js')
 const ProductModel = require('../../models/product.model.js')
 const OrderModel = require('../../models/orderModel.js')
 const UserModel = require('../../models/userModel.js')
+const CouponModel = require('../../models/coupon.model.js')
 const moment = require('moment')
 
 
@@ -109,6 +110,20 @@ const orderDetailsGET = async (req, res)=>{
 }
 
 
+//@des http://localhost:3000/admin/panel/coupon/add
+const addCouponGET = async(req, res)=>{
+    res.status(200).render('admin/addCoupon')
+}
+
+
+
+//@des http://localhost:3000/admin/panel/coupons
+const couponsGET = async (req, res)=>{
+    const coupons = await CouponModel.find()
+    res.status(200).render('admin/coupons', {couponData: coupons})
+}
+
+
 module.exports = {
     loginGET,
     panelGET,
@@ -120,5 +135,7 @@ module.exports = {
     productsGET,
     editProductGET,
     ordersGET,
-    orderDetailsGET
+    orderDetailsGET,
+    addCouponGET,
+    couponsGET
 }

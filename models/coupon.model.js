@@ -16,8 +16,7 @@ const couponSchema = new mongoose.Schema({
         require: true
     },
     used_users: {
-        type: [mongoose.Types.ObjectId],
-        default: [new mongoose.Types.ObjectId("648fcecacf13343701be3041")]
+        type: [mongoose.Types.ObjectId]
     }
 })
 

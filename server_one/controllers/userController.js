@@ -174,16 +174,18 @@ const order = async (req, res)=>{
     const {userId} = req.user
     
     const address = await UserModel.findOne({_id: userId, 'address._id': address_id}, {'address.$': 1})
-    console.log(address)
     if(!address) throw new Error('Invalid address..')
 
     let dis_amount = 0
     let totalProduct = checkoutData.length
-    if(coupon_id){
+    if(coupon_id){//checking coupon is valid or not
         const coupon = await CouponModel.findOneAndUpdate({_id: coupon_id, used_users: {$ne: userId}}, {$push: {used_users: userId}})
         if(coupon){
-            if(totalProduct >= coupon.coupon_value) dis_amount = 1
-            else dis_amount = Math.floor(coupon.coupon_value / checkoutData.length)
+            const isThisCouponAllowed = (total_price * .15) >= coupon.coupon_value//put a restriction to avoid coupon missuse
+            if(isThisCouponAllowed){
+                if(totalProduct >= coupon.coupon_value) dis_amount = 1
+                else dis_amount = Math.floor(coupon.coupon_value / checkoutData.length)
+            }
         }
     }
 
@@ -196,8 +198,6 @@ const order = async (req, res)=>{
         totalProduct--
         if(totalProduct <= 0) dis_amount = 0
     }
-
-    console.log(checkoutData)
 
 
     try {

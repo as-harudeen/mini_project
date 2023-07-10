@@ -21,24 +21,23 @@ const token = getToken()
 //     pincodeSPAN.textContent = pincode
 // }
 
-const currAddressContainer = document.getElementById('curr-address')
-function buildAddress (){
-    console.log(selectedAddressDiv.dataset.addressId)
+const currAddressContainer = document.getElementById('curr-address')//Selected address
+function buildAddress (){//Change / building the selected address
     currAddressContainer.innerHTML = selectedAddressDiv.innerHTML
 }
 
 
-
+//fetching address
 const res = await fetchData(`http://localhost:5000/user?option=${JSON.stringify({address: 1})}`, 'GET', null, token)
 const data = await res.json()
 
-
+//address for select
 const selectAddressContainer = document.querySelector('.select-address-container')
 const selectAddressTemp = document.getElementById('select-address-temp')
 let selectedAddressDiv 
 
 
-for(let adrs of data.address){
+for(let adrs of data.address){//building address's
     const addressTemp = selectAddressTemp.content.cloneNode(true)
     
     addressTemp.querySelector('.address-full-name').innerText = `${adrs.full_name}, `
@@ -49,7 +48,7 @@ for(let adrs of data.address){
     addressTemp.querySelector('.address-pincode').innerText = `Pin: ${adrs.pincode},`
 
     const addressDiv = addressTemp.querySelector('.address')
-    addressDiv.addEventListener('click', ()=>{
+    addressDiv.addEventListener('click', ()=>{ //change address event
         selectedAddressDiv.classList.remove('selected-address')
         addressDiv.classList.add('selected-address')
         selectedAddressDiv = addressDiv
@@ -62,7 +61,7 @@ for(let adrs of data.address){
     selectAddressContainer.appendChild(addressTemp)
 }
 
-selectedAddressDiv = selectAddressContainer.querySelector('.address')
+selectedAddressDiv = selectAddressContainer.querySelector('.address')//for pre address build
 selectedAddressDiv.classList.add('selected-address')
 selectedAddressDiv.dataset.addressId = data.address[0]._id
 buildAddress()
@@ -120,7 +119,7 @@ confirmBtn.addEventListener('click', async ()=>{
     const body = {
         address_id: selectedAddressDiv.dataset.addressId,
         payment_method: 'COD',
-        coupon_id: prev_applyed_coupon._id
+        coupon_id: prev_applyed_coupon?._id
     }
     let url = 'order'
     if(curUrl.includes('fromCart')) url += '?fromCart="true"'
@@ -155,7 +154,7 @@ openModalBtn.addEventListener('click', ()=>{
 
 
 
-
+//fetching available coupon
 const response = await fetchData('http://localhost:5000/getcoupons', 'GET', null, token)
 const couponsArr = await response.json()
 
@@ -190,7 +189,8 @@ let prev_applyed_coupon
 
 apply_coupon_btn.addEventListener('click', ()=>{
     const val = apply_coupon_inp.value
-    if(coupons[val] && coupons[val] != prev_applyed_coupon){
+    const isThisCouponAllowed = (total_price * .15) >= coupons[val]?.coupon_value//put a restriction to avoid coupon missuse
+    if(coupons[val] && coupons[val] != prev_applyed_coupon && isThisCouponAllowed){
 
         const dis_amount = coupons[val].coupon_value
         discount_price.innerText = dis_amount
@@ -205,7 +205,11 @@ apply_coupon_btn.addEventListener('click', ()=>{
         }, 2000)
     }
     else {
-        apply_coupon_msg.innerText = coupons[val] ? "Coupon already used" : "Provide available coupon"
+        if(!coupons[val]) apply_coupon_msg.innerText = "Provide available coupon"
+        else {
+            if(!isThisCouponAllowed) apply_coupon_msg.innerHTML = `Total price should more than <b>${Math.floor(coupons[val].coupon_value / .15)}</b> for using this coupon`
+            else apply_coupon_msg.innerText = "Coupon already selected"
+        } 
         apply_coupon_msg.classList.add('text-danger')
 
         setTimeout(()=>{

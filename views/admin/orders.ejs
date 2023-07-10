@@ -12,31 +12,31 @@
                         </li>
                         <li class="dashOther fw-bold p-1 ps-4 m-2">
                             <img src="/assets/admin/d3.png" alt="" class="img-fluid me-2">
-                            <span><a href="/admin/catagory" class="text-decoration-none"
+                            <span><a href="/admin/panel/category" class="text-decoration-none"
                                     style="color: #cdcdcd;">Category</a></span>
                         </li>
                         <li class="dashOther fw-bold p-1 ps-4 m-2">
                             <img src="/assets/admin/d2.png" alt="" class="img-fluid me-2">
                             <span></span>
-                            <a href="/admin/productView" class="text-decoration-none"
+                            <a href="/admin/panel/products" class="text-decoration-none"
                                 style="color: #cdcdcd;">Product</a></span>
                         </li>
                         <li class="dashOther fw-bold p-1 ps-4 m-2">
                             <img src="/assets/admin/d4.png" alt="" class="img-fluid me-2">
                             <span></span>
-                            <a href="/admin/coustomers" class="text-decoration-none"
+                            <a href="/admin/panel/user_management" class="text-decoration-none"
                                 style="color:  #cdcdcd;">Coustomer</a></span>
                         </li>
                         <li class="sideBarlist   p-1 ps-4 m-2">
                             <img src="/assets/admin/d5.png" alt="" class="img-fluid me-2">
                             <span></span>
-                            <a href="/admin/order" class="text-decoration-none"
+                            <a class="text-decoration-none"
                                 style="color: white;">Order</a></span>
                         </li>
                         <li class="dashOther fw-bold p-1 ps-4 m-2">
                             <img src="/assets/admin/d6.png" alt="" class="img-fluid me-2">
                             <span></span>
-                            <a href="/admin/coupons" class="text-decoration-none"
+                            <a href="/admin/panel/coupons" class="text-decoration-none"
                                 style="color: #cdcdcd;">Coupons</a></span>
                         </li>
                         <li class="dashOther fw-bold p-1 ps-4 m-2">
@@ -57,7 +57,21 @@
                             <div class="container summary d-flex align-items-center justify-content-between p-4 "
                                 id="product">
                                 <h6 class="p-3 ps-4">All Orders</h6>
-                                <input type="text" placeholder="User Name, Email, Phone" class="text-center">
+                                <input id="searchInp" type="text" placeholder="User Name, Email, Phone" class="text-center">
+                                <select id="search-by">
+                                    <option value="all">All</option>
+                                    <option value="username">username</option>
+                                    <option value="order_status">order status</option>
+                                    <option value="payment_method">payment method</option>
+                                    <option value="product_name">Product Name</option>
+                                </select>
+                                <!-- <select id="sorted-by">
+                                    <option value="">Latest</option>
+                                    <option value="">Oldest</option>
+                                    <option value=""></option>
+                                    <option value="">a</option>
+                                    <option value="">a</option>
+                                </select> -->                 
                             </div>
                         </div>
                         <div class="container-fluid Pa_table bg-white p-4">

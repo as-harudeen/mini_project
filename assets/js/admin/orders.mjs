@@ -42,11 +42,17 @@ import fetchData from '../helper/fetchData.js'
   }
 
 
+
+
+
   const buildOrders = async (page=1)=>{
-    const option = {}
-    let url = '/admin/getorders'
+    const option = {}//building option
+    if(selectSearchByVal != 'all') option[`${selectSearchByVal}`] = {$regex: `^${searchVal}`, $options: 'i'}
+
+    let url = `/admin/getorders`
     url += `?limit=${limit}`
     url += `&page=${page}`
+    if(Object.keys(option).length) url += `&option=${JSON.stringify(option)}`
     const res = await fetchData(url, 'GET')
     if(res.ok){
         const orders = await res.json()
@@ -67,13 +73,13 @@ import fetchData from '../helper/fetchData.js'
   
   const limit = 3
   let rebuildPaginationBtn = true //for build first pagination buttons
-  buildOrders()
 
 
-const btnsCount = async(option)=>{
-  let url = '/api/doc_count/orders'
+
+const btnsCount = async(option, collection = 'orders')=>{
+  let url = `/api/doc_count/${collection}`
   //this will return doc count that matching certain condition
-  if(option) url += `?option=${JSON.stringify(option)}`
+  // if(option) url += `?option=${JSON.stringify(option)}`
   const res = await fetchData(url, 'GET')
   const totalProductsCount = await res.text()
   //Building pagination buttons
@@ -143,3 +149,24 @@ function prevNextBtnEvent (){
   
 }
 
+
+
+//Filter and search
+const selectSearchBy = document.getElementById('search-by')
+let selectSearchByVal = selectSearchBy.value
+const searchInp = document.getElementById('searchInp')
+let searchVal = ''
+
+searchInp.addEventListener('keyup', ()=>{
+  searchVal = searchInp.value.trim()
+})
+
+selectSearchBy.addEventListener('change', ()=>{
+  selectSearchByVal = selectSearchBy.value
+  if(searchVal) {
+    rebuildPaginationBtn = true
+    buildOrders()
+  }
+})
+
+buildOrders()
