@@ -288,6 +288,18 @@ const createOrder = async (req, res)=>{
 
 }
 
+//@des localhost:3000/api/logout
+const logout = (req, res)=>{
+    req.session.destroy((err)=>{
+        if(err){
+            console.log(err)
+        } else {
+            res.clearCookie('userToken')
+            res.redirect("/api")
+        }
+    })
+}
+
 
 
 const redis = require('redis');
@@ -326,5 +338,6 @@ module.exports = {
     count,
     red,
     order,
-    createOrder
+    createOrder,
+    logout
 }

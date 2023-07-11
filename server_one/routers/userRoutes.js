@@ -9,7 +9,8 @@ const {
     count,
     red,
     order,
-    createOrder
+    createOrder,
+    logout
 } = require('../controllers/userController.js')
 const {
     registerGET,
@@ -46,6 +47,8 @@ router
 
 
 
+
+
 //Home
 router
 .route('/')
@@ -64,6 +67,13 @@ router
 
 
 router.use(authenticateUser)
+
+//logout
+router
+.route('/logout')
+.get(logout)
+
+
 
 //Cart
 router

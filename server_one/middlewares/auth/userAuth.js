@@ -8,6 +8,8 @@ const authenticateUser = (req, res, next)=>{
         const user = jwt.verify(token, process.env.SECRET)
         if(!user) return res.redirect('/api/login')
         req.user = user
+        console.log(user)
+        req.app.locals.user = user.userName
         next()
     } catch (err) {
         res.status(500).send(err.message)

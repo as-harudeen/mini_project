@@ -34,8 +34,19 @@ const productDetailGET = async (req, res)=>{
 
 //@des http:local:3000/api/
 const homeGET = async (req, res)=>{
-    const data = await ProductModel.find()
-    res.status(200).render('user/home', { log: "LogOut", title: "Home", user: "Achu", data, cartCount: 5 })
+   try {
+       const data = await ProductModel.find()
+       const token = req.cookies.userToken
+       if(token){
+           const user = jwt.verify(token, process.env.SECRET)
+           if(user) return res.status(200).render('user/home', {user: user.userName, data})
+       }
+   
+       res.status(200).render('user/home', {data})
+
+   } catch (err) {
+       return res.status(500).send(err.message)
+   }
 }
 
 
