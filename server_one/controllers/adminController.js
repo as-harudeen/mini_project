@@ -478,9 +478,21 @@ const updateOrderStatus = async (req, res)=>{
     option.$set.isCanceled = status == 'Canceled'
     
     // if(!status || (status != 'Processing' && status != 'Shipped' && status != 'requested for cancel')
-
+    console.log(status)
     if(!status) throw new Error("Status")
     const order = await OrderModel.findByIdAndUpdate(order_id, option)
+
+    let updateQuantity = 0
+    
+    if((status == 'Return Accepted' && order.order_status != 'Canceled') ||
+    (status == 'Canceled' && order.order_status != 'Return Accepted')) updateQuantity = order.quantity
+    else if((status != 'Return Accepted' && order.order_status == 'Canceled') ||
+    (status != 'Canceled' && order.order_status == 'Return Accepted')) updateQuantity = -order.quantity
+    
+
+    if(updateQuantity) await ProductModel.updateOne({_id: order.product_id}, {$inc: {product_stock: updateQuantity}})
+    else console.log("no updation")
+
     res.status(200).send({isCanceled: order.isCanceled, order_status: order.order_status})
 
 }

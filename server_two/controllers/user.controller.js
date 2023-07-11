@@ -28,58 +28,27 @@ const getProduct = async(req, res)=>{
 //method GET
 const userCart = async(req, res)=>{
     try {
-
         const {userId} = req.user
-        console.log(userId)
-        const _id = new mongoose.Types.ObjectId(userId)
+        const user = await UserModel.findById(userId, {cart: 1})
+        const product_id_arr = user.cart.map(product => product.product_id.toString())
+        const products = await ProductModel.find({_id: {$in: product_id_arr}}, {
+            product_name: 1,
+            product_price: 1,
+            product_stock: 1,
+            product_images: 1,
+            sizes: 1,
+            colors: 1
+        })
 
-        let pipeline = [
-            {$match: {_id}},
-            {
-                $lookup: {
-                  from: "products",
-                  localField: "cart.product_id",
-                  foreignField: "_id",
-                  as: "cartItems"
-                }
-            },
-            {
-                $addFields: {
-                  cart: {
-                    $map: {
-                      input: "$cart",
-                      as: "cartItem",
-                      in: {
-                        $mergeObjects: [
-                          "$$cartItem",
-                          {
-                            $arrayElemAt: [
-                              "$cartItems",
-                              { $indexOfArray: ["$cartItems._id", "$$cartItem.product_id"] }
-                            ]
-                          }
-                        ]
-                      }
-                    }
-                  }
-                }
-              },
-            // {
-            //     $project: {
-            //       cart: 1
-            //     }
-            // }
-        ]
+        const productsOBJ = {}//for constant access by Id
+        products.forEach(product=> productsOBJ[product._id] = product.toObject())
 
-        // if(req.query.pipeline){
-        //     pipeline = JSON.parse(req.query.pipeline)
-        // }
-        
-        // pipeline.unshift({$match: {_id}})
+        const data = []
+        user.cart.forEach((item, idx)=>{
+            data[idx] = {...item.toObject(), ...productsOBJ[item.product_id]}
+        })
 
-        const user = await UserModel.aggregate(pipeline);
-
-        res.status(200).json(user)
+        res.status(200).json(data)
     } catch (err) {
         console.log(err.message)
         res.status(500).send(err.message)

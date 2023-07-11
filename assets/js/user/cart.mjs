@@ -5,25 +5,34 @@ const cartContainer = document.getElementById('cart-container')
 const token = getToken()
 console.log(token)
 
-let dataToCheckout = []
-let dataToCheckoutOBJ = {}
+let dataToCheckout = []//this for pass the data as query
+let dataToCheckoutOBJ = {}//this for optimize updatation in product (eg.. quantity, remove product)
+const product_stock = {}
 
 const fetchCartDetails = async ()=>{
 
     const res = await fetchData(`http://localhost:5000/cart`, 'GET', null, token)
-    const data = await res.json()
-    const cart = data[0].cart
+    const cart = await res.json()
+    // const cart = data[0].cart
 
     dataToCheckoutOBJ = {}
 
     if(!cart) return false
+    console.log(cart)
     for(let item of cart){
-
+        const product_id = item.product_id
         dataToCheckoutOBJ[item.cart_item_id] = {
-          product_id: item.product_id,
+          product_id: product_id,
           color: item.color,
           size: item.size,
           quantity: item.quantity
+        }
+        
+        if(product_stock[product_id]) product_stock[product_id].stock -= item.quantity
+        else {
+            product_stock[product_id] = {stock: item.product_stock - item.quantity, product_name: item.product_name}
+            console.log("invdee")
+            console.log(product_stock[product_id].stock)
         }
 
         const cartItem = document.createElement('div')
@@ -50,7 +59,7 @@ const fetchCartDetails = async ()=>{
         const subBtn = cartItem.querySelector('.sub-btn')
         if(item.quantity == 1) subBtn.disabled = true
         const addBtn = cartItem.querySelector('.add-btn')
-        if(item.quantity == 10) addBtn.disabled = true
+        if(item.quantity == 10 || product_stock[product_id].stock <= 0) addBtn.disabled = true
         
         const cart_item_id = item.cart_item_id
         const quantityInp = cartItem.querySelector('.quantity')
@@ -68,8 +77,10 @@ const fetchCartDetails = async ()=>{
             const url = `http://localhost:5000/cart/update?findBy=${JSON.stringify(findBy)}`
             const res = await fetchData(url, 'PUT', body, token)
             dataToCheckoutOBJ[item.cart_item_id].quantity--
+            product_stock[product_id].stock++
+            console.log(product_stock[product_id].stock)
             if(quantityInp.value == 1) subBtn.disabled = true
-            if(quantityInp.value < 10) addBtn.disabled = false
+            if( 0 < product_stock[product_id]) addBtn.disabled = false
         })
         
         addBtn.addEventListener('click', async()=>{
@@ -87,8 +98,10 @@ const fetchCartDetails = async ()=>{
             const res = await fetchData(url, 'PUT', body, token)
 
             dataToCheckoutOBJ[item.cart_item_id].quantity++
-            if(quantityInp.value > 1) subBtn.disabled = false
-            if(quantityInp.value >= 10) addBtn.disabled = true
+            product_stock[product_id].stock--
+            subBtn.disabled = false
+            // if(quantityInp.value > 1) subBtn.disabled = false
+            if(quantityInp.value >= 10 || product_stock[product_id].stock <= 0) addBtn.disabled = true
         })
 
 
@@ -116,9 +129,10 @@ fetchCartDetails()
 const checkoutBtn = document.getElementById('checkout-btn')
 checkoutBtn.addEventListener('click', ()=>{
   dataToCheckout = []
-  for(let value of Object.values(dataToCheckoutOBJ)) dataToCheckout.push(value)
-  console.log(dataToCheckout)
-  location.href = `http://localhost:3000/api/checkout?products=${JSON.stringify(dataToCheckout)}&fromCart="true"`
+  if(isStockExeed()){
+      for(let value of Object.values(dataToCheckoutOBJ))dataToCheckout.push(value)
+      location.href = `http://localhost:3000/api/checkout?products=${JSON.stringify(dataToCheckout)}&fromCart="true"`
+  }
 })
 
 
@@ -144,3 +158,22 @@ confirmBtn.addEventListener("click", async ()=>{
         confirmDialog.close()
     }
 })
+
+//checking there is stock
+const msgContainer = document.getElementById('msg-container')
+function isStockExeed(){
+    let allOk = true
+    for(let product of Object.values(product_stock)){
+        if(product.stock < 0){
+            const msg = document.createElement('h6')
+            msg.classList.add('text-danger', 'p-4')
+            msg.innerText = `${product.product_name} not available this much stock please decrease`
+            msgContainer.appendChild(msg)
+            setTimeout(()=>{
+                msgContainer.removeChild(msg)
+            }, 3000)
+            allOk = false
+        }
+    }
+    return allOk
+}

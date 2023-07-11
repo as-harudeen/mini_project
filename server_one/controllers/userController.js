@@ -7,7 +7,13 @@ const otpGenerator = require('otp-generator');
 const jwt = require('jsonwebtoken')
 const {getDb} = require('../../database/db.js')
 const sendMail = require('../controllers/mailer.js')
+const Razorpay = require('razorpay')
 const env = process.env
+
+const razorpayInstence = new Razorpay({
+    key_id: env.RAZOR_KEY_ID,
+    key_secret: env.RAZOR_KEY_SECRET
+})
 // const {LocalStorage} = require('node-localstorage')
 // const {decryptData} = require('../../modules/secure.js')
 
@@ -164,17 +170,36 @@ const count = async (req, res)=>{
 }
 
 
-//Confirm SOrder
+//Confirm Order
 //@des localhost:3000/api/order
-//mthod POST
+//method POST
 const order = async (req, res)=>{
 
     const {checkoutData} = req.order//take the checkoutdata
     const {address_id, payment_method, coupon_id} = req.body //taking address, payment method and coupon id
     const {userId} = req.user
+
     
     const address = await UserModel.findOne({_id: userId, 'address._id': address_id}, {'address.$': 1})
     if(!address) throw new Error('Invalid address..')
+
+    if(payment_method != 'COD' && payment_method != 'Razorpay')return res.status(400).send("invalid payment method")
+
+    const productQuantity = {}//for update product orderedcount
+    checkoutData.forEach(product => {
+        //taking the count
+        if(productQuantity[product.product_id]) productQuantity[product.product_id] += product.quantity
+        else productQuantity[product.product_id] = product.quantity
+
+    })
+
+    for(let product_id in productQuantity){
+        const product = await ProductModel.findById(product_id, {product_stock: 1, _id:0})
+        if(product.product_stock < productQuantity[product_id]) return res.status(400).send("Stock not available")
+        else console.log("availble")
+    }
+
+
 
     let dis_amount = 0
     let totalProduct = checkoutData.length
@@ -205,22 +230,23 @@ const order = async (req, res)=>{
         const orders = await OrderModel.insertMany(checkoutData)
         
         const orderId = []//for adding to user's orders field
-        const productCount = {}//for update product orderedcount
+        // const productCount = {}//for update product orderedcount
+        // orders.forEach(order => {
+        //     //taking the count
+        //     if(productCount[order.product_id]) productCount[order.product_id] += order.quantity
+        //     else productCount[order.product_id] = order.quantity
+        //     orderId.push({order_id: order._id})//collecting as a order_id
+
+        // })
         orders.forEach(order => {
-            //taking the count
-            if(productCount[order.product_id]) productCount[order.product_id] += order.quantity
-            else productCount[order.product_id] = order.quantity
             orderId.push({order_id: order._id})//collecting as a order_id
-
         })
-        if(req.query.fromCart){ //clearing cart and adding all order Id to user model
-            await UserModel.updateOne({_id: userId}, {$unset: {cart: ""}, $push: {
-                orders: {$each: orderId}
-            }})
-        }
+        const query = {$push: {orders: {$each: orderId}}}
+        if(req.query.fromCart) query.$unset = {cart: ""}
+        await UserModel.updateOne({_id: userId}, query)
 
-        for(let _id of Object.keys(productCount)){//incresing orderedcount
-            await ProductModel.findByIdAndUpdate(_id, {$inc: {orderedCount: productCount[_id]}})
+        for(let _id in productQuantity){//incresing orderedcount
+            await ProductModel.findByIdAndUpdate(_id, {$inc: {orderedCount: productQuantity[_id], product_stock: -productQuantity[_id]}})
         }
 
         res.status(200).json("OK")
@@ -230,6 +256,37 @@ const order = async (req, res)=>{
     }
 } 
 
+
+
+//Razorpay createorder
+//@des localhost:3000/razorpay/createOrder
+//method POST
+const createOrder = async (req, res)=>{
+    const {checkoutData} = req?.order
+    if(!checkoutData) return res.status(400).send("No checkout details")
+
+    try {
+        let amount = 0
+        for(let product of checkoutData){
+            amount += product.total_price
+        }
+        console.log(amount)
+
+        const order = await razorpayInstence.orders.create({
+            amount: amount * 100,
+            currency: 'INR',
+            receipt: 'achuBSL'
+        })
+        order.key_id = env.RAZOR_KEY_ID
+        res.status(200).send(order)
+
+
+    } catch (err) {
+        console.log(err.message)
+        return res.status(500).send(err.message)
+    }
+
+}
 
 
 
@@ -268,5 +325,6 @@ module.exports = {
     verifyOTP,
     count,
     red,
-    order
+    order,
+    createOrder
 }

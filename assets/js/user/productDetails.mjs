@@ -97,4 +97,28 @@ addToCart.addEventListener('click', async()=>{
 
 
 
+const buy_btn = document.getElementById('buy_now')
+
+buy_btn.addEventListener('click', ()=>{
+    const data= [{
+        product_id,
+        color: selected_color.dataset.value,
+        size: selected_size.dataset.value,
+        quantity: 1
+    }]
+    location.href = `http://localhost:3000/api/checkout?products=${JSON.stringify(data)}`
+})
+
+
+/**
+ * {
+ * 
+ *   product_id,
+ *   color,
+ *   size,
+ *   quantity: 1
+ * 
+ * }
+ */
+
 

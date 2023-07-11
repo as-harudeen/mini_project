@@ -39,7 +39,7 @@
                                                             <span class="me-3 fw-bold" style="font-size: 13px;color: #959595;"><span>Order Date :</span><%= orderedOn %></span>
                                                             <span class="me-3 fw-bold" style="font-size: 13px;color: #959595;"><span>Delivery Date :</span> <%= expectedDate %> </span>
                                                             <span id="order_status">
-                                                                <%if(order.isCancelled === false){%>
+                                                                <%if(order.isCanceled == false){%>
                                                                     <%if(order.order_status == "Deliverd"){%>
                                                                         <span class="badge rounded-pill bg-success">Deliverd</span>
                                                                     <%}else if(order.order_status == "Processing"){%>

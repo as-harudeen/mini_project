@@ -90,6 +90,7 @@ const checkoutGET = async (req, res)=>{
     try {
         
         const products = JSON.parse(req.query.products)
+        console.log(products)
         //Redirection if the data not valide
         if(typeof products != 'object') return res.status(400).redirect('/api')
         //Redirection if the data is empty
@@ -110,6 +111,7 @@ const checkoutGET = async (req, res)=>{
          //intializig array for store data
         const data = []
         const checkoutData = []
+        const products_stocks = {}
         for(let productOBJ of products){//Itrating through all products
 
 
@@ -127,8 +129,21 @@ const checkoutGET = async (req, res)=>{
                     _id: 0, 
                     product_name: 1, 
                     product_price: 1,
-                    product_images: {$slice: 1}
+                    product_images: {$slice: 1},
+                    product_stock: 1
                 })
+
+            //stock validation
+            if(products_stocks[productOBJ.product_id] || products_stocks[productOBJ.product_id] == 0) {
+                console.log("HI")
+                products_stocks[productOBJ.product_id] -=  productOBJ.quantity 
+            }   
+            else products_stocks[productOBJ.product_id] = product.product_stock - productOBJ.quantity
+            console.log(products_stocks)
+            console.log(productOBJ.quantity)
+
+            if(products_stocks[productOBJ.product_id] < 0) return res.status(500).redirect("/api/cart")
+
                 
             checkoutData.push({
                 product_id: productOBJ.product_id,
@@ -141,7 +156,7 @@ const checkoutGET = async (req, res)=>{
             productOBJ = Object.assign(productOBJ, product.toObject())
             data.push(productOBJ)
         }
-
+        console.log(products_stocks)
 
 
         const playload = {
@@ -155,7 +170,7 @@ const checkoutGET = async (req, res)=>{
 
 
         const coupons = await CouponModel.find({used_users: {$ne: req.user.userId}})
-
+        console.log("HHIHIHIHIHIHHII")
         res.status(200).render('user/checkout',{data, coupons})
 
     } catch (err) {

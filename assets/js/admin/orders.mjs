@@ -8,7 +8,7 @@ import fetchData from '../helper/fetchData.js'
   function buildOrder_tr (order){
     const new_tr = order_tr_temp.content.cloneNode(true)
     
-    new_tr.querySelector('.order-no').innerText = `#${orderNo}`
+    new_tr.querySelector('.order-no').innerText = `#${orderNo++}`
     new_tr.querySelector('.image-button').href += order._id
     new_tr.querySelector('.order-img').src += order.product_images[0]
     new_tr.querySelector('.order-username').innerText = order.username
@@ -56,7 +56,8 @@ import fetchData from '../helper/fetchData.js'
     const res = await fetchData(url, 'GET')
     if(res.ok){
         const orders = await res.json()
-        orderTbody.innerHTML = ''
+        orderTbody.innerHTML = ''       
+        orderNo = selectedBtn ? (+selectedBtn.value - 1) * limit + 1 : 1
         orders.forEach((order)=> {buildOrder_tr(order)})
         if(rebuildPaginationBtn) {
           console.log("rebuilding")

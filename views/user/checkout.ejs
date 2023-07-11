@@ -44,8 +44,8 @@
                     <div class="container col-lg-3 col-md-3 col-12 p-3 m-0">
                         <div class="container bg-white profile_left p-5">
                             <div class="mb-4 d-flex gap-3 flex-column payment-method-container">
-                                <div class="p-2 selected-payment payment-method">Cash on delivery</div>
-                                <div class="p-2 payment-method">Razopay</div>
+                                <div data-method="COD" class="p-2 selected-payment payment-method">Cash on delivery</div>
+                                <div data-method="Razorpay" class="p-2 payment-method">Razorpay</div>
                             </div>
                             <div class="mb-4 d-flex flex-column">
                             </div>
@@ -160,6 +160,8 @@
         </div>
     </template>
 
+    
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
     <script type="module" src="/js/user/checkout.mjs"></script>
     <%-include('../include/_footer.ejs') %>

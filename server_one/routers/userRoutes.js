@@ -8,7 +8,8 @@ const {
     verifyOTP,
     count,
     red,
-    order
+    order,
+    createOrder
 } = require('../controllers/userController.js')
 const {
     registerGET,
@@ -119,7 +120,8 @@ router.get('/doc_count/:collection', count)
 //Order
 router.post('/order', orderAuth, order)
 
-
+//Razorpay
+router.post('/razorpay/createOrder', orderAuth, createOrder)
 
 
 
