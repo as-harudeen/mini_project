@@ -116,9 +116,11 @@ const successTemp = document.getElementById('success-temp')
 
 
 confirmBtn.addEventListener('click', async ()=>{
+
+    // if(selectedPayment.dataset.method == 'Razorpay')  razorpayHandler()
     const body = {
         address_id: selectedAddressDiv.dataset.addressId,
-        payment_method: 'COD',
+        payment_method: selectedPayment.dataset.method,
         coupon_id: prev_applyed_coupon?._id
     }
     let url = 'order'
@@ -134,7 +136,7 @@ confirmBtn.addEventListener('click', async ()=>{
         navigator.href = '/api/'
         navigator.innerText = "Home page."
         successContainer.appendChild(success)
-    }
+    } 
 
 })
 
@@ -223,4 +225,62 @@ apply_coupon_btn.addEventListener('click', ()=>{
 const total_price = +document.getElementById('total_price').innerText
 const grant_total_price = document.getElementById('grant_total')
 const discount_price = document.getElementById('discount_price')
+
+
+
+//performing with payment method
+const paymentMethods = document.querySelectorAll('.payment-method')
+let selectedPayment = document.querySelector('.selected-payment')
+
+for(let method of paymentMethods){
+    method.addEventListener('click', ()=>{
+        selectedPayment.classList.remove('selected-payment')
+        method.classList.add('selected-payment')
+        selectedPayment = method
+    })
+}
+
+const razorpayHandler = async ()=>{
+    const url = '/api/razorpay/createOrder'
+    const res = await fetchData(url, 'POST', {})
+    if(res.ok){
+        const order = await res.json()
+        const options = {
+            key: order.key_id,
+            currency: 'INR',
+            amount: order.amount,
+            name: 'HESHOP',
+            description: 'Test transaction',
+            image: '',
+            order_id: order._id,
+            handler: (response)=>{
+                console.log(response)
+                console.log('Success')
+            },
+            prefill: {
+                name: 'AchuBSL',
+                email: "AchuBSL@testing.node",
+                contanct: 753638374
+            },
+            notes: {
+                address: 'Razorpay Corporate Office'
+            },
+            theme: {
+                color: '#3399cc'
+            }
+
+        }
+        
+        const rzp = new Razorpay(options)
+        rzp.on('payment.success', (response)=> {
+            console.log(response)
+            console.log("successssssss")
+        })
+        rzp.on('payment.cancel', (response)=>{
+            console.log(response)
+            console.log("errorororororor")
+        })
+        rzp.open()
+    }
+}
 

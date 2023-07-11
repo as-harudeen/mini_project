@@ -41,9 +41,9 @@ const orderSchema = new mongoose.Schema({
         required: true,
         validate: {
             validator: function(value){
-                return value === 'COD' || value === 'Razopay'
+                return value === 'COD' || value === 'Razorpay'
             },
-            message: "Payment should be COD or Razopay"
+            message: "Payment should be COD or Razorpay"
         }
     },
     total_price: {
