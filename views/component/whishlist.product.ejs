@@ -1,0 +1,39 @@
+<template id="whishlist_product">
+    <div class="col-lg-3 col-sm-6 p-3">
+        <div class="container bg-white ProductCard-wish m-0 p-0">
+            <div class="container">
+                <!-- image rendering  -->
+                <a class="product_view_anchor" href="/api/products/">
+                    <div class="cardImage mb-2 p-1 d-flex align-items-center justify-content-center"
+                        style="position: relative;">
+                        <img class="product_img" style="width: 250px; height: 350px;" src="/public/img/" alt="Product Image"  >
+                        <div style="position: absolute; top: 9px; right: -3px; border-radius: 50%; width:30px; height: 30px;">
+                            <a href="/WhishList/"><img src="/assets/icons/delete.png" alt=""  class="img-fluid bg-white p-2" style="width:30px; height: 30px;"></a>
+                        </div>
+                    </div>
+                </a>
+                <div class="d-flex">
+                    <div class="col-10">
+                        <span class="p-0 m-0 product_name"> </span>
+                        <div class="p_price d-flex justify-content-between">
+                            <div class="price text-danger col-10">
+                                <span class="product_final_price"></span><text>
+                                    </text> &nbsp; <span>₹ <span  class="product_actual_price"></span></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="favor col-2 d-flex align-items-center justify-content-center"
+                        style="cursor: pointer;">
+                        <i class="fa-solid fa-heart fa-xl" style="color: #db4444;"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="whishlistCard mt-1 d-flex align-items-center justify-content-center">
+                <img src="/assets/icons/shoping.png" alt="" class="img-fluid" style="width: 25px;">
+                <a href="#" class="add_to_cart_anchor text-decoration-none text-white addToCart">
+                    <span class="text-white ps-2">Add to cart</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</template>
