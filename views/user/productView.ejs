@@ -73,20 +73,21 @@
                         <p class="text-success fw-bold mt-4 " id="CartSuccMsg"></p>
                         <div class="pt-3">
                             <div class="border border-dark d-flex flex-column" style="max-width: 350px;">
-                                <!-- <div class="d-flex align-items-center p-3 gap-3" id="add_to_cart"> -->
-                                    <!-- <img class="img-fluid" src="/assets/product/icon-delivery.png" alt="" -->
-                                        <!-- style="width:40px"> -->
-                                    <!-- <h6>Add to cart</h6> -->
-                                <!-- </div> -->
 
+                                <%if(isInWhishlist == false){%>
+                                    <button id="add_to_whishlist" class="btn btn-outline-warning p-3">Add to Whishlist</button>
+                                    <%} else {%>
+                                        <button class="btn btn-outline-warning p-3">Already in Whishlist</button>
+                                <%}%>
                                 <button id="add_to_cart" class="btn btn-dark p-3">Add to cart</button>
                                 <hr class="p-0 m-0 bg-dark">
-                                <div id="buy_now" class="btn btn-dark-outline">Buy now</div>
-                                <!-- <div class="d-flex align-items-center p-3 gap-3">
-                                    <img class="img-fluid" src="/assets/product/Icon-return.png" alt=""
-                                        style="width:40px">
-                                    <h6>Return Delivery</h6>
-                                </div> -->
+                                <% if(product.product_stock > 0){%>
+                                    <div id="buy_now" class="btn btn-dark-outline">Buy now</div>
+                                    <%} else {%>
+                                        <div class="btn btn-outline-danger">Out of stock</div>
+                                        <%}%>
+
+                                <div id="msg-container"></div>
                             </div>
                         </div>
                     </div>

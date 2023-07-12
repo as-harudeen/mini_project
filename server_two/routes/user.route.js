@@ -10,7 +10,9 @@ const {
     my_order,
     cancelRequest,
     getCoupons,
-    addressUpdate
+    addressUpdate,
+    addToWhishlist,
+    getwhishlist
 } = require('../controllers/user.controller.js')
 
 
@@ -56,6 +58,13 @@ router
 router
 .get('/getcoupons', getCoupons)
 
+
+//Add to whishlist
+router
+.put('/whishlist/add/', addToWhishlist)
+
+//Get user whishlist
+router.get('/getwhishlist', getwhishlist)
 
 
 module.exports = router

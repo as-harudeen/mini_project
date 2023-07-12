@@ -234,6 +234,38 @@ const addressUpdate = async (req, res)=>{
 }
 
 
+//http:localhost:5000/whishlist/add/
+const addToWhishlist = async (req, res)=>{
+    const {product_id} = req.body
+    if(!product_id) return res.status(400).send("Product not found")
+    const {userId} = req.user
+    
+    try {
+        const product = await ProductModel.findById(product_id)
+        if(!product) return res.status(400).send("Product not found")
+        await UserModel.updateOne({_id: userId}, {$push: {whishlist: product_id}})
+
+        res.status(200).send("Added")
+    } catch (err) {
+        return res.status(500).send(err.message)
+    }
+}
+
+//@des http://localhost:5000/getwhishlist
+const getwhishlist = async (req, res)=>{
+    const {userId} = req.user
+    try {
+        const user = await UserModel.findById(userId, {_id: 0, whishlist: 1})
+        if(user.whishlist.length){
+            const products = await ProductModel.find({_id: {$in: user.whishlist}})
+            res.status(200).json(products)
+        } else return res.status(200).json([])
+    } catch (err) {
+        return res.status(500).send(err.message)
+    }
+}
+
+
 module.exports = {
     getProduct,
     userCart,
@@ -243,5 +275,7 @@ module.exports = {
     my_order,
     cancelRequest,
     getCoupons,
-    addressUpdate
+    addressUpdate,
+    addToWhishlist,
+    getwhishlist
 }

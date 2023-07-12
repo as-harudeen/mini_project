@@ -26,9 +26,16 @@ const productGET = async (req, res)=>{
 
 //@des http:localhost:3000/api/products/:product_id
 const productDetailGET = async (req, res)=>{
-    const {product_id} = req.params
-    const product = await ProductModel.findById(product_id)
-    res.status(200).render('user/productView', {product})
+    try {
+        const {product_id} = req.params
+        const {userId} = req.user
+        const user = await UserModel.findById(userId, {_id: 0, whishlist: 1})
+        const product = await ProductModel.findById(product_id)
+        res.status(200).render('user/productView', {product, isInWhishlist: user.whishlist.includes(product_id)})
+    } catch (err) {
+        console.log(err.message)
+        return res.status(500).send(err.message)
+    }
 }
 
 
@@ -224,6 +231,21 @@ const orderViewGET = async (req, res)=>{
 }
 
 
+
+//@des http://localhost:3000/api/wihshlist
+const whishlistGET = async (req, res)=>{
+    const {userId} = req.user
+    console.log(userId)
+    try{
+        const user = await UserModel.findById(userId, {_id: 0, whishlist: 1})
+        const products = await ProductModel.find({_id: {$in: user.whishlist}})
+        res.status(200).render("user/whishlist", {productDetails: products})
+    } catch (err) {
+        return res.status(500).send(err.message)
+    }
+}
+
+
 module.exports = {
     registerGET,
     loginGET,
@@ -237,5 +259,6 @@ module.exports = {
     editAddressGET,
     checkoutGET,
     orderGET,
-    orderViewGET
+    orderViewGET,
+    whishlistGET
 }

@@ -99,7 +99,7 @@ addToCart.addEventListener('click', async()=>{
 
 const buy_btn = document.getElementById('buy_now')
 
-buy_btn.addEventListener('click', ()=>{
+buy_btn?.addEventListener('click', ()=>{
     const data= [{
         product_id,
         color: selected_color.dataset.value,
@@ -110,15 +110,35 @@ buy_btn.addEventListener('click', ()=>{
 })
 
 
-/**
- * {
- * 
- *   product_id,
- *   color,
- *   size,
- *   quantity: 1
- * 
- * }
- */
+//Whishlist
+const msg_container = document.getElementById('msg-container')
+const add_to_whishlist_btn = document.getElementById('add_to_whishlist')
 
+add_to_whishlist_btn?.addEventListener('click', async ()=>{
+    const url = 'http://localhost:5000/whishlist/add'
+    
+    const res = await fetchData(url, 'PUT', {product_id}, token)
+    if(res.ok){
+        const success_msg = document.createElement('h6')
+        success_msg.classList.add('text-success')
+        success_msg.innerText = 'Product added success'
+        msg_container.appendChild(success_msg)
+
+        add_to_whishlist_btn.innerText = 'Already in whishlist'
+        add_to_whishlist_btn.disabled = true
+
+        setTimeout(()=>{
+            msg_container.removeChild(success_msg)
+        }, 3000)
+    } else {
+        const err_msg = document.createElement('h6')
+        err_msg.classList.add('text-danger')
+        err_msg.innerText = "Opps something wrong"
+        msg_container.appendChild(err_msg)
+
+        setTimeout(()=>{
+            msg_container.removeChild(err_msg)
+        }, 3000)
+    }
+})
 

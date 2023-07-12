@@ -2,6 +2,9 @@
     <div class="container-fluid p-0 min-vh-100" style="margin-top: 8%;">
         <%- include("../include/navbar.ejs")%>
 
+        <!-- <script src=“https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js”></script>
+        <lottie-player src=“https://lottie.host/b25b45a9-d84f-43e4-8945-b96450594f36/q0ushOvOvp.json” background=“#fff” speed=“1” style=“width: 300px; height: 300px” loop controls autoplay direction=“1” mode=“normal”></lottie-player> -->
+        
             <!-- CAROUSEL -->
             <div id="carouselExampleControlsNoTouching" class="carousel slide container-fluid mt-2"
                 data-bs-touch="false" data-bs-interval="false">
@@ -52,7 +55,7 @@
                 <!-- view product -->
                 <div class="container d-flex p-3  justify-content-between ">
                     <div class="textHeading fw-bold fs-4">Latest men Wearing</div>
-                    <form action="/Shop" method="get">
+                    <form action="/api/shop" method="get">
                         <button class="productviewButton">view all products</button>
                     </form>
                 </div>
@@ -73,7 +76,7 @@
                                 </div>
                                 <div class="product-info">
                                     <h2 class="product-brand"><%= data.product_name %></h2>
-                                    <span class="price text-danger">₹ 444</span><span class="actual-price">₹ 555</span>
+                                    <span class="price text-danger">₹ <%= data.product_price %></span><span class="actual-price">₹ <%= data.product_price + 500 %></span>
                                     <div class="rating d-flex align-items-center">
                                         <div class="star d-flex align-items-center">
                                             <img src="/public/product/star.png" alt="">
@@ -98,7 +101,7 @@
                 <!-- view Accessory -->
                 <div class="container d-flex p-3  justify-content-between ">
                     <div class="textHeading fw-bold fs-4">Latest Men Accessory</div>
-                    <button class="productviewButton">view all products</button>
+                    <a class="productviewButton text-decoration-none">view all products</a>
                 </div>
 
                 <!--Accessory Container -->
@@ -117,7 +120,7 @@
                                 </div>
                                 <div class="product-info">
                                     <h2 class="product-brand"><%= data.product_name %></h2>
-                                    <span class="price text-danger">₹ 400</span><span class="actual-price">₹ 500</span>
+                                    <span class="price text-danger">₹ <%= data.product_price %></span><span class="actual-price">₹ <%= data.product_price + 500 %></span>
                                     <div class="rating d-flex align-items-center">
                                         <div class="star d-flex align-items-center">
                                             <img src="/public/product/star.png" alt="">

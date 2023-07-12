@@ -153,6 +153,7 @@ confirmBtn.addEventListener("click", async ()=>{
     const body = {$pull: {cart:{cart_item_id: item_todelete.id}}}
     const res = await fetchData(url, 'PUT', body, token)
     if(res.ok) {
+        product_stock[dataToCheckoutOBJ[item_todelete.id].product_id].stock += dataToCheckoutOBJ[item_todelete.id].quantity
         delete dataToCheckoutOBJ[item_todelete.id]
         cartContainer.removeChild(item_todelete.item)
         confirmDialog.close()

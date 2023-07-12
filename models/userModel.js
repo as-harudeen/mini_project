@@ -57,6 +57,10 @@ const userSchema = new mongoose.Schema({
   },
   isBlocked: {
     type: Boolean
+  },
+  whishlist: {
+    type: [mongoose.Types.ObjectId],
+    unique: true
   }
 });
 

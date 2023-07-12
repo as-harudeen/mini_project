@@ -25,7 +25,8 @@ const {
     editAddressGET,
     checkoutGET,
     orderGET,
-    orderViewGET
+    orderViewGET,
+    whishlistGET
 } = require('../render/user.render.js')
 const {verifyUser} = require('../middlewares/user.midleware.js')
 const authenticateUser = require('../middlewares/auth/userAuth.js')
@@ -60,19 +61,24 @@ router
 .route('/shop')
 .get(shopGET)
 
+router.use(authenticateUser)
+
+
 //Produt details
 router
 .route('/products/:product_id')
 .get(productDetailGET)
-
-
-router.use(authenticateUser)
 
 //logout
 router
 .route('/logout')
 .get(logout)
 
+
+//wisilist
+router
+.route('/whishlist')
+.get(whishlistGET)
 
 
 //Cart
