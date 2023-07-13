@@ -45,7 +45,7 @@ app.set('view engine', 'ejs')
 //Using routers
 app.use("/api", require('./routers/userRoutes.js'));
 app.use("/admin", require('./routers/adminRoutes.js'));
-app.use(errHandler)
+// app.use(errHandler)
 
 
 // const Redis = require('redis')

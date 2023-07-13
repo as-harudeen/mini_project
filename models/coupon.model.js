@@ -4,8 +4,7 @@ const couponSchema = new mongoose.Schema({
     coupon_name: {
         type: String,
         required: true,
-        unique: true,
-        index: true,
+        unique: true
     },
     coupon_value: {
         type: String,

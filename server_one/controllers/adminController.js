@@ -9,6 +9,7 @@ const CouponModel = require('../../models/coupon.model.js')
 const sharp = require('sharp')
 const moment = require('moment')
 const fs = require('fs')
+const { Console } = require('console')
 
 
 // const redisClient = require('redis').createClient()
@@ -524,6 +525,7 @@ const addCoupon = async(req, res)=>{
     }
 
     try {
+        console.log(coupon_name)
         const coupon = await CouponModel.create({
             coupon_name,
             coupon_value,
@@ -533,6 +535,7 @@ const addCoupon = async(req, res)=>{
 
         res.status(200).send(coupon)
     } catch (err) {
+        console.log(err.message)
         return res.status(400).send("coupon name exist")
     }
 
