@@ -52,7 +52,7 @@ router
 
 //Cancel order request
 router
-.put("/order/cancelrequest/:orderID", cancelRequest)
+.put("/order/cancelrequest/:order_id/:sub_id", cancelRequest)
 
 //GET AVAILABLE COUPONS
 router

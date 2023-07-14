@@ -1,4 +1,5 @@
 <%- include('../include/_header.ejs') %>
+<% const sub_order = order.sub_orders[0] %>
     <div class="container-fluid p-0 min-vh-100" style="margin-top: 6%;">
         <%-include('../include/navBar.ejs') %>
             <div class="container ">
@@ -26,7 +27,7 @@
                                 <div class="container pt-4">
                                     <!-- Title -->
                                     <div class="d-flex justify-content-between align-items-center py-3">
-                                        <h3 data-order_id="<%= order._id %>" id="order_id" class="h5 mb-0"><span class="text-danger">ORDER ID</span> : <span style="font-size: 14px; color: #959595;">#<%=order._id%></span></h3>
+                                        <h3 data-sub_id="<%= sub_order._id %>" data-order_id="<%= order._id %>" id="order_id" class="h5 mb-0"><span class="text-danger">ORDER ID</span> : <span style="font-size: 14px; color: #959595;">#<%=sub_order._id%></span></h3>
                                     </div>
                                     <!-- Main content -->
                                     <div class="row">
@@ -39,15 +40,15 @@
                                                             <span class="me-3 fw-bold" style="font-size: 13px;color: #959595;"><span>Order Date :</span><%= orderedOn %></span>
                                                             <span class="me-3 fw-bold" style="font-size: 13px;color: #959595;"><span>Delivery Date :</span> <%= expectedDate %> </span>
                                                             <span id="order_status">
-                                                                <%if(order.isCanceled == false){%>
-                                                                    <%if(order.order_status == "Deliverd"){%>
+                                                                <%if(sub_order.isCanceled == false){%>
+                                                                    <%if(sub_order.order_status == "Deliverd"){%>
                                                                         <span class="badge rounded-pill bg-success">Deliverd</span>
-                                                                    <%}else if(order.order_status == "Processing"){%>
+                                                                    <%}else if(sub_order.order_status == "Processing"){%>
                                                                         <span class="badge rounded-pill bg-warning">Processing</span>
-                                                                    <%} else if ( order.order_status == 'requested for cancel') {%>
+                                                                    <%} else if (sub_order.order_status == 'requested for cancel') {%>
                                                                         <span class="badge rounded-pill bg-warning">Cancel Requested</span>
                                                                     <%}else{%>
-                                                                        <span class="badge rounded-pill bg-info"><%= order.order_status %></span>
+                                                                        <span class="badge rounded-pill bg-info"><%= sub_order.order_status %></span>
                                                                     <%}%>
                                                                 <%}else {%>
                                                                     <span class="badge rounded-pill bg-danger">Canceld</span>  
@@ -79,8 +80,8 @@
                                                                     </div>
                                                                 </td>
                                                                 <td  style="font-size: 13px;"><%=order.quantity%></td>
-                                                                <td class="text-end fw-bold"  style="font-size: 14px;">₹ <%=order.total_price / order.quantity %></td>
-                                                                <td> <%= order.size %></td>
+                                                                <td class="text-end fw-bold"  style="font-size: 14px;">₹ <%=sub_order.total_price / sub_order.quantity %></td>
+                                                                <td> <%= sub_order.size %></td>
                                                                 <td>color</td>
                                                                 
                                                             </tr>
@@ -88,7 +89,7 @@
                                                             <tfoot class=" pt-2" style="border-radius: 10px;">
                                                                 <tr>
                                                                     <td colspan="2" class="fw-bold" style="color: #959595;">Subtotal</td>
-                                                                    <td class="text-end"style="color: #959595;">₹ <%= order.total_price %></td>
+                                                                    <td class="text-end"style="color: #959595;">₹ <%= sub_order.total_price %></td>
                                                                 </tr>
                                                                 <tr>
                                                                     <td colspan="2" class="fw-bold" style="color: #959595;">Shipping</td>
@@ -104,7 +105,7 @@
                                                                 </tr>
                                                                 <tr class="fw-bold">
                                                                     <td colspan="2">TOTAL</td>
-                                                                    <td class="text-end">₹ <%= order.total_price - order.discount_price %></td>
+                                                                    <td class="text-end">₹ <%= sub_order.total_price %></td>
                                                                 </tr>
                                                             </tfoot>   
                                                     </table>
@@ -121,7 +122,7 @@
                                                     <hr>
                                                     <h6 class="fw-bold ">Address</h6>
                                                     <address style="font-size: 14px; opacity: 70%;">
-                                                        <label class="fw-bold" style="font-size: 14px; opacity: 70%;"><%=address.full_name%></label><br>
+                                                        <label class="fw-bold" style="font-size: 14px; opacity: 70%;"><%=address.name%></label><br>
                                                         <%=address.house_name%>, <%=address.street%><br>
                                                         <%=address.city%>,<br>
                                                         Ph : <%=address.phone%><br>
@@ -131,8 +132,8 @@
                                             </div>
 
                                             <div id="cancel-order-btn-container">
-                                               <%if(order.isCanceled == false){%>
-                                                <%if(order.order_status == "Deliverd" || order.order_status == "requested for cancel"){%>
+                                               <%if(sub_order.isCanceled == false){%>
+                                                <%if(sub_order.order_status == "Deliverd" || sub_order.order_status == "requested for cancel"){%>
                                                     <form action="/api/Shop" method="get">
                                                         <button class="btn btn-success" style="width: 100%; border-radius: 10px;font-size: 13px;">Order Again</button>
                                                     </form>

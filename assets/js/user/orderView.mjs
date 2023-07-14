@@ -2,7 +2,9 @@ import getToken from "../helper/getToken.js"
 import fetchData from "../helper/fetchData.js"
 
 const token = getToken()
-const orderId = document.getElementById('order_id').dataset.order_id
+const order = document.getElementById('order_id')
+const orderId = order.dataset.order_id
+const subId = order.dataset.sub_id
 
 const confirmDialog = document.getElementById('confirm-dialog')
 
@@ -18,7 +20,7 @@ confirmDialog.querySelector('.cancel-btn').addEventListener('click', ()=>{
 })
 
 confirmDialog.querySelector('.confirm-btn').addEventListener('click', async ()=>{
-    const res = await fetchData(`http://localhost:5000/order/cancelrequest/${orderId}`, 'PUT', {}, token)
+    const res = await fetchData(`http://localhost:5000/order/cancelrequest/${orderId}/${subId}`, 'PUT', {}, token)
     if(res.ok){
         confirmDialog.close()
         document.getElementById('cancel-order-btn-container').innerHTML = `
