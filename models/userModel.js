@@ -49,11 +49,7 @@ const userSchema = new mongoose.Schema({
     type: [addressSchema]
   },
   orders: {
-    type: [{
-      order_id: {
-        type: mongoose.Types.ObjectId
-      }
-    }]
+    type: [mongoose.Types.ObjectId]
   },
   isBlocked: {
     type: Boolean

@@ -166,10 +166,9 @@ const my_order = async (req, res)=>{
                     const product = await ProductModel.findById(item.product_id, {product_name: 1, _id: 0, product_images: {$slice: 1}})
                     products[item.product_id] = product
                     order.sub_orders[idx] = {...product.toObject(), ...item}
-                    // data.push({...order.toObject(), ...product.toObject()})
                 } else {
                     const product = products[item.product_id]
-                    order.products[idx] = {...product.toObject(), ...item}
+                    order.sub_orders[idx] = {...product.toObject(), ...item}
                     // data.push({...order.toObject(), ...product.toObject()})
                 }
             }
@@ -180,7 +179,7 @@ const my_order = async (req, res)=>{
         console.timeEnd('orderGET')
         res.status(200).json(data)
     } catch (err) {
-        console.log(err.message)
+        console.log(err)
         res.status(500).send(err.message)
     }
 }

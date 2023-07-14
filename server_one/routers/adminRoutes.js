@@ -36,7 +36,8 @@ const {
     getOrders,
     updateOrderStatus,
     addCoupon,
-    deleteCoupon
+    deleteCoupon,
+    getorderscount
 } = require("../controllers/adminController.js")
 
 const authenticate = require('../middlewares/auth/adminAuth.js')
@@ -197,13 +198,17 @@ router
 
 //order Details
 router
-.route('/panel/orders/:order_id')
+.route('/panel/orders/:sub_id')
 .get(orderDetailsGET)
 .put(updateOrderStatus)
 
 //GET orders
 router
 .get('/getorders', getOrders)
+
+//sub_orders count
+router
+.get('/getorderscount', getorderscount)
 
 
 //===========COUPON==============//

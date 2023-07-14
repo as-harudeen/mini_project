@@ -5,7 +5,7 @@ const twoDayLater = ()=>{
     return Date.now() + twoDayMS
 }
 
-const productSchema = new mongoose.Schema({
+const subOrderSchema = new mongoose.Schema({
     product_id: {
         type: mongoose.Types.ObjectId,
         required: true
@@ -14,21 +14,21 @@ const productSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    product_price: {
+    total_price: {
         type: Number,
         required: true
     },
-    product_size: {
+    size: {
         type: String,
         required: true
     },
-    product_color: {
+    color: {
         type: String,
         required: true
     },
     order_status: {
         type: String,
-        required: true
+        default: "Processing"
     },
     isCanceled: {
         type: Boolean,
@@ -46,21 +46,13 @@ const orderSchema = new mongoose.Schema({
         type: mongoose.Types.ObjectId,
         required: true
     },
-    products:{
-
+    sub_orders:{
+        type: [subOrderSchema],
+        required: true
     },
     address: {
         type: Object,
         required: true
-    },
-    quantity: {
-        type: Number,
-        required: true
-    },
-    order_status: {
-        type: String,
-        required: true,
-        default: 'Processing'
     },
     payment_method: {
         type: String,

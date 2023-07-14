@@ -94,14 +94,16 @@ const ordersGET = async (req, res)=>{
 }
 
 
-//@des http://localhost:3000/amdin/panel/orders/:order_id
+//@des http://localhost:3000/amdin/panel/orders/:sub_id
 const orderDetailsGET = async (req, res)=>{
-    const {order_id} = req.params
+    const {sub_id} = req.params
     const fetchedOrders = req.session.orders
+    console.log(fetchedOrders)
 
     if(!fetchedOrders) return res.redirect('/admin/panel/orders')
-    const currOrder = fetchedOrders[order_id]
+    const currOrder = fetchedOrders[sub_id]
     if(!currOrder) return res.redirect('/admin/panel/orders')
+
 
     const orderedOn = moment(currOrder.createdAt).format('DD/MM/YYYY')
     const deliveryDate = moment(currOrder.delevery_date).format('DD/MM/YYYY')

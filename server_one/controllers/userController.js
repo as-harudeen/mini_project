@@ -219,7 +219,7 @@ const order = async (req, res) => {
 
         const orders = await OrderModel.create({
             user_id: userId,
-            products: checkoutData,
+            sub_orders: checkoutData,
             address: {
                 name: address.address[0].full_name,
                 house_name: address.address[0].house_name,
@@ -232,7 +232,7 @@ const order = async (req, res) => {
             discount_price
         })
 
-        const query = { $push: { orders: orders._id } }
+        const query = { $push: {orders: orders._id} }
         if (req.query.fromCart) query.$unset = { cart: "" }
         await UserModel.updateOne({ _id: userId }, query)
 
