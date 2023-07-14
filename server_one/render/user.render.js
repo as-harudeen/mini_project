@@ -210,24 +210,34 @@ const orderGET = async (req, res)=>{
 }
 
 
-//@des http://localhost:3000/api/profile/order/:order_id
+//@des http://localhost:3000/api/profile/order/:order_id/:sub_order_id
 const orderViewGET = async (req, res)=>{
     const {userId} = req.user
-    const {order_id} = req.params
+    const {order_id, sub_order_id} = req.params
+    try {
+
+        const user = await UserModel.findOne({_id: userId, orders: {"$elemMatch": {$eq: order_id}}}, {_id: 0})
+        if(!user) return res.status(403).send("Forbiden")
+
+        const order = await OrderModel.findOne({_id: order_id, "sub_orders._id": sub_order_id}, 
+        {"sub_orders.$": 1, createdAt: 1, address: 1, payment_method: 1})
+        const product = await ProductModel.findById(order.sub_orders[0].product_id, {
+            product_name: 1,
+            product_des: 1,
+            product_images: 1,
+            _id: 0
+        })
     
-    const order = await OrderModel.findById(order_id)
-    const product = await ProductModel.findById(order.product_id, {
-        product_name: 1,
-        product_des: 1,
-        product_images: 1,
-        _id: 0
-    })
-
-    const orderedOn = moment(order.createdAt).format('DD/MM/YYYY')
-    const expectedDate = moment(order.delivery_date).format('DD/MM/YYYY')
-    const address = await UserModel.findOne({_id: userId, 'address._id': order.address}, {'address.$': 1, _id: 0})
-
-    res.status(200).render('user/orderView', {address: address.address[0], order: {...order.toObject(), ...product.toObject()}, orderedOn, expectedDate})
+        const orderedOn = moment(order.createdAt).format('DD/MM/YYYY')
+        const expectedDate = moment(order.sub_orders[0].delivery_date).format('DD/MM/YYYY')
+        // const address = await UserModel.findOne({_id: userId, 'address._id': order.address}, {'address.$': 1, _id: 0})
+    
+        res.status(200).render('user/orderView', {order: {...order.toObject(), ...product.toObject()}, orderedOn, expectedDate, address: order.address})
+        // res.status(200).render('user/orderView', {address: {}, order: {}, orderedOn: 1, expectedDate: 3})
+    } catch (err) {
+        console.log(err.message)
+        return res.status(500).send(err.message)
+    }
 }
 
 

@@ -5,36 +5,54 @@ const twoDayLater = ()=>{
     return Date.now() + twoDayMS
 }
 
-
-const orderSchema = new mongoose.Schema({
-    user_id: {
+const subOrderSchema = new mongoose.Schema({
+    product_id: {
         type: mongoose.Types.ObjectId,
-        required: true
-    },
-    product_id:{
-        type: mongoose.Types.ObjectId,
-        required: true
-    },
-    address: {
-        type: Object,
         required: true
     },
     quantity: {
         type: Number,
         required: true
     },
-    color: {
-        type: String,
+    total_price: {
+        type: Number,
         required: true
     },
     size: {
         type: String,
         required: true
     },
+    color: {
+        type: String,
+        required: true
+    },
     order_status: {
         type: String,
-        required: true,
-        default: 'Processing'
+        default: "Processing"
+    },
+    isCanceled: {
+        type: Boolean,
+        default: false
+    },
+    delivery_date: {
+        type: Date,
+        default: twoDayLater
+    }
+})
+
+
+const orderSchema = new mongoose.Schema({
+    user_id: {
+        type: mongoose.Types.ObjectId,
+        required: true
+    },
+    sub_orders:{
+        type: [subOrderSchema],
+        required: true
+    },
+    address: {
+        type: Object,
+        required: true
     },
     payment_method: {
         type: String,
@@ -46,22 +64,9 @@ const orderSchema = new mongoose.Schema({
             message: "Payment should be COD or Razorpay"
         }
     },
-    total_price: {
-        type: String,
-        required: true
-    },
     discount_price: {
         type: String,
-        required: true
-    },
-    isCanceled: {
-        type: Boolean,
-        default: false
-    },
-    delivery_date: {
-        type: Date,
-        default: twoDayLater
-
+        default: 0
     }
 }, {timestamps: true})
 

@@ -176,6 +176,7 @@ const count = async (req, res) => {
 const order = async (req, res) => {
 
     const { checkoutData } = req.order//take the checkoutdata
+    console.log(checkoutData)
     const { address_id, payment_method, coupon_id } = req.body //taking address, payment method and coupon id
     const { userId } = req.user
 
@@ -183,6 +184,7 @@ const order = async (req, res) => {
     const address = await UserModel.findOne({ _id: userId, 'address._id': address_id }, { 'address.$': 1 })
     if (!address) throw new Error('Invalid address..')
 
+    console.log(address)
     if (payment_method != 'COD' && payment_method != 'Razorpay') return res.status(400).send("invalid payment method")
 
     const productQuantity = {}//for update product orderedcount
@@ -201,47 +203,36 @@ const order = async (req, res) => {
 
 
 
-    let dis_amount = 0
-    let totalProduct = checkoutData.length
+    let discount_price = 0
+    // let totalProduct = checkoutData.length
     if (coupon_id) {//checking coupon is valid or not
         const coupon = await CouponModel.findOneAndUpdate({ _id: coupon_id, used_users: { $ne: userId } }, { $push: { used_users: userId } })
         if (coupon) {
             const isThisCouponAllowed = (total_price * .15) >= coupon.coupon_value//put a restriction to avoid coupon missuse
             if (isThisCouponAllowed) {
-                if (totalProduct >= coupon.coupon_value) dis_amount = 1
-                else dis_amount = Math.floor(coupon.coupon_value / checkoutData.length)
+                discount_price = coupon.coupon_value
             }
         }
     }
 
-    //Assigning address and payment method with products
-    for (let product of checkoutData) {
-        product.user_id = userId,
-            product.address = address.address[0],
-            product.payment_method = payment_method,
-            product.discount_price = dis_amount
-        totalProduct--
-        if (totalProduct <= 0) dis_amount = 0
-    }
-
-
     try {
 
-        const orders = await OrderModel.insertMany(checkoutData)
-
-        const orderId = []//for adding to user's orders field
-        // const productCount = {}//for update product orderedcount
-        // orders.forEach(order => {
-        //     //taking the count
-        //     if(productCount[order.product_id]) productCount[order.product_id] += order.quantity
-        //     else productCount[order.product_id] = order.quantity
-        //     orderId.push({order_id: order._id})//collecting as a order_id
-
-        // })
-        orders.forEach(order => {
-            orderId.push({ order_id: order._id })//collecting as a order_id
+        const orders = await OrderModel.create({
+            user_id: userId,
+            sub_orders: checkoutData,
+            address: {
+                name: address.address[0].full_name,
+                house_name: address.address[0].house_name,
+                street: address.address[0].street,
+                city: address.address[0].city,
+                phone: address.address[0].phone,
+                pincode: address.address[0].pincode
+            },
+            payment_method,
+            discount_price
         })
-        const query = { $push: { orders: { $each: orderId } } }
+
+        const query = { $push: {orders: orders._id} }
         if (req.query.fromCart) query.$unset = { cart: "" }
         await UserModel.updateOne({ _id: userId }, query)
 

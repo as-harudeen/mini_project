@@ -403,6 +403,21 @@ const test = async (req, res) => {
  }
  
 
+//get orders count
+const getorderscount = async (req, res)=>{
+    try {
+        const count = await OrderModel.aggregate([
+            { $group: { _id: null, total_count: { $sum: { $size: "$sub_orders" } } } }
+        ])
+
+        const total_count = count[0].total_count
+        res.status(200).send('' + total_count)
+    } catch (err) {
+        console.log(err)
+        return res.status(500).send(err.message)
+    }
+} 
+
 
 //get orders
 const getOrders = async (req, res)=>{
@@ -415,16 +430,18 @@ const getOrders = async (req, res)=>{
         const option = req.query.option ? JSON.parse(req.query.option) : {}
         console.log(option)
 
-        const orders = await OrderModel.find(option).limit(+limit).skip(skip)
-        
-        // console.log(orders)
-        
+        // const orders = await OrderModel.find(option).limit(+limit).skip(skip)
+        const orders = await OrderModel.aggregate([ { $project: { sub_orders: 1, address: 1, payment_method: 1, user_id: 1 } }, { $unwind: "$sub_orders" }, {$skip: +skip}, { $limit: +limit }])
+        console.log(orders)
+
         const producstId = {}//stroring products id for retriving products
         const usersId = {}//storing user id for retriving users
         
         orders.forEach(order => {//building productId and userId
-            if(!producstId[order.product_id]) producstId[order.product_id] = true
             if(!usersId[order.user_id]) usersId[order.user_id] = true
+            if(!producstId[order.sub_orders.product_id]) producstId[order.sub_orders.product_id] = true
+            // order.sub_orders.forEach(sub_order => {
+            // })
         })
         
         //stroting products and users
@@ -449,9 +466,9 @@ const getOrders = async (req, res)=>{
     //manpulating orders object and add some neccessary data from
     //both products and users
     for (let idx in orders) {
-        orders[idx] = orders[idx].toObject()
+        // orders[idx] = orders[idx].toObject()
         const order = orders[idx]
-        const product = productsOBJ[order.product_id.toString()];
+        const product = productsOBJ[order.sub_orders.product_id.toString()];
         const user = usersOBJ[order.user_id.toString()];
         
         order['product_name'] = product.product_name
@@ -459,12 +476,13 @@ const getOrders = async (req, res)=>{
         order.product_images = product.product_images; 
         order.username = user.username;
         
-        req.session.orders[order._id] = order
+        req.session.orders[order.sub_orders._id] = order
     }
     
+    console.log(orders)
     res.status(200).send(orders)
 } catch (err) {
-    console.log(err.message)
+    console.log(err)
     return res.status(500).send(err.message)
 }
 } 
@@ -472,29 +490,30 @@ const getOrders = async (req, res)=>{
 
 //update order
 const updateOrderStatus = async (req, res)=>{
-    const {order_id} = req.params
+    const {sub_id} = req.params
     const status = req.body.status
     
-    const option = {$set: {order_status: status}}
-    option.$set.isCanceled = status == 'Canceled'
+    const option = {$set: {"sub_orders.$.order_status": status}}
+    option.$set['sub_orders.$.isCanceled'] = status == 'Canceled'
     
     // if(!status || (status != 'Processing' && status != 'Shipped' && status != 'requested for cancel')
     console.log(status)
     if(!status) throw new Error("Status")
-    const order = await OrderModel.findByIdAndUpdate(order_id, option)
+    const order = await OrderModel.findOneAndUpdate({'sub_orders._id': sub_id}, option)
 
     let updateQuantity = 0
     
-    if((status == 'Return Accepted' && order.order_status != 'Canceled') ||
-    (status == 'Canceled' && order.order_status != 'Return Accepted')) updateQuantity = order.quantity
-    else if((status != 'Return Accepted' && order.order_status == 'Canceled') ||
-    (status != 'Canceled' && order.order_status == 'Return Accepted')) updateQuantity = -order.quantity
+    const sub_order = order.sub_orders[0]
+    if((status == 'Return Accepted' && sub_order.order_status != 'Canceled') ||
+    (status == 'Canceled' && sub_order.order_status != 'Return Accepted')) updateQuantity = sub_order.quantity
+    else if((status != 'Return Accepted' && sub_order.order_status == 'Canceled') ||
+    (status != 'Canceled' && sub_order.order_status == 'Return Accepted')) updateQuantity = -sub_order.quantity
     
 
-    if(updateQuantity) await ProductModel.updateOne({_id: order.product_id}, {$inc: {product_stock: updateQuantity}})
+    if(updateQuantity) await ProductModel.updateOne({_id: sub_order.product_id}, {$inc: {product_stock: updateQuantity}})
     else console.log("no updation")
 
-    res.status(200).send({isCanceled: order.isCanceled, order_status: order.order_status})
+    res.status(200).send({isCanceled: sub_order.isCanceled, order_status: sub_order.order_status})
 
 }
 
@@ -576,5 +595,6 @@ module.exports = {
     getOrders,
     updateOrderStatus,
     addCoupon,
-    deleteCoupon
+    deleteCoupon,
+    getorderscount
 }

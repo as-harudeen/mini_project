@@ -9,7 +9,7 @@ import fetchData from '../helper/fetchData.js'
     const new_tr = order_tr_temp.content.cloneNode(true)
     
     new_tr.querySelector('.order-no').innerText = `#${orderNo++}`
-    new_tr.querySelector('.image-button').href += order._id
+    new_tr.querySelector('.image-button').href += `${order.sub_orders._id}`
     new_tr.querySelector('.order-img').src += order.product_images[0]
     new_tr.querySelector('.order-username').innerText = order.username
 
@@ -22,14 +22,14 @@ import fetchData from '../helper/fetchData.js'
     new_tr.querySelector('.order-phone').innerText = order.address.phone
     const isCanceled = new_tr.querySelector('.order-isCanceled')
 
-    isCanceled.innerText = order.isCanceled
-    if(order.isCanceled == true) isCanceled.classList.add('bg-danger')
+    isCanceled.innerText = order.sub_orders.isCanceled
+    if(order.sub_orders.isCanceled == true) isCanceled.classList.add('bg-danger')
     else isCanceled.classList.add('bg-success')
 
     const orderStatusSpan = new_tr.querySelector('.order-status')
-    orderStatusSpan.innerText = order.order_status
+    orderStatusSpan.innerText = order.sub_orders.order_status
 
-    const status = order.order_status
+    const status = order.sub_orders.order_status
     if(status == 'Processing') orderStatusSpan.classList.add('bg-warning')
     else if(status == 'Shipped') orderStatusSpan.classList.add('bg-info')
     else if(status == 'Return accepted') orderStatusSpan.classList.add('bg-success')
@@ -78,11 +78,12 @@ import fetchData from '../helper/fetchData.js'
 
 
 const btnsCount = async(option, collection = 'orders')=>{
-  let url = `/api/doc_count/${collection}`
+  let url = '/admin/getorderscount'
   //this will return doc count that matching certain condition
   // if(option) url += `?option=${JSON.stringify(option)}`
   const res = await fetchData(url, 'GET')
   const totalProductsCount = await res.text()
+  console.log(totalProductsCount)
   //Building pagination buttons
   buildPagenationBtns(Math.ceil(+totalProductsCount / limit))
 }

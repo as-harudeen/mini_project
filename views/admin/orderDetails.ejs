@@ -1,4 +1,5 @@
 <%- include('../include/_header.ejs') %>
+<% const sub_order = order.sub_orders %>
     <div class="container-fluid p-0 min-vh-100 " style="margin-top: 7%;">
         <%-include('../include/navBar.ejs') %>
             <div class="container f-flex align-items-center justify-content-center">
@@ -56,7 +57,7 @@
                                 <div class="container pt-3">
                                     <!-- Title -->
                                     <div class="d-flex justify-content-between align-items-center py-3">
-                                        <h3 class="h5 mb-0"><span class="fw-bold">ORDER ID</span> : <span style="font-size: 14px; color: #959595;">#<%=order._id%></span></h3>
+                                        <h3 class="h5 mb-0"><span class="fw-bold">ORDER ID</span> : <span style="font-size: 14px; color: #959595;">#<%=sub_order._id%></span></h3>
                                     </div>
                                     <!-- Main content -->
                                     <div class="row">
@@ -73,17 +74,17 @@
                                                                 <span>Delivery Date :</span> <%= deliveryDate %>
                                                             </span>
                                                             <span id="orderStatus">
-                                                            <% if (order.isCanceled === false) { %>
-                                                                <% if (order.order_status == 'Deliverd') { %>
+                                                            <% if (sub_order.isCanceled === false) { %>
+                                                                <% if (sub_order.order_status == 'Deliverd') { %>
                                                                     <span class="badge rounded-pill bg-success">Deliverd</span>
-                                                                <% } else if (order.order_status == 'Processing') { %>
+                                                                <% } else if (sub_order.order_status == 'Processing') { %>
                                                                     <span class="badge rounded-pill bg-warning">Processing</span>
-                                                                <% } else if (order.order_status == 'Return Accepted') { %>
+                                                                <% } else if (sub_order.order_status == 'Return Accepted') { %>
                                                                     <span class="badge rounded-pill bg-success">Return Accepted</span>
-                                                                <% } else if(order.order_status == 'requested for cancel'){ %>
+                                                                <% } else if(sub_order.order_status == 'requested for cancel'){ %>
                                                                     <span class="badge rounded-pill bg-warning">Order Cancel Requested</span>
                                                                 <% } else { %>
-                                                                    <span class="badge rounded-pill bg-info"><%=order.order_status%></span>
+                                                                    <span class="badge rounded-pill bg-info"><%=sub_order.order_status%></span>
                                                                 <% } %>
                                                             <% } else { %>
                                                                     <span class="badge rounded-pill bg-danger">Canceled</span>
@@ -109,15 +110,15 @@
                                                                         </div>
                                                                     </div>
                                                                 </td>
-                                                                <td  style="font-size: 13px;"><%=order.quantity%></td>
-                                                                <td class="text-end fw-bold"  style="font-size: 14px;">₹ <%=order.total_price / order.quantity%></td>
+                                                                <td  style="font-size: 13px;"><%=sub_order.quantity%></td>
+                                                                <td class="text-end fw-bold"  style="font-size: 14px;">₹ <%=sub_order.total_price / sub_order.quantity%></td>
                                                                 
                                                             </tr>
                                                         </tbody>
                                                             <tfoot class="mt-3" style="border-radius: 10px;">
                                                                 <tr>
                                                                     <td colspan="2" class="fw-bold" style="color: #959595;">Subtotal</td>
-                                                                    <td class="text-end"style="color: #959595;">₹ <%= order.total_price %></td>
+                                                                    <td class="text-end"style="color: #959595;">₹ <%= sub_order.total_price %></td>
                                                                 </tr>
                                                                 <tr>
                                                                     <td colspan="2" class="fw-bold" style="color: #959595;">Shipping</td>
@@ -133,7 +134,7 @@
                                                                 </tr>
                                                                 <tr class="fw-bold">
                                                                     <td colspan="2">TOTAL</td>
-                                                                    <td class="text-end">₹ <%= order.total_price - order.discount_price %></td>
+                                                                    <td class="text-end">₹ <%= sub_order.total_price %></td>
                                                                 </tr>
                                                             </tfoot>   
                                                     </table>
@@ -148,15 +149,15 @@
                                                     <h6 class="fw-bold ">Status Updation</h6>
                                                     <div class="width-100 my-3">
                                                         <select name="status" id="status__id" style="width: 100%; background-color: white;">
-                                                            <option selected value="<%=order.order_status %>"><%= order.order_status %></option>
-                                                            <% if (order.order_status !== "Processing") {%> <option value="Processing">Processing</option> <%}%>
-                                                            <% if (order.order_status !== "Shipped") {%> <option value="Shipped">Shipped</option> <%}%>
-                                                            <% if (order.order_status !== "Out For Delivery") {%> <option value="Out For Delivery">Out For Delivery</option> <%}%>
-                                                            <% if (order.order_status !== "Deliverd") {%> <option value="Deliverd">Deliverd</option> <%}%>
-                                                            <% if (order.order_status !== "Canceled") {%> <option value="Canceled">Canceled</option> <%}%>
-                                                            <% if (order.order_status !== "Return Accepted") {%> <option value="Return Accepted">Return Accepted</option> <%}%>
-                                                            <% if (order.order_status !== "Requested for return") {%> <option value="Requested for return">Requested for return</option> <%}%>
-                                                            <% if (order.order_status !== "requested for cancel") {%> <option value="requested for cancel">requested for cancel</option> <%}%>
+                                                            <option selected value="<%=order.order_status %>"><%= sub_order.order_status %></option>
+                                                            <% if (sub_order.order_status !== "Processing") {%> <option value="Processing">Processing</option> <%}%>
+                                                            <% if (sub_order.order_status !== "Shipped") {%> <option value="Shipped">Shipped</option> <%}%>
+                                                            <% if (sub_order.order_status !== "Out For Delivery") {%> <option value="Out For Delivery">Out For Delivery</option> <%}%>
+                                                            <% if (sub_order.order_status !== "Deliverd") {%> <option value="Deliverd">Deliverd</option> <%}%>
+                                                            <% if (sub_order.order_status !== "Canceled") {%> <option value="Canceled">Canceled</option> <%}%>
+                                                            <% if (sub_order.order_status !== "Return Accepted") {%> <option value="Return Accepted">Return Accepted</option> <%}%>
+                                                            <% if (sub_order.order_status !== "Requested for return") {%> <option value="Requested for return">Requested for return</option> <%}%>
+                                                            <% if (sub_order.order_status !== "requested for cancel") {%> <option value="requested for cancel">requested for cancel</option> <%}%>
                                                         </select>
                                                     </div>
                                                     <span class="text text-success fw-bold" id="msg"></span>
@@ -171,7 +172,7 @@
                                                     <hr>
                                                     <h6 class="fw-bold" style="font-size: 14px; opacity: 70%;">Address :</h6>
                                                     <address style="font-size: 14px; opacity: 70%;">
-                                                        <label class="fw-bold" style="font-size: 14px; opacity: 70%;"><%=order.address.full_name%></label><br>
+                                                        <label class="fw-bold" style="font-size: 14px; opacity: 70%;"><%=order.address.name%></label><br>
                                                         <%=order.address.house_name%>, <%=order.address.street%><br>
                                                         <%=order.address.city%>,
                                                         Ph : <%=order.address.phone%><br>

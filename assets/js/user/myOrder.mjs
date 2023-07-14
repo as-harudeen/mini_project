@@ -11,26 +11,29 @@ async function buildOrders(){
     const res = await fetchData('http://localhost:5000/profile/my_order', "GET", null, token)
     if(res.ok){
         const data = await res.json()
-    
         for(let order of data){
-            const status = order.order_status
-            if(status == "Processing" || status == "shipped"){
-                buildNewOrders(
-                    order.product_images[0], 
-                    status, 
-                    order.quantity,
-                    order.total_price - order.discount_price,
-                    order.delivery_date,
-                    order._id
-                )
-            } else {
-                buildOrderHistory(
-                    order._id,
-                    status,
-                    order.product_images[0],
-                    order.total_price - order.discount_price,
-                    order.quantity
-                )
+            for(let sub_order of order.sub_orders){
+                console.log(sub_order)
+                const status = sub_order.order_status
+                if(status == "Processing" || status == "shipped"){
+                    buildNewOrders(
+                        sub_order.product_images[0], 
+                        status, 
+                        sub_order.quantity,
+                        sub_order.total_price,
+                        sub_order.delivery_date,
+                        order._id,
+                        sub_order._id
+                    )
+                } else {
+                    buildOrderHistory(
+                        sub_order._id,
+                        status,
+                        sub_order.product_images[0],
+                        sub_order.total_price,
+                        sub_order.quantity
+                    )
+                }
             }
 
         }
@@ -51,7 +54,7 @@ buildOrders()
 
 let newOrderCount = 1
 //building new orders
-function buildNewOrders(img, status, qty, price, del_date, id){
+function buildNewOrders(img, status, qty, price, del_date, id, sub_id){
     const order_item_tr = orderItem_trTEMP.content.cloneNode(true)
             
     order_item_tr.querySelector('.order-no').innerText = newOrderCount++
@@ -66,7 +69,7 @@ function buildNewOrders(img, status, qty, price, del_date, id){
     const month = date.getMonth() + 1
     const year = date.getFullYear()
     order_item_tr.querySelector('.order-date').innerText = `${day}/${month}/${year}`
-    order_item_tr.querySelector('.view-btn').href = `/api/profile/order/${id}`
+    order_item_tr.querySelector('.view-btn').href = `/api/profile/order/${id}/${sub_id}`
 
     order_tbody.appendChild(order_item_tr)
 }

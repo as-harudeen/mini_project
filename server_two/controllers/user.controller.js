@@ -4,6 +4,7 @@ const ProductModel = require('../../models/product.model.js')
 const UserModel = require('../../models/userModel.js')
 const OrderModel = require('../../models/orderModel.js')
 const CouponModel = require('../../models/coupon.model.js')
+const { order } = require('../../server_one/controllers/userController.js')
 
 
 //localhost:5000/get-product
@@ -154,39 +155,49 @@ const my_order = async (req, res)=>{
     try {
         const user = await UserModel.findOne({_id: userId}, {orders: 1, _id: 0})
         const data = []
-        for(let orderId of user.orders){
 
-            let order = await OrderModel.findById(orderId.order_id)
-            console.log(order)
-            const product = await ProductModel.findById(order.product_id, {product_name: 1, _id: 0, product_images: {$slice: 1}})
-            data.push({...order.toObject(), ...product.toObject()})
-    
+        const products = {}//memoization
+        for(let orderId of user.orders){
+            let order = await OrderModel.findById(orderId)
+            order = order.toObject()
+            for(let idx in order.sub_orders){
+                const item = order.sub_orders[idx]
+                if(!products[item.product_id]){
+                    const product = await ProductModel.findById(item.product_id, {product_name: 1, _id: 0, product_images: {$slice: 1}})
+                    products[item.product_id] = product
+                    order.sub_orders[idx] = {...product.toObject(), ...item}
+                } else {
+                    const product = products[item.product_id]
+                    order.sub_orders[idx] = {...product.toObject(), ...item}
+                    // data.push({...order.toObject(), ...product.toObject()})
+                }
+            }
+            data.push(order)
         }
 
     
         console.timeEnd('orderGET')
         res.status(200).json(data)
     } catch (err) {
-        console.log(err.message)
+        console.log(err)
         res.status(500).send(err.message)
     }
 }
 
 
-//localhost:5000/profile/order/cancelrequest/:orderID
+//localhost:5000/profile/order/cancelrequest/:order_id/:sub_id
 const cancelRequest = async (req, res)=>{
-    const {orderID} = req.params
-    console.log(orderID)
+    const {order_id, sub_id} = req.params
     const {userId} = req.user
 
     try {
-        const user = await UserModel.findOne({_id: userId, 'orders.order_id': orderID})
+        const user = await UserModel.findOne({_id: userId, orders: {"$elemMatch": {$eq: order_id}}}, {_id: 0})
         if(!user){
-            res.status(401)
-            throw new Error("Forbiden")
+            res.status(403)
+            throw new Error("Forbidden")
         }
     
-        const order = await OrderModel.updateOne({_id: orderID}, {order_status: 'requested for cancel'})
+        await OrderModel.updateOne({_id: order_id, "sub_orders._id": sub_id}, {"sub_orders.$.order_status": 'requested for cancel'})
     
         res.status(200).send("OK")
     } catch (err) {

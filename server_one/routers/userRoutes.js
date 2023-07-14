@@ -115,7 +115,7 @@ router
 
 //Order view
 router
-.route('/profile/order/:order_id')
+.route('/profile/order/:order_id/:sub_order_id')
 .get(orderViewGET)
 
 
