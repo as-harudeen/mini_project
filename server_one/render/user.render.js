@@ -90,7 +90,6 @@ const editAddressGET = async (req, res)=>{
     try {
         const data = await UserModel.findOne({_id: userId, 'address._id': address_id},
             { 'address.$': 1, _id: 0 })
-            console.log(data.address[0], " ithu nanana")
         res.status(200).render('user/edit_address', {address:  data.address[0]})
     } catch (err) {
         console.error(err.message)
@@ -108,7 +107,6 @@ const checkoutGET = async (req, res)=>{
     try {
         
         const products = JSON.parse(req.query.products)
-        console.log(products)
         //Redirection if the data not valide
         if(typeof products != 'object') return res.status(400).redirect('/api')
         //Redirection if the data is empty
@@ -153,12 +151,9 @@ const checkoutGET = async (req, res)=>{
 
             //stock validation
             if(products_stocks[productOBJ.product_id] || products_stocks[productOBJ.product_id] == 0) {
-                console.log("HI")
                 products_stocks[productOBJ.product_id] -=  productOBJ.quantity 
             }   
             else products_stocks[productOBJ.product_id] = product.product_stock - productOBJ.quantity
-            console.log(products_stocks)
-            console.log(productOBJ.quantity)
 
             if(products_stocks[productOBJ.product_id] < 0) return res.status(500).redirect("/api/cart")
 
@@ -174,7 +169,6 @@ const checkoutGET = async (req, res)=>{
             productOBJ = Object.assign(productOBJ, product.toObject())
             data.push(productOBJ)
         }
-        console.log(products_stocks)
 
 
         const playload = {
@@ -182,13 +176,11 @@ const checkoutGET = async (req, res)=>{
             checkoutData
         }
         const orderToken = jwt.sign(playload, process.env.SUPER_SECRET,  {expiresIn: '15m'})
-        // console.log(orderToken)
         const expirationTime = new Date(Date.now() + 15 * 60 * 1000); 
         res.cookie('orderToken', orderToken, {expires: expirationTime})
 
 
         const coupons = await CouponModel.find({used_users: {$ne: req.user.userId}})
-        console.log("HHIHIHIHIHIHHII")
         res.status(200).render('user/checkout',{data, coupons})
 
     } catch (err) {
@@ -245,7 +237,6 @@ const orderViewGET = async (req, res)=>{
 //@des http://localhost:3000/api/wihshlist
 const whishlistGET = async (req, res)=>{
     const {userId} = req.user
-    console.log(userId)
     try{
         const user = await UserModel.findById(userId, {_id: 0, whishlist: 1})
         const products = await ProductModel.find({_id: {$in: user.whishlist}})

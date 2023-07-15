@@ -55,7 +55,6 @@ loginBtn.addEventListener('click', async (e)=>{
     if(response.ok) window.location.href = '/api'
     else {
         const data = await response.json()
-        console.log(data)
         const err = data.err
         if(err == 'User not found') setError(emailInp, "User not found")
         else if(err == 'Incorrect password and OTP'){

@@ -41,7 +41,6 @@ const editCategoryGET = async (req, res)=>{
     
     const category_name = req.params.category_name
     
-    console.log(category_name)
     try{
         
         const category = await CategoryModel.findOne({category_name})
@@ -81,9 +80,7 @@ const productsGET = async(req, res)=>{
 //@des http:localhost:3000/admin/panel/products/edit/:product_id
 const editProductGET = async (req, res)=>{
     const productId = req.params.product_id
-    console.log(productId)
     const product = await ProductModel.findById(productId)
-    console.log(product)
     res.status(200).render('admin/editProduct', {product})
 }
 
@@ -98,7 +95,6 @@ const ordersGET = async (req, res)=>{
 const orderDetailsGET = async (req, res)=>{
     const {sub_id} = req.params
     const fetchedOrders = req.session.orders
-    console.log(fetchedOrders)
 
     if(!fetchedOrders) return res.redirect('/admin/panel/orders')
     const currOrder = fetchedOrders[sub_id]

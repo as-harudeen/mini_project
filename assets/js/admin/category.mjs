@@ -12,9 +12,7 @@ function subCatBtnClickHandler(categoryName, subcategoryName, button) {
         subcategory_name: subcategoryName
       };
   
-      console.log(body);
       const query = button.innerHTML === 'list' ? 'enable' : 'disable';
-      console.log(query)
       const response = await fetchData(`/admin/${query}`, 'PUT', body);
   
       if (response.ok) {

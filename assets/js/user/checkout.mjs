@@ -2,24 +2,11 @@ import fetchData from "../helper/fetchData.js"
 import getToken from "../helper/getToken.js"
 
 
-// const full_nameSPAN = document.querySelector('.address-full-name')
-// const house_nameSPAN = document.querySelector('.address-house-name')
-// const streetSPAN = document.querySelector('.address-street')
-// const citySPAN = document.querySelector('.address-city')
-// const phoneSPAN = document.querySelector('.address-phone')
-// const pincodeSPAN = document.querySelector('.address-pincode')
+
 const token = getToken()
 
 
-// function buildAddress (){
-    
-//     full_nameSPAN.textContent = full_name
-//     house_nameSPAN.textContent = house_name
-//     streetSPAN.textContent = street
-//     citySPAN.textContent = city
-//     phoneSPAN.textContent = phone
-//     pincodeSPAN.textContent = pincode
-// }
+
 
 const currAddressContainer = document.getElementById('curr-address')//Selected address
 function buildAddress (){//Change / building the selected address
@@ -130,7 +117,6 @@ confirmBtn.addEventListener('click', async ()=>{
         cancelBtn.click()
         contentDiv.innerHTML = ""
         const success = successTemp.content.cloneNode(true)
-        console.log(success)
         success.querySelector('.success-msg').innerText = 'Order successfully'
         const navigator = success.querySelector('.success-navigator')
         navigator.href = '/api/'
@@ -254,7 +240,6 @@ const razorpayHandler = async ()=>{
             image: '',
             order_id: order._id,
             handler: (response)=>{
-                console.log(response)
                 console.log('Success')
             },
             prefill: {

@@ -41,7 +41,6 @@ form.addEventListener('submit', async(e)=>{
         const res = await fetchData('http://localhost:5000/address/add', 'PUT', body, token)
         if(res.ok){
             const data = await res.json()
-            console.log(data)
             full_nameINP.value = ''
             house_nameINP.value = ''
             streetINP.value = ''

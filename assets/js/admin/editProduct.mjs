@@ -29,8 +29,6 @@ if(resp.ok){
 }
 
 
-console.log(product, "   currrrrr")
-console.log(productsName, "   nameeee")
 
 //Performing with SELECTOR Options
 const categorySel = document.getElementById('category')
@@ -191,12 +189,11 @@ for(let img of product.product_images){
 
 fileInp.addEventListener('change', (e)=>{
     const imgFiles = e.target.files
-    console.log(imgFiles[0])
     for(let idx = 0; idx < imgFiles.length; idx++){
         photoCollections_curr.push(imgFiles[idx])
         const imgSrc = URL.createObjectURL(imgFiles[idx])
         const newDiv = document.createElement('div')
-        newDiv.classList.add('product-img', 'col-md-2')
+        newDiv.classList.add('p-img', 'col-md-2')
         newDiv.innerHTML = `<img src="${imgSrc}">`
         const deleteBtn = document.createElement('button')
         deleteBtn.classList.add('btn', 'btn-danger')
@@ -208,8 +205,6 @@ fileInp.addEventListener('change', (e)=>{
             photoCollections_curr = photoCollections_curr.filter(photo => photo != imgFiles[idx])
         })
     }
-    console.log(photoCollections_curr)
-    console.log(photoCollections_prev)
 })
 
 
@@ -329,7 +324,7 @@ button.addEventListener('click', async (e)=>{
                 div.removeChild(msg)
             }, 5000)
             
-        }
+        } else console.log("err")
     }
     
 })

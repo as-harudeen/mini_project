@@ -57,7 +57,6 @@ form.addEventListener('submit', async (e)=>{
             confirmPassword.value = ''
 
             const updated = await res.json()
-            console.log(updated)
             const p = document.createElement('p')
             for(let key of Object.keys(updated)){
                 p.innerHTML += `${key} updated. <br>`

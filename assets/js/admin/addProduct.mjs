@@ -57,7 +57,6 @@ let photoCollections = []
 
 fileInp.addEventListener('change', (e)=>{
     const imgFiles = e.target.files
-    console.log(imgFiles[0])
     for(let idx = 0; idx < imgFiles.length; idx++){
         photoCollections.push(imgFiles[idx])
         const imgSrc = URL.createObjectURL(imgFiles[idx])
@@ -74,8 +73,6 @@ fileInp.addEventListener('change', (e)=>{
             photoCollections = photoCollections.filter(photo => photo != imgFiles[idx])
         })
     }
-    // div.innerHTML = `<img src="${imgSrc}">`
-    console.log(photoCollections)
 })
 
 

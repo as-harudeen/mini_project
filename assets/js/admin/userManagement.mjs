@@ -71,13 +71,11 @@ const searchInpEventHandler = async ()=>{
         pagenationBtnEventHandler()
         pagenation.querySelector('#prev-btn').addEventListener('click', ()=>{
             const currBtn = pagenation.querySelector('.btn-outline-dark').innerText
-            console.log(currBtn)
             pagenationBtns[+currBtn - 2].click()
         })
 
         pagenation.querySelector('#next-btn').addEventListener('click', ()=>{
             const currBtn = pagenation.querySelector('.btn-outline-dark').innerText
-            console.log(currBtn)
             pagenationBtns[+currBtn].click()
         })
     }
@@ -127,7 +125,6 @@ const fetch = async(page = 1)=>{
     
             const res = await fetchData(`/admin/${query}/${user._id}`, 'PUT')
             if(res.ok){
-                console.log(query)
                 opBtn.innerText == 'block' ? opBtn.innerText = 'unblock' : opBtn.innerText = 'block'
             }
         })

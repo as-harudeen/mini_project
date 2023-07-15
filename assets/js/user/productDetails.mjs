@@ -21,7 +21,6 @@ for(let color of colors){
         color.classList.add('selected_color')
         selected_color = color
         isUIDExist()
-        // console.log(id)
     })
 }
 
@@ -34,7 +33,6 @@ for(let size of sizes){
         size.classList.add('selected_size')
         selected_size = size
         isUIDExist()
-        // console.log(id)
     })
 }
 
@@ -45,7 +43,6 @@ const option = {cart: 1, _id: 0}
 const res = await fetchData(`http://localhost:5000/user?option=${JSON.stringify(option)}`, 'GET', null, token)
 const data = await res.json()
 
-console.log(data)
 if(data.cart){
     for(let item of data.cart){//building exist cart item id
         isExsting[item.cart_item_id] = true
@@ -76,7 +73,6 @@ isUIDExist()//for first checking
 
 addToCart.addEventListener('click', async()=>{
     const url = 'http://localhost:5000/cart/update'
-    console.log(id)
     const body = {
         product_id,
         color: selected_color.dataset.value,

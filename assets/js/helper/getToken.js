@@ -9,7 +9,6 @@ const getToken = ()=>{
         token += cookies[i]
     }
 
-    console.log(token)
     return token
 }
 

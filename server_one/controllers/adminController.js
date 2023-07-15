@@ -9,7 +9,6 @@ const CouponModel = require('../../models/coupon.model.js')
 const sharp = require('sharp')
 const moment = require('moment')
 const fs = require('fs')
-const { Console } = require('console')
 
 
 // const redisClient = require('redis').createClient()
@@ -31,11 +30,9 @@ const login = async (req, res)=>{
     try {
         const {admin_email, password} = req.body
     
-        console.log(admin_email)
         const db = mongoose.connection.db;
         const root = db.collection('root')
         const data = await root.findOne({})
-        console.log(data.admin_email)
         if(data.admin_email !== admin_email) return res.status(400).json({msg: "email not found"})
 
         const comparePass = await bcrypt.compare(password, data.password)
@@ -162,7 +159,6 @@ const editCategory = async (req, res)=>{
 const disable = async (req, res)=>{
     const {category_name, subcategory_name} = req.body 
 
-    console.log(category_name, subcategory_name)
     try {
 
         const filter = {
@@ -185,7 +181,6 @@ const disable = async (req, res)=>{
 const enable = async (req, res)=>{
     const {category_name, subcategory_name} = req.body 
 
-    console.log(category_name, subcategory_name)
     try {
 
         const filter = {
@@ -210,7 +205,6 @@ const users = async (req, res)=>{
 
     //filter
     const query = req.query.query ? JSON.parse(req.query.query) : {}
-    console.log(query)
 
     //pagenation
     const {page, limit} = req.query
@@ -285,7 +279,6 @@ const addProduct = async (req, res)=>{
             fs.renameSync(`${file.path}-cropped`, file.path)
         }
 
-        console.log(files)
         if(!files) return res.status(400).send("no file")
 
         const filenames = files.map(file => file.originalname); // Extract filenames from files array
@@ -302,7 +295,6 @@ const addProduct = async (req, res)=>{
             isDeleted: false
         });
     
-        console.log(product)
         res.status(200).send("uploaded")
     } catch (err) {
         console.log(err.message)
@@ -317,7 +309,6 @@ const getAllProducts = async (req, res)=>{
     try {
         let options = {}
         if(req.query.options) options = JSON.parse(req.query.options)
-        console.log(options)
         const data = await ProductModel.find(options)
         res.status(200).json(data)
     } catch (err) {
@@ -353,7 +344,6 @@ const editProduct = async (req, res)=>{
             {_id: product_id},
             options
         )
-        console.log(product)
         res.status(200).send("updated")
     } catch (err) {
         console.log(err.message)
@@ -398,7 +388,6 @@ const test = async (req, res) => {
     };
  
     const products = await ProductModel.find({}, null, options);
-    console.log(products)
     res.send(products)
  }
  
@@ -428,11 +417,9 @@ const getOrders = async (req, res)=>{
     try {
 
         const option = req.query.option ? JSON.parse(req.query.option) : {}
-        console.log(option)
 
         // const orders = await OrderModel.find(option).limit(+limit).skip(skip)
         const orders = await OrderModel.aggregate([ { $project: { sub_orders: 1, address: 1, payment_method: 1, user_id: 1 } }, { $unwind: "$sub_orders" }, {$skip: +skip}, { $limit: +limit }])
-        console.log(orders)
 
         const producstId = {}//stroring products id for retriving products
         const usersId = {}//storing user id for retriving users
@@ -479,7 +466,6 @@ const getOrders = async (req, res)=>{
         req.session.orders[order.sub_orders._id] = order
     }
     
-    console.log(orders)
     res.status(200).send(orders)
 } catch (err) {
     console.log(err)
@@ -497,7 +483,6 @@ const updateOrderStatus = async (req, res)=>{
     option.$set['sub_orders.$.isCanceled'] = status == 'Canceled'
     
     // if(!status || (status != 'Processing' && status != 'Shipped' && status != 'requested for cancel')
-    console.log(status)
     if(!status) throw new Error("Status")
     const order = await OrderModel.findOneAndUpdate({'sub_orders._id': sub_id}, option)
 
@@ -544,13 +529,12 @@ const addCoupon = async(req, res)=>{
     }
 
     try {
-        console.log(coupon_name)
         const coupon = await CouponModel.create({
             coupon_name,
             coupon_value,
             expiry_date
         })
-        console.log("coupon added success")
+        console.log("🌟 coupon added success")
 
         res.status(200).send(coupon)
     } catch (err) {

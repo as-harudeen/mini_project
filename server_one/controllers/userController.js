@@ -44,7 +44,6 @@ const register = async (req, res) => {
             isBlocked: false
         })
 
-        console.log(user, " created success")
         req.app.locals.OTPVerified = null
         res.status(201).json('Register success')
     } catch (err) {
@@ -138,8 +137,6 @@ const generateOTP = async (req, res) => {
 //mehod POST
 const verifyOTP = (req, res) => {
     const { OTP } = req.body
-    console.log(OTP)
-    console.log(req.app.locals.OTP)
     if (OTP === req.app.locals.OTP) {
         req.app.locals.OTP = null
         req.app.locals.OTPVerified = true
@@ -176,7 +173,6 @@ const count = async (req, res) => {
 const order = async (req, res) => {
 
     const { checkoutData } = req.order//take the checkoutdata
-    console.log(checkoutData)
     const { address_id, payment_method, coupon_id } = req.body //taking address, payment method and coupon id
     const { userId } = req.user
 
@@ -184,14 +180,15 @@ const order = async (req, res) => {
     const address = await UserModel.findOne({ _id: userId, 'address._id': address_id }, { 'address.$': 1 })
     if (!address) throw new Error('Invalid address..')
 
-    console.log(address)
     if (payment_method != 'COD' && payment_method != 'Razorpay') return res.status(400).send("invalid payment method")
 
+    let total_price = 0
     const productQuantity = {}//for update product orderedcount
     checkoutData.forEach(product => {
         //taking the count
         if (productQuantity[product.product_id]) productQuantity[product.product_id] += product.quantity
         else productQuantity[product.product_id] = product.quantity
+        total_price += product.total_price
 
     })
 
@@ -261,7 +258,6 @@ const createOrder = async (req, res) => {
         for (let product of checkoutData) {
             amount += product.total_price
         }
-        console.log(amount)
 
         const order = await razorpayInstence.orders.create({
             amount: amount * 100,

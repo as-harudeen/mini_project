@@ -152,7 +152,7 @@ const fetchProducts = async (page = 1)=>{
 
     buildProducts(products)
     if(rebuildPaginationBtn) {
-        console.log("rebuilding")
+        console.log("🚀rebuilding")
         rebuildPaginationBtn = false
         btnsCount(option)//build pagenation button
     }

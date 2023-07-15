@@ -60,7 +60,7 @@ import fetchData from '../helper/fetchData.js'
         orderNo = selectedBtn ? (+selectedBtn.value - 1) * limit + 1 : 1
         orders.forEach((order)=> {buildOrder_tr(order)})
         if(rebuildPaginationBtn) {
-          console.log("rebuilding")
+          console.log("🦦 rebuilding")
           rebuildPaginationBtn = false
           btnsCount(option)//build pagenation button
       }
@@ -83,7 +83,6 @@ const btnsCount = async(option, collection = 'orders')=>{
   // if(option) url += `?option=${JSON.stringify(option)}`
   const res = await fetchData(url, 'GET')
   const totalProductsCount = await res.text()
-  console.log(totalProductsCount)
   //Building pagination buttons
   buildPagenationBtns(Math.ceil(+totalProductsCount / limit))
 }

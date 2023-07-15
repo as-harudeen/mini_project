@@ -3,7 +3,6 @@ import getToken from "../helper/getToken.js"
 
 const cartContainer = document.getElementById('cart-container')
 const token = getToken()
-console.log(token)
 
 let dataToCheckout = []//this for pass the data as query
 let dataToCheckoutOBJ = {}//this for optimize updatation in product (eg.. quantity, remove product)
@@ -18,7 +17,6 @@ const fetchCartDetails = async ()=>{
     dataToCheckoutOBJ = {}
 
     if(!cart) return false
-    console.log(cart)
     for(let item of cart){
         const product_id = item.product_id
         dataToCheckoutOBJ[item.cart_item_id] = {
@@ -31,8 +29,6 @@ const fetchCartDetails = async ()=>{
         if(product_stock[product_id]) product_stock[product_id].stock -= item.quantity
         else {
             product_stock[product_id] = {stock: item.product_stock - item.quantity, product_name: item.product_name}
-            console.log("invdee")
-            console.log(product_stock[product_id].stock)
         }
 
         const cartItem = document.createElement('div')
@@ -78,7 +74,6 @@ const fetchCartDetails = async ()=>{
             const res = await fetchData(url, 'PUT', body, token)
             dataToCheckoutOBJ[item.cart_item_id].quantity--
             product_stock[product_id].stock++
-            console.log(product_stock[product_id].stock)
             if(quantityInp.value == 1) subBtn.disabled = true
             if( 0 < product_stock[product_id]) addBtn.disabled = false
         })
@@ -117,8 +112,6 @@ const fetchCartDetails = async ()=>{
         cartItem.dataset.value = item.cart_item_id
         cartContainer.appendChild(cartItem)
     }
-console.log(dataToCheckout)
-console.log(dataToCheckoutOBJ)
 
 }
 

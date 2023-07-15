@@ -30,9 +30,7 @@ categoryNameInp.value = categoryName
 const buildOldSubCategories = async()=>{
     const res = await fetchData(`/admin/get-category?category_name=${categoryNameInp.value}`, 'GET')
     if(res.ok){
-        console.log("hHIHIHHB")
         const data = await res.json()
-        console.log(data)
         for(let sub of data[0].subCategories){
             oldSubCategories.push(sub.subcategory_name)
         }
@@ -51,9 +49,6 @@ form.addEventListener('submit', async(e)=>{
         subCategories
     }
 
-    console.log(categoryName)
-
-    console.log(body)
 
     const response = await fetchData(
         `/admin/panel/category/edit/${categoryName}`,

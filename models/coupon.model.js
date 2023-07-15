@@ -20,7 +20,6 @@ const couponSchema = new mongoose.Schema({
 })
 
 const coupon =  mongoose.model('coupons', couponSchema)
-coupon.ensureIndexes()
 
 module.exports = coupon
 

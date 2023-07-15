@@ -13,7 +13,6 @@ async function buildOrders(){
         const data = await res.json()
         for(let order of data){
             for(let sub_order of order.sub_orders){
-                console.log(sub_order)
                 const status = sub_order.order_status
                 if(status == "Processing" || status == "shipped"){
                     buildNewOrders(

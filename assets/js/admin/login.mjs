@@ -9,10 +9,6 @@ const passwordInp = document.getElementById('password')
 
 form.addEventListener("submit", async (e)=>{
     e.preventDefault()
-
-
-    console.log("inside event")
-
     const admin_email = emailInp.value.trim()
     const password = passwordInp.value.trim()
 
@@ -25,7 +21,6 @@ form.addEventListener("submit", async (e)=>{
     if(response.ok) window.location.href = '/admin/panel/category'
     else {
         const data = await response.json()
-        console.log(data)
         if(data.msg === "email not found"){
             setError(emailInp, 'Not a Admin')
         } else {

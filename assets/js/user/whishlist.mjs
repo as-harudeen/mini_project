@@ -1,8 +1,6 @@
 import getToken from "../helper/getToken.js"
 import fetchData from "../helper/fetchData.js"
 
-console.log(">>>>>>>>>>>>>")
-
 
 const product_temp = document.getElementById('whishlist_product')
 const product_container = document.getElementById('product_container')
