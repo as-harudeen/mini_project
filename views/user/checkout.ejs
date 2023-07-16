@@ -55,7 +55,16 @@
                             </div>
                         </div>
 
+                        <div class="container mt-3 d-flex justify-content-between">
+                            <h6>Wallet <i class="fa-solid fa-wallet"></i></h6>
+                            <p>Rs <span id="wallet-dis"><%= wallet %></span></p>
+                        </div>
 
+                        <div class="container p-2 billing_coupon gap-2 col-lg-12 col-12 d-flex">
+                            <input id="wallet-inp" type="text" name="wallet" placeholder="Use wallet money">
+                            <button id="wallet-use-btn" class="btn btn-danger p-2"  type="button">use</button>
+                        </div>
+                        <div class="wallet-msg"></div>
 
 
 
@@ -72,6 +81,11 @@
                                     Click Here
                                 </a>
                             </span>
+
+
+
+
+
                             <dialog  id="coupon-dialog">
                                 <!-- <div class="modal-content"> -->
                                     <div class="modalWrapper">

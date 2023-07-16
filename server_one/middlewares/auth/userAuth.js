@@ -12,6 +12,7 @@ const authenticateUser = (req, res, next)=>{
         req.app.locals.user = user.userName
         next()
     } catch (err) {
+        
         res.status(500).send(err.message)
     }
 }

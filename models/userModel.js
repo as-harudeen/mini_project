@@ -57,6 +57,10 @@ const userSchema = new mongoose.Schema({
   whishlist: {
     type: [mongoose.Types.ObjectId],
     unique: true
+  },
+  wallet: {
+    type: Number,
+    default: 0
   }
 });
 

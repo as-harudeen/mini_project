@@ -1,5 +1,6 @@
 import fetchData from "../helper/fetchData.js"
 import getToken from "../helper/getToken.js"
+import { setError } from "../helper/setError&SetSuccess.js"
 
 
 
@@ -104,11 +105,20 @@ const successTemp = document.getElementById('success-temp')
 
 confirmBtn.addEventListener('click', async ()=>{
 
-    // if(selectedPayment.dataset.method == 'Razorpay')  razorpayHandler()
+    confirmDialog.close()
+    if (selectedPayment.dataset.method === 'Razorpay') {
+        const isSuccess = await razorpayHandler();
+        console.log(isSuccess);
+        if (!isSuccess) {
+          console.log('Payment failed');
+          return; // Exit the event listener function
+        }
+    }
     const body = {
         address_id: selectedAddressDiv.dataset.addressId,
         payment_method: selectedPayment.dataset.method,
-        coupon_id: prev_applyed_coupon?._id
+        coupon_id: prev_applyed_coupon?._id,
+        wallet_amount: total_wallet_amount - walletAmount
     }
     let url = 'order'
     if(curUrl.includes('fromCart')) url += '?fromCart="true"'
@@ -227,8 +237,11 @@ for(let method of paymentMethods){
 }
 
 const razorpayHandler = async ()=>{
-    const url = '/api/razorpay/createOrder'
-    const res = await fetchData(url, 'POST', {})
+
+    return new Promise(async (resolve, reject)=>{
+
+        const url = '/api/razorpay/createOrder'
+        const res = await fetchData(url, 'POST', {})
     if(res.ok){
         const order = await res.json()
         const options = {
@@ -240,7 +253,7 @@ const razorpayHandler = async ()=>{
             image: '',
             order_id: order._id,
             handler: (response)=>{
-                console.log('Success')
+                resolve(true)
             },
             prefill: {
                 name: 'AchuBSL',
@@ -254,18 +267,46 @@ const razorpayHandler = async ()=>{
                 color: '#3399cc'
             }
 
-        }
-        
+        }       
         const rzp = new Razorpay(options)
-        rzp.on('payment.success', (response)=> {
-            console.log(response)
-            console.log("successssssss")
-        })
-        rzp.on('payment.cancel', (response)=>{
-            console.log(response)
-            console.log("errorororororor")
-        })
         rzp.open()
-    }
+
+    } else reject()
+})
 }
 
+
+//Performing with wallet
+const walletDisplay = document.getElementById('wallet-dis')
+const walletInp = document.getElementById('wallet-inp')
+const walletUseBtn = document.getElementById('wallet-use-btn')
+const walletMsg = document.querySelector('.wallet-msg')
+
+let walletAmount = walletDisplay.innerText
+const total_wallet_amount = walletAmount
+
+walletUseBtn.addEventListener('click', ()=>{
+    const inp_val = walletInp.value
+    if(inp_val > walletAmount){
+        const msg = document.createElement('p')
+        msg.classList.add('text-danger')
+        msg.innerText = "Please choose within your wallet amount"
+        walletMsg.appendChild(msg)
+        setTimeout(()=>{
+            walletMsg.removeChild(msg)
+        }, 2000)
+        return;
+    }
+
+    const dis_amount = +discount_price.innerText
+    if(dis_amount + +inp_val > total_price){
+        discount_price.innerText = total_price
+        grant_total_price.innerText = 0
+        walletAmount -= total_price - dis_amount
+    } else {
+        discount_price.innerText = +inp_val + dis_amount
+        grant_total_price.innerText = total_price - (dis_amount + +inp_val)
+        walletAmount -= inp_val
+    }
+    walletDisplay.innerText = walletAmount
+})

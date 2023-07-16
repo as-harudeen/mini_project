@@ -7,7 +7,7 @@ const couponSchema = new mongoose.Schema({
         unique: true
     },
     coupon_value: {
-        type: String,
+        type: Number,
         require: true
     },
     expiry_date: {

@@ -68,7 +68,7 @@ const logout = async (req, res)=>{
 }
 */
 const addCategory = async (req, res)=>{
-    const {category_name, subCategories} = req.body
+    const {category_name, subCategories, offer_price} = req.body
 
     try {
         const isExist = await CategoryModel.findOne({category_name})
@@ -81,7 +81,8 @@ const addCategory = async (req, res)=>{
 
         const category = await CategoryModel.create({
             category_name,
-            subCategories: buildSubCategories
+            subCategories: buildSubCategories,
+            offer_price
         })
     
         res.status(200).send(`${category}  Created success...`)
@@ -125,7 +126,8 @@ const getCategory = async (req, res)=>{
 const editCategory = async (req, res)=>{
     const {oldCategory_name, 
         category_name, 
-        subCategories
+        subCategories,
+        offer_price
     } = req.body
     
 
@@ -143,7 +145,7 @@ const editCategory = async (req, res)=>{
         category_name: oldCategory_name
     };
     const update = {
-        $set: {category_name}, 
+        $set: {category_name, offer_price}, 
         $push: { subCategories: { $each: buildSubCategories } } 
     };
     //Disabling

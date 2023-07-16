@@ -65,7 +65,7 @@ const orderSchema = new mongoose.Schema({
         }
     },
     discount_price: {
-        type: String,
+        type: Number,
         default: 0
     }
 }, {timestamps: true})

@@ -173,11 +173,11 @@ const count = async (req, res) => {
 const order = async (req, res) => {
 
     const { checkoutData } = req.order//take the checkoutdata
-    const { address_id, payment_method, coupon_id } = req.body //taking address, payment method and coupon id
+    const { address_id, payment_method, coupon_id, wallet_amount } = req.body //taking address, payment method and coupon id
     const { userId } = req.user
 
 
-    const address = await UserModel.findOne({ _id: userId, 'address._id': address_id }, { 'address.$': 1 })
+    const address = await UserModel.findOneAndUpdate({ _id: userId, 'address._id': address_id }, {$inc: {wallet: +-wallet_amount}}, {projection: {'address.$': 1}})
     if (!address) throw new Error('Invalid address..')
 
     if (payment_method != 'COD' && payment_method != 'Razorpay') return res.status(400).send("invalid payment method")
@@ -197,22 +197,22 @@ const order = async (req, res) => {
         if (product.product_stock < productQuantity[product_id]) return res.status(400).send("Stock not available")
         else console.log("availble")
     }
-
-
-
-    let discount_price = 0
-    // let totalProduct = checkoutData.length
-    if (coupon_id) {//checking coupon is valid or not
-        const coupon = await CouponModel.findOneAndUpdate({ _id: coupon_id, used_users: { $ne: userId } }, { $push: { used_users: userId } })
-        if (coupon) {
-            const isThisCouponAllowed = (total_price * .15) >= coupon.coupon_value//put a restriction to avoid coupon missuse
-            if (isThisCouponAllowed) {
-                discount_price = coupon.coupon_value
+    
+    try {
+        let discount_price = +wallet_amount
+        // let totalProduct = checkoutData.length
+        if (coupon_id) {//checking coupon is valid or not
+            const coupon = await CouponModel.findOneAndUpdate({ _id: coupon_id, used_users: { $ne: userId } }, { $push: { used_users: userId } })
+            if (coupon) {
+                const isThisCouponAllowed = (total_price * .15) >= coupon.coupon_value//put a restriction to avoid coupon missuse
+                if (isThisCouponAllowed) {
+                    discount_price += coupon.coupon_value
+                }
             }
         }
-    }
 
-    try {
+        console.log(discount_price)
+        console.log(typeof discount_price)
 
         const orders = await OrderModel.create({
             user_id: userId,
