@@ -31,7 +31,8 @@ const productDetailGET = async (req, res)=>{
         const {userId} = req.user
         const user = await UserModel.findById(userId, {_id: 0, whishlist: 1})
         const product = await ProductModel.findById(product_id)
-        res.status(200).render('user/productView', {product, isInWhishlist: user.whishlist.includes(product_id)})
+        const category = await CategoryModel.findOne({category_name: product.category})
+        res.status(200).render('user/productView', {product, isInWhishlist: user.whishlist.includes(product_id), offer_price: category.offer_price})
     } catch (err) {
         console.log(err.message)
         return res.status(500).send(err.message)
@@ -43,15 +44,35 @@ const productDetailGET = async (req, res)=>{
 const homeGET = async (req, res)=>{
    try {
        const data = await ProductModel.find()
+
+       const category_offer = {}
+       const categories = await CategoryModel.find({}, {subCategories: 0, _id: 0})
+    
+       categories.forEach(cate =>{
+        category_offer[cate.category_name] = cate.offer_price
+       })
+
+
+       for(let idx in data){
+        data[idx] = data[idx].toObject()
+        const product = data[idx]
+        product.offer_price = category_offer[product.category]
+       }
+       console.log(data)
+
+
+
        const token = req.cookies.userToken
        if(token){
            const user = jwt.verify(token, process.env.SECRET)
            if(user) return res.status(200).render('user/home', {user: user.userName, data})
        }
    
-       res.status(200).render('user/home', {data})
+
+       res.status(200).render('user/home', {data, categories})
 
    } catch (err) {
+    console.log(err)
        return res.status(500).send(err.message)
    }
 }
@@ -101,6 +122,7 @@ const editAddressGET = async (req, res)=>{
 //@des http://localhost:3000/api/checkout?products="[]"
 const checkoutGET = async (req, res)=>{
 
+    const {userId} = req.user
     //Redirecting to a home page when user try to access checkout directly
     if(!req.query.products) return res.status(400).redirect('/api')
 
@@ -179,9 +201,8 @@ const checkoutGET = async (req, res)=>{
         const expirationTime = new Date(Date.now() + 15 * 60 * 1000); 
         res.cookie('orderToken', orderToken, {expires: expirationTime})
 
-
-        const coupons = await CouponModel.find({used_users: {$ne: req.user.userId}})
-        res.status(200).render('user/checkout',{data, coupons})
+        const user = await UserModel.findById(userId, {wallet: 1, _id: 0})
+        res.status(200).render('user/checkout',{data, wallet: user.wallet})
 
     } catch (err) {
         if(err instanceof SyntaxError && err.name == 'SyntaxError'){

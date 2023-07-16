@@ -26,11 +26,14 @@ for(let i = reversCatName.length - 1; i >= 0; i--){
 
 previewTitle.querySelector('h5').innerHTML = categoryName
 categoryNameInp.value = categoryName
+let offer_price
 
 const buildOldSubCategories = async()=>{
     const res = await fetchData(`/admin/get-category?category_name=${categoryNameInp.value}`, 'GET')
     if(res.ok){
         const data = await res.json()
+        offer_price = data[0].offer_price
+        offerInp.value = offer_price
         for(let sub of data[0].subCategories){
             oldSubCategories.push(sub.subcategory_name)
         }
@@ -41,12 +44,13 @@ buildOldSubCategories()
 
 form.addEventListener('submit', async(e)=>{
     e.preventDefault()
-    if(subCategories.length === oldCategoriesLength && categoryNameInp.value.trim() === categoryName) return setError(subCategoryInp, "There is no change")
+    if(subCategories.length === oldCategoriesLength && categoryNameInp.value.trim() === categoryName && offerInp.value == offer_price) return setError(subCategoryInp, "There is no change")
 
     const body = {
         oldCategory_name: categoryName,
         category_name: categoryNameInp.value.trim(),
-        subCategories
+        subCategories,
+        offer_price: offerInp.value.trim()
     }
 
 
@@ -114,6 +118,24 @@ subCategoryInp.addEventListener('keypress', (e) => {
         subCategoryInp.value = ''
     }
 });
+
+
+
+
+const offerInp = document.getElementById('category_offer')
+const submitBtn = document.getElementById('submit-btn')
+offerInp.addEventListener('keyup', ()=>{
+    if(offerInp.value.trim() < 0 || offerInp.value.trim() > 999){
+        setError(offerInp, "Offer can't be less than 0 and more than 999")
+        submitBtn.disabled = true
+    }
+    else {
+        setSuccess(offerInp)
+        submitBtn.disabled = false
+    }
+})
+
+
 
 
 

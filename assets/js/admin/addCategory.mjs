@@ -5,6 +5,8 @@ import { setSuccess, setError } from "../helper/setError&SetSuccess.js"
 const form = document.getElementById('form')
 const categoryNameInp = document.getElementById('category_name')
 const subCategoryInp = document.getElementById('sub_category_name')
+const offerInp = document.getElementById('category_offer')
+const submitBtn = document.getElementById('submit-btn')
 
 let subCategories = []
 
@@ -13,7 +15,8 @@ form.addEventListener('submit', async(e)=>{
     if(!subCategories.length) return setError(subCategoryInp, "Provide atleast one subcategory")
     const body = {
         category_name: categoryNameInp.value.trim(),
-        subCategories
+        subCategories,
+        offer_price: offerInp.value.trim()
     }
     const response = await fetchData(
         '/admin/panel/category/add',
@@ -25,6 +28,7 @@ form.addEventListener('submit', async(e)=>{
             setSuccess(categoryNameInp)
             previewBody.innerHTML = ''
             categoryNameInp.value = ''
+            offerInp.value = ''
             previewTitle.querySelector('h5').innerHTML = "Category added." 
             subCategories = []
         }  
@@ -81,10 +85,19 @@ subCategoryInp.addEventListener('keypress', (e) => {
 
 
 
-
-
 const logout = document.getElementById('logout')
 logout.addEventListener('click', async ()=>{
     const res = await fetchData('/admin/logout', 'DELETE')
     if(res.ok) window.location.href = '/admin/login'
+})
+
+offerInp.addEventListener('keyup', ()=>{
+    if(offerInp.value.trim() < 0 || offerInp.value.trim() > 999){
+        setError(offerInp, "Offer can't be less than 0 and more than 999")
+        submitBtn.disabled = true
+    }
+    else {
+        setSuccess(offerInp)
+        submitBtn.disabled = false
+    }
 })

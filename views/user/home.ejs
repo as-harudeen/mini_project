@@ -76,7 +76,7 @@
                                 </div>
                                 <div class="product-info">
                                     <h2 class="product-brand"><%= data.product_name %></h2>
-                                    <span class="price text-danger">₹ <%= data.product_price %></span><span class="actual-price">₹ <%= data.product_price + 500 %></span>
+                                    <span class="price text-danger">₹ <%= data.product_price - data.offer_price %></span><span class="actual-price">₹ <%= data.product_price %></span>
                                     <div class="rating d-flex align-items-center">
                                         <div class="star d-flex align-items-center">
                                             <img src="/public/product/star.png" alt="">
@@ -120,7 +120,7 @@
                                 </div>
                                 <div class="product-info">
                                     <h2 class="product-brand"><%= data.product_name %></h2>
-                                    <span class="price text-danger">₹ <%= data.product_price %></span><span class="actual-price">₹ <%= data.product_price + 500 %></span>
+                                    <span class="price text-danger">₹ <%= data.product_price - data.offer_price %></span><span class="actual-price">₹ <%= data.product_price %></span>
                                     <div class="rating d-flex align-items-center">
                                         <div class="star d-flex align-items-center">
                                             <img src="/public/product/star.png" alt="">

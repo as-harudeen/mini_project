@@ -8,6 +8,10 @@ const categorySchema = new mongoose.Schema({
     subCategories: {
         type: [Object],
         required: true
+    },
+    offer_price: {
+        type: Number,
+        default: 0
     }
 })
 
