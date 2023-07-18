@@ -9,7 +9,8 @@
                                 <div class="py-3 pt-4">
                                     <h5 class=" fw-bold">Checkout</h5>
                                 </div>
-                                <% let total = 0 %>
+                                <% let total = 0; %>
+                                <% let discount = 0; %>
                                 <% for(let product of data){ %>
                                     <div class="checkout-item d-flex align-items-center p-3 justify-content-between p-2 gap-2 mt-3">
                                         <img class="checkout-item-img" width="100px" src="/public/img/<%= product.product_images[0] %>" alt="">
@@ -20,6 +21,7 @@
                                             <div><%= product.quantity %></div>
                                             <div>Rs <%= product.quantity * product.product_price %> </div>
                                             <% total += product.quantity * product.product_price %>
+                                            <% discount += product.offer_price %>
                                             <button type="button" class="del-btn btn btn-danger">x</button>
                                     </div>
                                 <%}%>
@@ -110,9 +112,9 @@
                             </div>
                             <div class="col-lg-6">
                                 <h6>: <span >₹ <span id="total_price"><%= total %></span></span></h6>
-                                <h6>: <span >₹ <span id="discount_price">0</span></span></h6>
+                                <h6>: <span >₹ <span id="discount_price"><%= discount %></span></span></h6>
                                 <h6>:<span> Free</span></h6>
-                                <h6>: <span >₹<span id="grant_total"><%= total %></span></span></h6>
+                                <h6>: <span >₹<span id="grant_total"><%= total - discount %></span></span></h6>
                             </div>
                         </div>
                         <div class="p-2 col-md-6 billing_button">

@@ -101,11 +101,11 @@
                                                                 </tr>
                                                                 <tr>
                                                                     <td colspan="2" class="fw-bold" style="color: #959595;">Discount</td>
-                                                                    <td class="text-danger text-end" style="opacity: 80%;">₹ <%= order.discount_price %></td>
+                                                                    <td class="text-danger text-end" style="opacity: 80%;">₹ <%= sub_order.offer_price %></td>
                                                                 </tr>
                                                                 <tr class="fw-bold">
                                                                     <td colspan="2">TOTAL</td>
-                                                                    <td class="text-end">₹ <%= sub_order.total_price %></td>
+                                                                    <td class="text-end">₹ <%= sub_order.total_price - sub_order.offer_price %></td>
                                                                 </tr>
                                                             </tfoot>   
                                                     </table>

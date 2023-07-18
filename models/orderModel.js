@@ -34,6 +34,10 @@ const subOrderSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
+    offer_price: {
+        type: Number,
+        default: 0
+    },
     delivery_date: {
         type: Date,
         default: twoDayLater

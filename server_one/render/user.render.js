@@ -146,6 +146,12 @@ const checkoutGET = async (req, res)=>{
          ]
          */
 
+        //category
+        const category = {}
+        const categories = await CategoryModel.find({}, {offer_price: 1, category_name: 1, _id: 0})
+        categories.forEach(cate=> category[cate.category_name] = cate.offer_price)
+        console.log("HI")
+
          //intializig array for store data
         const data = []
         const checkoutData = []
@@ -168,7 +174,8 @@ const checkoutGET = async (req, res)=>{
                     product_name: 1, 
                     product_price: 1,
                     product_images: {$slice: 1},
-                    product_stock: 1
+                    product_stock: 1,
+                    category: 1
                 })
 
             //stock validation
@@ -185,8 +192,11 @@ const checkoutGET = async (req, res)=>{
                 color: productOBJ.color,
                 size: productOBJ.size,
                 quantity: productOBJ.quantity,
-                total_price: product.product_price * productOBJ.quantity
+                total_price: product.product_price * productOBJ.quantity,
+                offer_price: category[product.category]
             })
+
+            productOBJ.offer_price = category[product.category]
             //assigning 
             productOBJ = Object.assign(productOBJ, product.toObject())
             data.push(productOBJ)
@@ -209,7 +219,7 @@ const checkoutGET = async (req, res)=>{
             console.log("NOT a json")
             return res.status(400).redirect('/api')
         } else {
-            console.log(err.message)
+            console.log(err)
             return res.status(500).send(err.message)
         }
     }

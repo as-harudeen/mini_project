@@ -190,9 +190,9 @@ apply_coupon_btn.addEventListener('click', ()=>{
     const isThisCouponAllowed = (total_price * .15) >= coupons[val]?.coupon_value//put a restriction to avoid coupon missuse
     if(coupons[val] && coupons[val] != prev_applyed_coupon && isThisCouponAllowed){
 
-        const dis_amount = coupons[val].coupon_value
+        const dis_amount = +coupons[val].coupon_value + +discount_price.innerText
         discount_price.innerText = dis_amount
-        grant_total_price.innerText = total_price - +dis_amount
+        grant_total_price.innerText = total_price - dis_amount
         apply_coupon_msg.innerText = prev_applyed_coupon ? "Coupon replaced with previous coupon" : "Coupon Applyed"
         prev_applyed_coupon = coupons[val]
         apply_coupon_msg.classList.add('text-success')

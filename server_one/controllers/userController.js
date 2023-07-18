@@ -189,9 +189,10 @@ const order = async (req, res) => {
         if (productQuantity[product.product_id]) productQuantity[product.product_id] += product.quantity
         else productQuantity[product.product_id] = product.quantity
         total_price += product.total_price
-
     })
 
+
+    //checking requested quantity available or not
     for (let product_id in productQuantity) {
         const product = await ProductModel.findById(product_id, { product_stock: 1, _id: 0 })
         if (product.product_stock < productQuantity[product_id]) return res.status(400).send("Stock not available")
@@ -211,8 +212,16 @@ const order = async (req, res) => {
             }
         }
 
-        console.log(discount_price)
-        console.log(typeof discount_price)
+        
+        //distributing discounts for each products
+        checkoutData.forEach(product => {
+            const percentage = (product.total_price / total_price) * 100
+            console.log("🐉 ",percentage)
+            console.log(discount_price * (percentage / 100))
+            console.log(product.offer_price)
+            product.offer_price += discount_price * (percentage / 100)
+        })
+
 
         const orders = await OrderModel.create({
             user_id: userId,
@@ -256,7 +265,7 @@ const createOrder = async (req, res) => {
     try {
         let amount = 0
         for (let product of checkoutData) {
-            amount += product.total_price
+            amount += product.total_price - product.offer_price
         }
 
         const order = await razorpayInstence.orders.create({
