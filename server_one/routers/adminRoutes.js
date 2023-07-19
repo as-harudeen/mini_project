@@ -13,7 +13,8 @@ const {
     ordersGET,
     orderDetailsGET,
     addCouponGET,
-    couponsGET
+    couponsGET,
+    dashboardGET
 } = require('../render/admin.render.js')
 const {
     login,
@@ -37,7 +38,8 @@ const {
     updateOrderStatus,
     addCoupon,
     deleteCoupon,
-    getorderscount
+    getorderscount,
+    getSalesdata
 } = require("../controllers/adminController.js")
 
 const authenticate = require('../middlewares/auth/adminAuth.js')
@@ -228,6 +230,17 @@ router
 router
 .route('/panel/coupons/delete/:coupon_id')
 .put(deleteCoupon)
+
+
+/**<==== Sales Report ===> */
+router
+.route('/panel')
+.get(dashboardGET)
+
+router
+.route('/getSalesdata/:based_on')
+.get(getSalesdata)
+
 
 
 //Logout
