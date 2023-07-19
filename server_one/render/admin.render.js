@@ -122,6 +122,13 @@ const couponsGET = async (req, res)=>{
 }
 
 
+
+//@des http://localhost:3000/admin/panel
+const dashboardGET = async (req, res)=>{
+    res.status(200).render('admin/dashboard')
+}
+
+
 module.exports = {
     loginGET,
     panelGET,
@@ -135,5 +142,6 @@ module.exports = {
     ordersGET,
     orderDetailsGET,
     addCouponGET,
-    couponsGET
+    couponsGET,
+    dashboardGET
 }

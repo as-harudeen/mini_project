@@ -559,6 +559,74 @@ const deleteCoupon = async(req, res)=>{
 }
 
 
+//@des localhost:3000/admin/getSalesdata/:based_on
+const getSalesdata = async (req, res)=>{
+    
+    const now = new Date();
+    // console.log(now);
+    const timeFrame = {
+        year: new Date(now.getFullYear(), 0, 1),
+        month: new Date(now.getFullYear(), now.getMonth(), 1),
+        week: new Date(now.getFullYear(), now.getMonth(), now.getDate() - now.getDay())
+    }
+
+    const {based_on} = req.params
+    if(!timeFrame[based_on]) throw new Error("Invalid value on 'based on'")
+
+    const getBy = based_on == 'year' ? '$month' : '$dayOfMonth'
+
+    const aggregationPipeline = buildPipeline(timeFrame[based_on], now, getBy)
+    const ordersData = await OrderModel.aggregate(aggregationPipeline);
+
+    console.log(ordersData)
+    const data = []
+
+    //building base of data
+    let len = 0;
+    if(based_on == 'month') len = Math.floor(now.getDate() / 6)
+    else if(based_on == 'week') len = now.getDay()
+    else len = now.getMonth()
+
+    
+    for(let i = 0; i <= len; i++)data.push(0)
+    console.log(ordersData)
+    console.log(data)
+
+    for(let order of ordersData){
+        let idx;
+        if(based_on == 'month') idx = Math.floor(order._id / 6);
+        else if(based_on == 'year') idx = order._id - 1;
+        else idx = order._id - (now.getDate() - len);
+        data[idx] ? data[idx] += order.frequency : data[idx] = order.frequency
+    }
+
+    console.log(data)
+    res.send(data)
+
+    function buildPipeline (startDate, endDate, getBy){
+
+        const aggregationPipeline = [
+            {
+              $match: {
+                createdAt: { $gte: startDate, $lte: endDate },
+              },
+            },
+            {
+              $group: {
+    
+                _id: { [getBy]: '$createdAt'}, // Group orders by the full date to get unique dates for the current week
+                frequency: { $sum: 1 }, // Count the occurrences of orders for each date
+              },
+            },
+            {
+              $sort: { _id: 1 }, // Sort by date in ascending order (optional)
+            },
+          ];
+    
+          return aggregationPipeline
+    }
+}
+
 
 module.exports = {
     login,
@@ -582,5 +650,6 @@ module.exports = {
     updateOrderStatus,
     addCoupon,
     deleteCoupon,
-    getorderscount
+    getorderscount,
+    getSalesdata
 }
