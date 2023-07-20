@@ -54,7 +54,7 @@ based_on_selector.addEventListener('change', ()=>{
 import fetchData from '../helper/fetchData.js'
 
 async function rebuildGraph(){
-  const res = await fetchData(`/admin/getSalesdata/${selected_based_on}`)
+  const res = await fetchData(`/admin/orderdata/${selected_based_on}`)
   if(res.ok){
     const data = await res.json()
     createGraph(timeFrames[`${selected_based_on}`], data, data_two, data_three)

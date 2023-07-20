@@ -128,6 +128,11 @@ const dashboardGET = async (req, res)=>{
     res.status(200).render('admin/dashboard')
 }
 
+//@des http://localshost:3000/admin/panel/dashboard/salesreport
+const salesreportGET = async (req, res)=> {
+    res.status(200).render('admin/salesReport')
+}
+
 
 module.exports = {
     loginGET,
@@ -143,5 +148,6 @@ module.exports = {
     orderDetailsGET,
     addCouponGET,
     couponsGET,
-    dashboardGET
+    dashboardGET,
+    salesreportGET
 }

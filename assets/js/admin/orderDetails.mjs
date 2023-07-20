@@ -12,6 +12,7 @@ const cancelBtn = confirmDialog.querySelector('.cancel-btn')
 
 let prevSelectorValue = statusSelctor.value
 statusSelctor.addEventListener('change', ()=>{
+    console.log(statusSelctor.value)
     confirmDialog.showModal()
 })
 

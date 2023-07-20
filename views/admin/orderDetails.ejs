@@ -149,7 +149,7 @@
                                                     <h6 class="fw-bold ">Status Updation</h6>
                                                     <div class="width-100 my-3">
                                                         <select name="status" id="status__id" style="width: 100%; background-color: white;">
-                                                            <option selected value="<%=order.order_status %>"><%= sub_order.order_status %></option>
+                                                            <option selected value="<%=sub_order.order_status %>"><%= sub_order.order_status %></option>
                                                             <% if (sub_order.order_status !== "Processing") {%> <option value="Processing">Processing</option> <%}%>
                                                             <% if (sub_order.order_status !== "Shipped") {%> <option value="Shipped">Shipped</option> <%}%>
                                                             <% if (sub_order.order_status !== "Out For Delivery") {%> <option value="Out For Delivery">Out For Delivery</option> <%}%>
