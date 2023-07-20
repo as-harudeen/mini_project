@@ -480,6 +480,7 @@ const getOrders = async (req, res)=>{
 const updateOrderStatus = async (req, res)=>{
     const {sub_id} = req.params
     const status = req.body.status
+    console.log("⭐⭐⭐", status)
     
     const option = {$set: {"sub_orders.$.order_status": status}}
     option.$set['sub_orders.$.isCanceled'] = status == 'Canceled'
@@ -492,7 +493,14 @@ const updateOrderStatus = async (req, res)=>{
     
     const sub_order = order.sub_orders[0]
     if((status == 'Return Accepted' && sub_order.order_status != 'Canceled') ||
-    (status == 'Canceled' && sub_order.order_status != 'Return Accepted')) updateQuantity = sub_order.quantity
+    (status == 'Canceled' && sub_order.order_status != 'Return Accepted')) {
+        updateQuantity = sub_order.quantity
+        if(order.payment_method == 'Razorpay'){
+            console.log("HI")
+            const user = await UserModel.findOneAndUpdate({_id: order.user_id}, {$inc: {wallet: sub_order.total_price - sub_order.offer_price}})
+            console.log(user)
+        }
+    }
     else if((status != 'Return Accepted' && sub_order.order_status == 'Canceled') ||
     (status != 'Canceled' && sub_order.order_status == 'Return Accepted')) updateQuantity = -sub_order.quantity
     
@@ -560,7 +568,7 @@ const deleteCoupon = async(req, res)=>{
 
 
 //@des localhost:3000/admin/getSalesdata/:based_on
-const getSalesdata = async (req, res)=>{
+const getorderdata = async (req, res)=>{
     
     const now = new Date();
     // console.log(now);
@@ -651,5 +659,5 @@ module.exports = {
     addCoupon,
     deleteCoupon,
     getorderscount,
-    getSalesdata
+    getorderdata
 }
