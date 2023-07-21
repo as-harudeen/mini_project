@@ -9,7 +9,7 @@ const timeFrames = {
 
    const ctx = document.getElementById('myChart').getContext('2d');
 
-   const createGraph = (timeFrames, data_one, data_two, data_three)=>{
+   const createGraph = (timeFrames, data_one, data_two)=>{
      new Chart(ctx, {
          type: 'line',
          data: {
@@ -18,29 +18,17 @@ const timeFrames = {
                data: data_one,
                label: "Total order",
                borderColor: "rgb(62,149,205)",
-               backgroundColor: "rgb(62,149,205,0.1)",}
-            //  }, { 
-            //    data: data_two,
-            //    label: "Payment pending",
-            //    borderColor: "rgb(60,186,159)",
-            //    backgroundColor: "rgb(60,186,159,0.1)",
-            //  },{ 
-            //    data: data_three,
-            //    label: "Return/Cancel Request",
-            //    borderColor: "rgb(196,88,80)",
-            //    backgroundColor:"rgb(196,88,80,0.1)",
-            //  }
+               backgroundColor: "rgb(62,149,205,0.1)",
+           },{
+               data: data_two,
+               label: "Cash On Delivery",
+               borderColor: "rgb(196,88,80)",
+               backgroundColor:"rgb(196,88,80,0.1)",
+             }
            ]
          },
        });
    }
-
-   const data_one = [86,114,106,106,107,111,133];
-   const data_two = [70,90,44,60,83,90,100];
-   const data_three = [6,3,2,2,7,0,16];
-
-  //  createGraph(timeFrames.lastMonthRanges, data_one, data_two, data_three)
-
 
 
 const based_on_selector = document.getElementById('based_on');
@@ -57,7 +45,7 @@ async function rebuildGraph(){
   const res = await fetchData(`/admin/orderdata/${selected_based_on}`)
   if(res.ok){
     const data = await res.json()
-    createGraph(timeFrames[`${selected_based_on}`], data, data_two, data_three)
+    createGraph(timeFrames[`${selected_based_on}`], data[0], data[1]);
   }
 }
 
