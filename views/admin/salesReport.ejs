@@ -105,14 +105,12 @@
                                 </select>
                                 <div id="select_container">
                                     <div class="year_container">
-                                        <input type="text" value="2000" id="year_input">
-                                        <select name="year_selector" id="year_selector">
-                                            <option value="2000">2000</option>
-                                            <option value="2001">2001</option>
-                                            <option value="2003">2003</option>
-                                        </select>
+                                        <label for="year_input">Year</label>
+                                        <input type="text" value="2023" id="year_input">
+                                        <select name="year_selector" id="year_selector"></select>
                                     </div>
                                     <div class="month_container">
+                                        <label for="month_input">Month</label>
                                         <input type="text" value="1" id="month_input">
                                         <select name="month_selector" id="month_selector">
                                             <option value="1">Jan</option>
@@ -130,34 +128,56 @@
                                         </select>
                                     </div>
                                     <div class="week_container">
+                                        <label for="week_input">Week</label>
                                         <input type="text" value="1" id="week_input">
-                                        <select name="week_selector" id="week_selector">
-                                            <option value="1">1</option>
-                                            <option value="2">2</option>
-                                            <option value="3">3</option>
-                                            <option value="4">4</option>
-                                        </select>
+                                        <select name="week_selector" id="week_selector"></select>
                                     </div>
                                     <div class="day_container d-none">
+                                        <label for="day_input">Day</label>
                                         <input type="text" value="1" id="day_input">
                                         <select name="day_selector" id="day_selector"></select>
                                     </div>
                                 </div>
+                                <button id="get_btn" class="btn btn-outline-danger">GET SALES REPORT</button>
                             </div>
 
-                            <div class="container graph">
-                                <!-- <div class="chart p-3">
-                                    <canvas id="barChart" width="400" height="100"></canvas>
-                                    <input type="hidden" id="orderStatus" value="=orderStatus">
-                                </div> -->
-                                <div>
-                                    <select name="based_on" id="based_on">
-                                        <option value="week">Week</option>
-                                        <option value="month">Month</option>
-                                        <option value="year">Year</option>
-                                    </select>
-                                </div>                            
+                            <div class="container" id="orders_container">
+                                <div class="container">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>id</th>
+                                                <th>product name</th>
+                                                <th>user</th>
+                                                <th>date</th>
+                                                <th>total price</th>
+                                                <th>payment to pay</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
                             </div>
+
+
+                            <div class="container mt-4">
+                                <table class="table table-bordered">
+                                  <thead>
+                                    <tr>
+                                      <th>#Id</th>
+                                      <th>Product Name</th>
+                                      <th>Quantity</th>
+                                      <th>User</th>
+                                      <th>Order At</th>
+                                      <th>Total Price</th>
+                                      <th>Pending Amount</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody></tbody>
+                                </table>
+                            </div>
+                              
+
+
                         </div>
                     </div>
                 </div>
@@ -165,6 +185,18 @@
         </div>
 </div>
 </div>
+
+<template id="order-row">
+    <tr>
+        <td class="order_id"></td>
+        <td class="product_name"></td>
+        <td class="quantity"></td>
+        <td class="user"></td>
+        <td class="order_date"></td>
+        <td class="total_price"></td>
+        <td class="pending_payment"></td>
+    </tr>
+</template>
 
 <script src="/js/admin/ts/dist/sales_report.js"></script>
 <%- include('../include/_adminFooter.ejs')%>

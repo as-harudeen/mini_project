@@ -586,8 +586,8 @@ const getorderdata = async (req, res)=>{
     const aggregationPipeline = buildPipeline(timeFrame[based_on], now, getBy)
     const ordersData = await OrderModel.aggregate(aggregationPipeline);
 
-    console.log(ordersData)
     const data = []
+    const codPayment = []
 
     //building base of data
     let len = 0;
@@ -596,9 +596,10 @@ const getorderdata = async (req, res)=>{
     else len = now.getMonth()
 
     
-    for(let i = 0; i <= len; i++)data.push(0)
-    console.log(ordersData)
-    console.log(data)
+    for(let i = 0; i <= len; i++){
+        data.push(0)
+        codPayment.push(0)
+    }
 
     for(let order of ordersData){
         let idx;
@@ -606,33 +607,156 @@ const getorderdata = async (req, res)=>{
         else if(based_on == 'year') idx = order._id - 1;
         else idx = order._id - (now.getDate() - len);
         data[idx] ? data[idx] += order.frequency : data[idx] = order.frequency
+        codPayment[idx] ? codPayment[idx] += order.codPayment : codPayment[idx] = order.codPayment
+        
     }
 
-    console.log(data)
-    res.send(data)
+    res.status(200).send([data, codPayment])
 
-    function buildPipeline (startDate, endDate, getBy){
-
+    function buildPipeline (startDate, endDate, getBy) {
         const aggregationPipeline = [
+          {
+            $match: {
+              createdAt: { $gte: startDate, $lte: endDate },
+            },
+          },
+          {
+            $group: {
+              _id: { [getBy]: '$createdAt' },
+              totalAmount: { $sum: '$amount' }, // Calculate the total amount for each date
+              frequency: { $sum: 1 }, // Count all orders for each date
+              codPayment: {
+                $sum: {
+                  $cond: [{ $eq: ['$payment_method', 'COD'] }, 1, 0], // Count cancelled orders for each date
+                },
+              }
+            },
+          },
+          {
+            $sort: { _id: 1 }, // Sort by date in ascending order (optional)
+          },
+        ];
+      
+        return aggregationPipeline;
+      };
+      
+}
+
+
+//localhost:3000/admin/orderdetails/:based_on
+const getorderdetails = async (req, res)=>{
+    const {based_on} = req.params;
+    const {year, month, week, day} = req.body;
+    let start, end;
+
+    if(based_on == "year"){
+        start = new Date(+year, 0, 1);
+        end = new Date(+year + 1, 0, 1);
+    } else if (based_on == "month"){
+        start = new Date(+year, +month - 1, 0);
+        end = new Date(+year, +month, 0);
+    } else if (based_on == 'day'){
+        start = new Date(+year, +month - 1, +day);
+        end = new Date(+year, +month - 1, +day + 1)
+    } else if (based_on == 'week') {
+        //validation !month || !week ....
+        getWeekDates(year, month, week)
+    }
+
+
+    function getWeekDates(year, month, weekNumber) {
+        const firstDayOfMonth = new Date(year, month - 1, 1); // Note: Months are 0-indexed
+        const firstDayOfWeek = new Date(firstDayOfMonth);
+      
+        // Find the first day of the week (Sunday in this case)
+        firstDayOfWeek.setDate(firstDayOfMonth.getDate() - firstDayOfMonth.getDay());
+      
+        // Calculate the starting date of the specified week
+        start = new Date(firstDayOfWeek);
+        start.setDate(start.getDate() + (weekNumber - 1) * 7);
+      
+        // Calculate the ending date of the specified week (Saturday in this case)
+        end = new Date(start);
+        end.setDate(end.getDate() + 6);
+      }
+
+      console.log(start);
+      console.log(end);
+
+    try {
+
+        const pipeline = [
             {
-              $match: {
-                createdAt: { $gte: startDate, $lte: endDate },
+                $match: {
+                  createdAt: {
+                    $gte: start, // Start of the year
+                    $lt: end, // Start of the next year
+                  },
+                },
+            },
+            // Lookup stage to join orders with products based on product_id
+            {
+              $lookup: {
+                from: 'products', // Collection name for the products
+                localField: 'sub_orders.product_id',
+                foreignField: '_id',
+                as: 'sub_orders_with_products',
               },
             },
+            // Unwind the sub_orders_with_products array to de-normalize the data
             {
-              $group: {
-    
-                _id: { [getBy]: '$createdAt'}, // Group orders by the full date to get unique dates for the current week
-                frequency: { $sum: 1 }, // Count the occurrences of orders for each date
+              $unwind: '$sub_orders_with_products',
+            },
+            // Add the product_name field to the sub_orders
+            {
+              $addFields: {
+                'sub_orders.product_name': '$sub_orders_with_products.product_name',
               },
             },
+            // Replace the original sub_orders array with the updated sub_orders
             {
-              $sort: { _id: 1 }, // Sort by date in ascending order (optional)
+              $project: {
+                sub_orders_with_products: 0,
+              },
+            },
+            // Lookup stage to join orders with users based on user_id
+            {
+              $lookup: {
+                from: 'users', // Collection name for the users
+                localField: 'user_id',
+                foreignField: '_id',
+                as: 'user',
+              },
+            },
+            // Unwind the user array to de-normalize the data
+            {
+              $unwind: '$user',
+            },
+            // Add the username field to the order
+            {
+              $addFields: {
+                username: '$user.username',
+              },
+            },
+            // Project to reshape the final output
+            {
+              $project: {
+                _id: 0,
+                user_id: 0,
+                user: 0,
+              },
             },
           ];
-    
-          return aggregationPipeline
-    }
+
+const ordersWithProductDetails = await OrderModel.aggregate(pipeline).exec();
+
+
+for(const order of ordersWithProductDetails) console.log(order)
+
+res.status(200).send(ordersWithProductDetails)
+} catch (err) {
+    return res.status(500).send(err.message)
+}
 }
 
 
@@ -659,5 +783,6 @@ module.exports = {
     addCoupon,
     deleteCoupon,
     getorderscount,
-    getorderdata
+    getorderdata,
+    getorderdetails
 }

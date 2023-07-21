@@ -40,7 +40,8 @@ const {
     addCoupon,
     deleteCoupon,
     getorderscount,
-    getorderdata
+    getorderdata,
+    getorderdetails
 } = require("../controllers/adminController.js")
 
 const authenticate = require('../middlewares/auth/adminAuth.js')
@@ -250,6 +251,9 @@ router
 router
 .route('/panel/dashboard/salesreport')
 .get(salesreportGET)
+
+router
+.post('/orderdetails/:based_on', getorderdetails)
 
 
 //Logout
