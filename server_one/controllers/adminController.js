@@ -8,7 +8,8 @@ const OrderModel = require('../../models/orderModel.js')
 const CouponModel = require('../../models/coupon.model.js')
 const sharp = require('sharp')
 const moment = require('moment')
-const fs = require('fs')
+const fs = require('fs');
+const PDFDocument = require('pdfkit');
 
 
 // const redisClient = require('redis').createClient()
@@ -638,7 +639,7 @@ const getorderdata = async (req, res)=>{
         ];
       
         return aggregationPipeline;
-      };
+    };
       
 }
 
@@ -678,12 +679,41 @@ const getorderdetails = async (req, res)=>{
         // Calculate the ending date of the specified week (Saturday in this case)
         end = new Date(start);
         end.setDate(end.getDate() + 6);
-      }
+    }
 
-      console.log(start);
-      console.log(end);
 
     try {
+        // Function to generate the PDF
+        function generatePDF(orderDetails) {
+            const doc = new PDFDocument();
+            const filename = 'sales_report.pdf';
+            const stream = fs.createWriteStream(filename);
+          
+            doc.pipe(stream);
+          
+            // Add content to the PDF
+            doc.fontSize(18).text('Sales Report - Order Details', { align: 'center' });
+          
+            // Loop through the order details and add them to the PDF
+            let count = 1;
+            orderDetails.forEach((order) => {
+                order.sub_orders.forEach((sub)=>{
+                    doc.moveDown();
+                    doc.fontSize(14).text(`Order #${count++}`);
+                    doc.fontSize(12).text(`Order ID: ${sub._id}`);
+                    doc.fontSize(12).text(`Product Name: ${sub.product_name}`);
+                    doc.fontSize(12).text(`Quantity: ${sub.quantity}`);
+                    doc.fontSize(12).text(`Customer Name: ${order.username}`);
+                    doc.fontSize(12).text(`Total Amount: ${sub.total_price}`);
+                    doc.fontSize(12).text(`Payment Method: ${order.payment_method}`);
+                    doc.fontSize(12).text(`Order status: ${sub.order_status}`);
+                    doc.fontSize(12).text(`Order Date: ${order.createdAt}`);
+                    doc.moveTo(50, doc.y + 10).lineTo(550, doc.y + 10).stroke();
+                })
+            });
+            doc.end();
+            console.log(`PDF generated successfully: ${filename}`);
+        }
 
         const pipeline = [
             {
@@ -746,17 +776,34 @@ const getorderdetails = async (req, res)=>{
                 user: 0,
               },
             },
-          ];
+        ];
+        
+        const ordersWithProductDetails = await OrderModel.aggregate(pipeline).exec();
 
-const ordersWithProductDetails = await OrderModel.aggregate(pipeline).exec();
+
+        generatePDF(ordersWithProductDetails);
+        console.log(ordersWithProductDetails[0])
 
 
-for(const order of ordersWithProductDetails) console.log(order)
-
-res.status(200).send(ordersWithProductDetails)
-} catch (err) {
-    return res.status(500).send(err.message)
+        res.status(200).send(ordersWithProductDetails)
+        
+    } catch (err) {
+        return res.status(500).send(err.message)
+    }
 }
+
+
+//localhost:3000/admin/salesreport/download
+const downloadSalesreport = (req, res)=>{
+    const filePath = 'sales_report.pdf'
+  
+    // Set the appropriate headers for downloading the file
+    res.setHeader('Content-Disposition', `attachment; filename=${encodeURIComponent('sales_report.pdf')}`);
+    res.setHeader('Content-Type', 'application/pdf');
+  
+    // Stream the PDF file to the response
+    const stream = fs.createReadStream(filePath);
+    stream.pipe(res);
 }
 
 
@@ -784,5 +831,6 @@ module.exports = {
     deleteCoupon,
     getorderscount,
     getorderdata,
-    getorderdetails
+    getorderdetails,
+    downloadSalesreport
 }

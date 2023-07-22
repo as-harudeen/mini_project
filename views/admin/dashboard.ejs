@@ -104,11 +104,8 @@
                                 </select>
                             </div>
 
+                            <a class="btn" href="dashboard/salesreport">Sales Report</a>
                             <div class="container graph">
-                                <!-- <div class="chart p-3">
-                                    <canvas id="barChart" width="400" height="100"></canvas>
-                                    <input type="hidden" id="orderStatus" value="=orderStatus">
-                                </div> -->
                                 <div>
                                     <select name="based_on" id="based_on">
                                         <option value="week">Week</option>
@@ -127,5 +124,5 @@
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script> 
-<script type="module" src="/js/admin/ts/dist/dashboard.js"></script>
+<script type="module" src="/js/admin/dashboard.mjs"></script>
 <%- include('../include/_adminFooter.ejs')%>

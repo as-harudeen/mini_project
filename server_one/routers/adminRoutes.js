@@ -41,7 +41,8 @@ const {
     deleteCoupon,
     getorderscount,
     getorderdata,
-    getorderdetails
+    getorderdetails,
+    downloadSalesreport
 } = require("../controllers/adminController.js")
 
 const authenticate = require('../middlewares/auth/adminAuth.js')
@@ -254,6 +255,10 @@ router
 
 router
 .post('/orderdetails/:based_on', getorderdetails)
+
+//download pdf 
+router
+.get('/salesreport/download', downloadSalesreport)
 
 
 //Logout
