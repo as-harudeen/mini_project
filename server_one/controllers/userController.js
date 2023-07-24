@@ -159,7 +159,8 @@ const count = async (req, res) => {
     const { collection } = req.params
     const db = await getDb()
     try {
-        const count = await db.collection(collection).countDocuments(option)
+        const count = await db.collection(collection).countDocuments(option);
+        console.log(count)
         res.status(200).send(String(count))
     } catch (err) {
         res.status(500).send(err.message)

@@ -61,6 +61,10 @@ router
 .route('/shop')
 .get(shopGET)
 
+
+//Document count
+router.get('/doc_count/:collection', count)
+
 router.use(authenticateUser)
 
 
@@ -130,8 +134,6 @@ router.get('/generate-otp/:email', generateOTP)
 router.post('/verify-otp', verifyOTP)
 
 
-//Document count
-router.get('/doc_count/:collection', count)
 
 //Order
 router.post('/order', orderAuth, order)

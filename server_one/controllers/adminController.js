@@ -202,7 +202,7 @@ const enable = async (req, res)=>{
 }
 
 
-//@des localhost:3000/admin/getusers
+//@des localhost:3000/admin/get-users
 //method GET
 const users = async (req, res)=>{
 
@@ -219,8 +219,8 @@ const users = async (req, res)=>{
     }
 
     try {
-        const data = await UserModel.find(query, null, option)
-        res.status(200).send(data)
+        const data = await UserModel.find(query, null, option);
+        res.status(200).send(data);
     } catch (err) {
         return res.status(500).send(err.message)
     }

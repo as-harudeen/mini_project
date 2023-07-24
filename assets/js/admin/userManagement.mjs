@@ -45,11 +45,13 @@ const searchInpEventHandler = async ()=>{
         username: {$regex: `^${searchInpVal}`}
     }
 
-
+    
     /*api/doc_count/:collection   here we need users document count*/
+    console.log("hhi");
     const res = await fetchData(`/api/doc_count/users?option=${JSON.stringify(option)}`, 'GET')
-    const count = await res.json()
-
+    console.log(res)
+    const count = await res.text()
+    // console.log(count);
     if(!count){
         fetch()
         pagenation.innerHTML = ''
