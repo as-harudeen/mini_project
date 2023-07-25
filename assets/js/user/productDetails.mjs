@@ -138,3 +138,18 @@ add_to_whishlist_btn?.addEventListener('click', async ()=>{
     }
 })
 
+
+
+const selectedImage = document.getElementById('zoom');
+
+const smallImgs = document.querySelectorAll('.smalImg');
+
+for(let img of smallImgs) {
+    img.addEventListener('click', (e)=> {
+        selectedImage.src = e.currentTarget.src;
+    })
+}
+
+
+
+

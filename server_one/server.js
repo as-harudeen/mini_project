@@ -68,6 +68,19 @@ app.use("/admin", require('./routers/adminRoutes.js'));
 // }
 // get()
 
+const fs = require('fs');
+
+app.get('/download-pdf', (req, res) => {
+  const filePath = './sales_report.pdf'
+  
+  // Set the appropriate headers for downloading the file
+  res.setHeader('Content-Disposition', `attachment; filename=${encodeURIComponent('sales_report.pdf')}`);
+  res.setHeader('Content-Type', 'application/pdf');
+
+  // Stream the PDF file to the response
+  const stream = fs.createReadStream(filePath);
+  stream.pipe(res);
+});
 
 
 

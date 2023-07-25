@@ -7,7 +7,7 @@ const emailInp = document.getElementById('email');
 const passwordInp = document.getElementById('password');
 const loginBtn = document.getElementById('login-btn')
 
-loginBtn.disabled = true
+// loginBtn.disabled = true
 
 
 
@@ -18,28 +18,30 @@ const regEx = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[
 
 
 //For enable OTP buttons
-emailInp.addEventListener('keyup', async ()=>{
-    if(regEx.test(emailInp.value.trim())){
-        const response = await fetchData('get-user', 
-        'POST', 
-        {
-            email: emailInp.value.trim()
-        })
+// emailInp.addEventListener('keyup', async ()=>{
+//     if(regEx.test(emailInp.value.trim())){
+//         const response = await fetchData('get-user', 
+//         'POST', 
+//         {
+//             email: emailInp.value.trim()
+//         })
 
-        if(response.ok) {
-            setSuccess(emailInp)
-            sendOTP_btn.disabled = false
-            loginBtn.disabled = false
-        } else setError(emailInp, 'Email is not found')
-        
-    } else {
-        sendOTP_btn.disabled = true
-        loginBtn.disabled = true
-    }
-})
+//         if(response.ok) {
+//             setSuccess(emailInp)
+//             sendOTP_btn.disabled = false
+//             loginBtn.disabled = false
+//         } else {
+//             setError(emailInp, 'Password of Email not correct')
+//             setError(passwordInp, 'Password or Email not correct')
+//         }
+//     } else {
+//         sendOTP_btn.disabled = true
+//         loginBtn.disabled = true
+//     }
+// })
 
 
-loginBtn.addEventListener('click', async (e)=>{
+loginBtn.addEventListener('click', async (e) => {
     e.preventDefault()
 
     const email = emailInp.value.trim()
@@ -52,29 +54,20 @@ loginBtn.addEventListener('click', async (e)=>{
     }
 
     const response = await fetchData('/api/login', 'POST', body)
-    if(response.ok) window.location.href = '/api'
+    if (response.ok) window.location.href = '/api'
     else {
-        const data = await response.json()
-        const err = data.err
-        if(err == 'User not found') setError(emailInp, "User not found")
-        else if(err == 'Incorrect password and OTP'){
-            setSuccess(emailInp)
-            setError(passwordInp, "Password Not Correct...")
-            setError(otpInp, 'OTP Not Correct...')
-        } else {
-            setError(otpInp, "Please provide Password or OTP")
-            setError(passwordInp, "Please provide Password or OTP")
-        }
+        setError(emailInp, 'Password of Email not correct')
+        setError(passwordInp, 'Password or Email not correct')
     }
-    
+
 })
 
 
 
 
 //SendOTP
-sendOTP_btn.addEventListener('click', async ()=>{
+sendOTP_btn.addEventListener('click', async () => {
     const response = await fetchData(`/api/generate-otp/${emailInp.value.trim()}`, 'GET')
-    if(response.ok) alert("OTP sended success.")
+    if (response.ok) alert("OTP sended success.")
 })
 

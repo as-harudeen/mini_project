@@ -2,27 +2,21 @@ const ProductModel = require('../../models/product.model.js')
 const UserModel = require('../../models/userModel.js')
 const CategoryModel = require('../../models/categoryModel.js')
 const OrderModel = require('../../models/orderModel.js')
-const CouponModel = require('../../models/coupon.model.js')
 const jwt = require('jsonwebtoken')
 const moment = require('moment')
 
 
 //@des http:localhost:3000/api/register
 const registerGET = (req, res)=>{
-    res.status(200).render('user_register', {user: 'achu'})
+    res.status(200).render('user_register')
 }
 //@des http:localhost:3000/api/login
 const loginGET = (req, res)=>{
+    const token = req.cookies.userToken;
+    if(token) return res.redirect('/api');
     res.status(200).render('user_login')
 }
 
-//@des http:local:3000/api/products
-const productGET = async (req, res)=>{
-    const product = await ProductModel.findOne()
-    const user = await UserModel.findOne()
-    res.render('user/productView', {product})
-
-}
 
 //@des http:localhost:3000/api/products/:product_id
 const productDetailGET = async (req, res)=>{
@@ -43,7 +37,7 @@ const productDetailGET = async (req, res)=>{
 //@des http:local:3000/api/
 const homeGET = async (req, res)=>{
    try {
-       const data = await ProductModel.find()
+       const data = await ProductModel.find({isDeleted: false})
 
        const category_offer = {}
        const categories = await CategoryModel.find({}, {subCategories: 0, _id: 0})
@@ -58,7 +52,6 @@ const homeGET = async (req, res)=>{
         const product = data[idx]
         product.offer_price = category_offer[product.category]
        }
-       console.log(data)
 
 
 
@@ -281,7 +274,6 @@ const whishlistGET = async (req, res)=>{
 module.exports = {
     registerGET,
     loginGET,
-    productGET,
     homeGET,
     shopGET,
     productDetailGET,

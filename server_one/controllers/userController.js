@@ -292,6 +292,7 @@ const logout = (req, res) => {
             console.log(err)
         } else {
             res.clearCookie('userToken')
+            req.app.locals.user = null;
             res.redirect("/api")
         }
     })

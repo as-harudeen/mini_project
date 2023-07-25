@@ -15,7 +15,6 @@ const {
 const {
     registerGET,
     loginGET,
-    productGET,
     homeGET,
     shopGET,
     productDetailGET,

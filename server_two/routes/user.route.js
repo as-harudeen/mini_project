@@ -2,7 +2,7 @@ const router = require('express').Router()
 const auth = require('../middlewares/auth.js')
 
 const {
-    getProduct,
+    getProducts,
     updateCart,
     userCart,
     updateProfile,
@@ -18,7 +18,7 @@ const {
 
 //Get products
 router
-.get('/get-products', getProduct)
+.get('/get-products', getProducts)
 
 
 router.use(auth)

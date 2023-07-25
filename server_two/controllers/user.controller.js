@@ -1,17 +1,16 @@
 const bcrypt = require('bcrypt')
-const mongoose = require('mongoose')
 const ProductModel = require('../../models/product.model.js')
 const UserModel = require('../../models/userModel.js')
 const OrderModel = require('../../models/orderModel.js')
 const CouponModel = require('../../models/coupon.model.js')
-const { order } = require('../../server_one/controllers/userController.js')
 
 
-//localhost:5000/get-product
+//localhost:5000/get-products
 //QUERY   option & sort
-const getProduct = async(req, res)=>{
+const getProducts = async(req, res)=>{
     try {
         const option = JSON.parse(req.query.option)
+        option.isDeleted = false
         const sort = JSON.parse(req.query.sort)
         const pagination = JSON.parse(req.query.pagination)
 
@@ -278,7 +277,7 @@ const getwhishlist = async (req, res)=>{
 
 
 module.exports = {
-    getProduct,
+    getProducts,
     userCart,
     updateCart,
     updateProfile,
