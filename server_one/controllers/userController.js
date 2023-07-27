@@ -94,6 +94,32 @@ const loginWithPass = async (req, res) => {
 }
 
 
+
+//localhsot:3000/api/login/otp
+//@method POST
+const loginWithOTP = async (req, res)=>{
+
+    try {
+        const {email, OTP} = req.body;
+        const OTPVerified = req.app.locals.OTP === OTP;
+        if(!OTPVerified) return res.status(400).send("Incorrect OTP");
+    
+        const user = await UserModel.findOne({ email });
+        if(!user) return res.status(400).send("Invalid user email");
+        const token = jwt.sign({
+            userId: user._id,
+            userName: user.username
+        }, env.SECRET, { expiresIn: '24h' });
+        res.cookie('userToken', token);
+        res.status(200).send(token)
+    } catch (err) {
+        return res.status(500).send(err.message);
+    }
+}
+
+
+
+
 //Get user data
 //@des localhost:3000/api/get-user
 //mehod post
@@ -117,6 +143,11 @@ const getUser = async (req, res) => {
 const generateOTP = async (req, res) => {
 
     const { email } = req.params
+    console.log(email);
+
+    const user = await UserModel.findOne({email});
+    if(!user) return res.status(400).send("User Not found");
+    if(user.isBlocked) return res.status(403).send("User has been blocked");
 
     req.app.locals.OTP = otpGenerator.generate(6, {
         lowerCaseAlphabets: false,
@@ -285,6 +316,20 @@ const createOrder = async (req, res) => {
 
 }
 
+//localhost:3000/return/:orderId/:subId
+//@method POST
+const returnRequest = async (req, res)=> {
+    const { userId } = req.user;
+    const {orderId, subId} = req.params;
+    const user = await UserModel.findOne({_id: userId, orders: orderId}, {_id: 1})
+    if(!user) return res.status(403).send("Forbidden");
+    const order = await OrderModel.findOneAndUpdate({_id: orderId, 'sub_orders._id': subId}, {$set: {'sub_orders.$.order_status': 'Requested for return'}});
+    console.log(order);
+    res.status(200).send("Requested for return");
+}
+
+
+
 //@des localhost:3000/api/logout
 const logout = (req, res) => {
     req.session.destroy((err) => {
@@ -340,5 +385,7 @@ module.exports = {
     red,
     order,
     createOrder,
-    logout
+    logout,
+    loginWithOTP,
+    returnRequest
 }

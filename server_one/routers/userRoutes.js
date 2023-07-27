@@ -10,7 +10,9 @@ const {
     red,
     order,
     createOrder,
-    logout
+    logout,
+    loginWithOTP,
+    returnRequest
 } = require('../controllers/userController.js')
 const {
     registerGET,
@@ -25,7 +27,8 @@ const {
     checkoutGET,
     orderGET,
     orderViewGET,
-    whishlistGET
+    whishlistGET,
+    otpLoginGET
 } = require('../render/user.render.js')
 const {verifyUser} = require('../middlewares/user.midleware.js')
 const authenticateUser = require('../middlewares/auth/userAuth.js')
@@ -46,6 +49,10 @@ router
 .post(verifyUser,loginWithPass)
 
 
+router
+.route('/login/otp')
+.get(otpLoginGET)
+.post(loginWithOTP);
 
 
 
@@ -64,7 +71,10 @@ router
 //Document count
 router.get('/doc_count/:collection', count)
 
-router.use(authenticateUser)
+//Generate OTP
+router.get('/generate-otp/:email' ,generateOTP);
+
+router.use(authenticateUser);
 
 
 //Produt details
@@ -126,9 +136,6 @@ router
 router.post('/get-user', getUser)
 
 
-//Generate OTP
-router.get('/generate-otp/:email', generateOTP)
-
 //verify OTP
 router.post('/verify-otp', verifyOTP)
 
@@ -137,15 +144,12 @@ router.post('/verify-otp', verifyOTP)
 //Order
 router.post('/order', orderAuth, order)
 
+//Return request
+router.put('/return/:orderId/:subId', returnRequest)
+
 //Razorpay
 router.post('/razorpay/createOrder', orderAuth, createOrder)
 
-
-
-router.get('/test', (req, res)=>{
-    console.log("HIHIHIIIHIHIIHIHIHIHIH")
-    res.send("OKNIIII")
-})
 
 
 //redis

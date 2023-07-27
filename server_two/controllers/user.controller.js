@@ -152,11 +152,11 @@ const my_order = async (req, res)=>{
     const {userId} = req.user
 
     try {
-        const user = await UserModel.findOne({_id: userId}, {orders: 1, _id: 0})
+        const user = await UserModel.findOne({_id: userId}, {orders: 1, _id: 0});
         const data = []
-
+        const orders = user.orders.reverse();
         const products = {}//memoization
-        for(let orderId of user.orders){
+        for(let orderId of orders){
             let order = await OrderModel.findById(orderId)
             order = order.toObject()
             for(let idx in order.sub_orders){

@@ -17,6 +17,14 @@ const loginGET = (req, res)=>{
     res.status(200).render('user_login')
 }
 
+//@des http:localhost:3000/api/login
+const otpLoginGET = (req, res)=>{
+    const token = req.cookies.userToken;
+    if(token) return res.redirect('/api');
+    res.status(200).render('user/login_with_otp')
+}
+
+
 
 //@des http:localhost:3000/api/products/:product_id
 const productDetailGET = async (req, res)=>{
@@ -274,6 +282,7 @@ const whishlistGET = async (req, res)=>{
 module.exports = {
     registerGET,
     loginGET,
+    otpLoginGET,
     homeGET,
     shopGET,
     productDetailGET,

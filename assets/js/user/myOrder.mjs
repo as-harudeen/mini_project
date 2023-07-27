@@ -7,17 +7,17 @@ const orderItem_trTEMP = document.getElementById('order_item_tr')
 const order_tbody = document.getElementById('order-tbody')
 
 
-async function buildOrders(){
+async function buildOrders() {
     const res = await fetchData('http://localhost:5000/profile/my_order', "GET", null, token)
-    if(res.ok){
+    if (res.ok) {
         const data = await res.json()
-        for(let order of data){
-            for(let sub_order of order.sub_orders){
+        for (let order of data) {
+            for (let sub_order of order.sub_orders) {
                 const status = sub_order.order_status
-                if(status == "Processing" || status == "shipped"){
+                if (status == "Processing" || status == "shipped") {
                     buildNewOrders(
-                        sub_order.product_images[0], 
-                        status, 
+                        sub_order.product_images[0],
+                        status,
                         sub_order.quantity,
                         sub_order.total_price,
                         sub_order.delivery_date,
@@ -30,7 +30,8 @@ async function buildOrders(){
                         status,
                         sub_order.product_images[0],
                         sub_order.total_price,
-                        sub_order.quantity
+                        sub_order.quantity,
+                        order._id
                     )
                 }
             }
@@ -39,11 +40,11 @@ async function buildOrders(){
 
     }
 
-    if(newOrderCount == 1){
+    if (newOrderCount == 1) {
         order_tbody.innerHTML = 'Empty'
     }
-    
-    if(orderHistCount == 1){
+
+    if (orderHistCount == 1) {
         orderHistTbody.innerHTML = 'Empty'
     }
 }
@@ -53,12 +54,12 @@ buildOrders()
 
 let newOrderCount = 1
 //building new orders
-function buildNewOrders(img, status, qty, price, del_date, id, sub_id){
+function buildNewOrders(img, status, qty, price, del_date, id, sub_id) {
     const order_item_tr = orderItem_trTEMP.content.cloneNode(true)
-            
+
     order_item_tr.querySelector('.order-no').innerText = newOrderCount++
     order_item_tr.querySelector('.order-img').src += img
-    if(status == "Processing"){
+    if (status == "Processing") {
         order_item_tr.querySelector('.order-status-processing').innerText = 'Processing'
     } else order_item_tr.querySelector('.order-status-shipped').innerText = 'Shipped'
     order_item_tr.querySelector('.order-quantity').innerText = qty
@@ -82,7 +83,7 @@ const orderHistTbody = document.getElementById('order_hist_tbody')
 
 
 let orderHistCount = 1
-function buildOrderHistory(id, status, img, price, qty){
+function buildOrderHistory(id, status, img, price, qty, orderId) {
     const tr = orderHistTemp.content.cloneNode(true)
     tr.querySelector('.order-no').innerText = orderHistCount++
     tr.querySelector('.order_pic_anchor').href += id
@@ -90,7 +91,7 @@ function buildOrderHistory(id, status, img, price, qty){
     const orderStatus = tr.querySelector('.order_status')
     const returnAnchor = tr.querySelector('.return-anchor')
 
-    if(status == "canceled" || status === 'requested for cancel'){
+    if (status == "Canceled" || status === 'requested for cancel' || status == 'Requested for return') {
         tr.querySelector('.canceled-tag').classList.remove('d-none')
         orderStatus.innerText = status
         orderStatus.classList.add('bg-danger')
@@ -101,7 +102,18 @@ function buildOrderHistory(id, status, img, price, qty){
         orderStatus.classList.add('bg-success')
         returnAnchor.innerText = "Return"
         returnAnchor.classList.add("btn-success")
-        returnAnchor.href = `/api/return/${id}`
+        returnAnchor.addEventListener('click', async function returnHandler() {
+            const res = await fetch(`/api/return/${orderId}/${id}`, {
+                method: 'PUT'
+            })
+            if (res.ok) {
+                returnAnchor.removeEventListener('click', returnHandler);
+                orderStatus.innerText = 'Requested for return';
+                orderStatus.classList.add('bg-warning');
+                returnAnchor.innerText = "no return";
+
+            }
+        })
     }
 
 
