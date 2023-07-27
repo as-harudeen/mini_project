@@ -47,6 +47,9 @@ app.use("/api", require('./routers/userRoutes.js'));
 app.use("/admin", require('./routers/adminRoutes.js'));
 // app.use(errHandler)
 
+app.all('*', (req, res)=> {
+  res.status(404).render('pagenotfound')
+})
 
 
 

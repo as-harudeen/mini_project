@@ -217,4 +217,3 @@ function builSalesReport (data: Order[]): void {
         }
     }
 }
-

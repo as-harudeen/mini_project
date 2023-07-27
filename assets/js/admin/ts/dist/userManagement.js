@@ -165,11 +165,3 @@ class UserManagement extends PagenationButton {
     }
 }
 const userManagement = new UserManagement(3);
-const logout = document.getElementById('logout');
-logout.addEventListener('click', () => __awaiter(void 0, void 0, void 0, function* () {
-    const res = yield fetch('/admin/logout', {
-        method: 'DELETE'
-    });
-    if (res.ok)
-        window.location.href = '/admin/login';
-}));

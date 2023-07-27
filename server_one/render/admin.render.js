@@ -125,7 +125,9 @@ const couponsGET = async (req, res)=>{
 
 //@des http://localhost:3000/admin/panel
 const dashboardGET = async (req, res)=>{
-    res.status(200).render('admin/dashboard')
+    const usersCount = await UserModel.countDocuments();
+    const productsCount = await ProductModel.countDocuments();
+    res.status(200).render('admin/dashboard', {usersCount, productsCount})
 }
 
 //@des http://localshost:3000/admin/panel/dashboard/salesreport

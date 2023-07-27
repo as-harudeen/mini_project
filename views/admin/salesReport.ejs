@@ -8,7 +8,7 @@
                         <li class="sideBarlist border p-1 m-2 ps-4 ">
                             <img src="/assets/admin/d1.png" alt="" class="img-fluid me-2">
                             <span><a class="text-decoration-none" style="color: white;"
-                                    href="/admin/Dashboard">DashBoard</a></span>
+                                    href="/admin/panel/dashboard">DashBoard</a></span>
                         </li>
                         <li class="dashOther fw-bold p-1 ps-4 m-2">
                             <img src="/assets/admin/d3.png" alt="" class="img-fluid me-2">
@@ -47,71 +47,33 @@
                         <li class="dashOther fw-bold p-1 ps-4 m-2">
                             <img src="/assets/admin/d6.png" alt="" class="img-fluid me-2">
                             <span></span>
-                            <a href="admin/logOut" class="text-decoration-none"
+                            <a id="logout" class="text-decoration-none"
                                 style="color: #cdcdcd;">Logout</a></span>
                         </li>
                     </ul>
                 </div>
                 <div class=" container col-md-9  p-0 m-0">
                     <div class="container p-0 ">
-                        <div class="conatiner saleTop bg-white mb-3">
-                            <div class="container summary p-3 d-flex gap-3">
-                                <h6 class="mt-3 ps-4">Sales Summary</h6>
-                                <select name="cars" id="cars" class="btnYear fw-bold mt-3">
-                                    <option value="volvo">2023</option>
-                                </select>
-                            </div>
-                            <div class="row p-4">
-                                <div
-                                    class="container SaleBox-one d-flex flex-column align-items-center justify-content-center col-md-3 p-3 ">
-                                    <img src="/assets/admin/DsC1.png" alt="" class="img-fluid mb-3">
-                                    <h2>₹ totalAmount</h2>
-                                    <h6>Total Revenue</h6>
-                                </div>
-                                <div id="two"
-                                    class="container SaleBox-one d-flex flex-column align-items-center justify-content-center col-md-3 p-3">
-                                    <img src="/assets/admin/DsC2.png" alt="" class="img-fluid mb-3">
-                                    <h2>totalOrder</h2>
-                                    <h6>Total Order</h6>
-                                </div>
-                                <div id="three"
-                                    class="container SaleBox-one d-flex flex-column align-items-center justify-content-center col-md-3 p-3">
-                                    <img src="/assets/admin/DsC3.png" alt="" class="img-fluid mb-3">
-                                    <h2>totalSales</h2>
-                                    <h6>Sales Count</h6>
-                                </div>
-                                <div id="four"
-                                    class="container SaleBox-one d-flex flex-column align-items-center justify-content-center col-md-3 p-3">
-                                    <img src="/assets/admin/DsC4.png" alt="" class="img-fluid mb-3">
-                                    <h2>totalUser</h2>
-                                    <h6>Total User</h6>
-                                </div>
-                                <div id="fifth"
-                                    class="container SaleBox-one d-flex flex-column align-items-center justify-content-center col-md-3 p-3">
-                                    <img src="/assets/admin/DsC1.png" alt="" class="img-fluid mb-3">
-                                    <h2>canceled</h2>
-                                    <h6>Order Canceled </h6>
-                                </div>
-                            </div>
-                        </div>
                         <div class="conatiner graphSummary bg-white">
                             <div class="container summary p-3 d-flex gap-3">
                                 <h6 class="mt-3 ps-4">Sales Report</h6>
-                                <select name="based_on" id="based_on">
-                                    <option value="week">Week</option>
-                                    <option value="month">Month</option>
-                                    <option value="year">Year</option>
-                                    <option value="day">Day</option>
-                                </select>
+                                <div>
+                                    <select name="based_on" id="based_on">
+                                        <option value="week">Week</option>
+                                        <option value="month">Month</option>
+                                        <option selected value="year">Year</option>
+                                        <option value="day">Day</option>
+                                    </select>
+                                </div>
                                 <div id="select_container">
                                     <div class="year_container">
                                         <label for="year_input">Year</label>
-                                        <input type="text" value="2023" id="year_input">
+                                        <input disabled type="text" value="2023" id="year_input">
                                         <select name="year_selector" id="year_selector"></select>
                                     </div>
                                     <div class="month_container">
                                         <label for="month_input">Month</label>
-                                        <input type="text" value="1" id="month_input">
+                                        <input disabled type="text" value="1" id="month_input">
                                         <select name="month_selector" id="month_selector">
                                             <option value="1">Jan</option>
                                             <option value="2">Feb</option>
@@ -129,36 +91,19 @@
                                     </div>
                                     <div class="week_container">
                                         <label for="week_input">Week</label>
-                                        <input type="text" value="1" id="week_input">
+                                        <input disabled type="text" value="1" id="week_input">
                                         <select name="week_selector" id="week_selector"></select>
                                     </div>
                                     <div class="day_container d-none">
                                         <label for="day_input">Day</label>
-                                        <input type="text" value="1" id="day_input">
+                                        <input disabled type="text" value="1" id="day_input">
                                         <select name="day_selector" id="day_selector"></select>
                                     </div>
                                 </div>
-                                <button id="get_btn" class="btn btn-outline-danger">GET SALES REPORT</button>
-                            </div>
-
-                            <div class="container" id="orders_container">
-                                <div class="container">
-                                    <table>
-                                        <thead>
-                                            <tr>
-                                                <th>id</th>
-                                                <th>product name</th>
-                                                <th>user</th>
-                                                <th>date</th>
-                                                <th>total price</th>
-                                                <th>payment to pay</th>
-                                            </tr>
-                                        </thead>
-                                    </table>
+                                <div>
+                                    <button id="get_btn" class="btn btn-outline-danger">GET SALES REPORT</button>
                                 </div>
                             </div>
-
-
                             <div class="container mt-4">
                                 <table class="table table-bordered">
                                   <thead>
@@ -175,7 +120,9 @@
                                   <tbody></tbody>
                                 </table>
                             </div>
-                            <a class="btn btn-danger" href="/admin/salesreport/download">Download</a>
+                            <div class="p-4">
+                                <a class="btn btn-danger" href="/admin/salesreport/download">Download</a>
+                            </div>
                         </div>
                     </div>
                 </div>

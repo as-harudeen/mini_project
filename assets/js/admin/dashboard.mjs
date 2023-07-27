@@ -24,7 +24,7 @@ const timeFrames = {
                label: "Cash On Delivery",
                borderColor: "rgb(196,88,80)",
                backgroundColor:"rgb(196,88,80,0.1)",
-             }
+             },
            ]
          },
        });
@@ -44,7 +44,7 @@ import fetchData from '../helper/fetchData.js'
 async function rebuildGraph(){
   const res = await fetchData(`/admin/orderdata/${selected_based_on}`)
   if(res.ok){
-    const data = await res.json()
+    const data = await res.json();
     createGraph(timeFrames[`${selected_based_on}`], data[0], data[1]);
   }
 }

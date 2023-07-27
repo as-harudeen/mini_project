@@ -1,6 +1,6 @@
 <%- include('../include/_header.ejs') %>
 <div class="container-fluid p-0 min-vh-100 " style="margin-top: 7%;">
-    <%-include('../include/navBar.ejs') %>
+    <%-include('../include/_adminNav.ejs') %>
     <div class="container f-flex align-items-center justify-content-center">
             <div class="row p-4 gap-3 d-flex justify-content-center">
                 <div class="DashBoardUl container col-md-2 p-0 m-0 bg-white d-flex pt-4 sideBar">
@@ -8,7 +8,7 @@
                         <li class="dashOther fw-bold p-1 m-2 ps-4 ">
                             <img src="/assets/admin/d9.png" alt="" class="img-fluid me-2">
                             <span><a class="text-decoration-none" style="color: #cdcdcd;"
-                                    href="/admin/Dashboard">DashBoard</a></span>
+                                    href="/admin/panel/dashboard">DashBoard</a></span>
                         </li>
                         <li class="dashOther fw-bold p-1 ps-4 m-2">
                             <img src="/assets/admin/d3.png" alt="" class="img-fluid me-2">
@@ -40,14 +40,9 @@
                                 style="color: #cdcdcd;">Coupons</a></span>
                         </li>
                         <li class="dashOther fw-bold p-1 ps-4 m-2">
-                            <img src="/assets/admin/d2.png" alt="" class="img-fluid me-2">
-                            <span></span>
-                            <a href="#" class="text-decoration-none" style="color: #cdcdcd;">Banner</a></span>
-                        </li>
-                        <li class="dashOther fw-bold p-1 ps-4 m-2">
                             <img src="/assets/admin/d6.png" alt="" class="img-fluid me-2">
                             <span></span>
-                            <a href="admin/logOut" class="text-decoration-none" style="color: #cdcdcd;">Logout</a></span>
+                            <a id="logout" class="text-decoration-none" style="color: #cdcdcd;">Logout</a></span>
                         </li>
                     </ul>
                 </div>
