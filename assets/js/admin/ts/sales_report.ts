@@ -24,6 +24,7 @@ const yearInput = document.getElementById('year_input')! as HTMLInputElement;
 
 
 
+
 let selectedBasedOn: string = basedOnSelector.value;
 basedOnSelector.addEventListener('change', ()=>{
     selectedBasedOn = basedOnSelector.value;
@@ -101,8 +102,8 @@ function buildAvailableWeek (){
 }
 
 
+//* DATES EVENTS
 
-//DATES EVENTS
 let selectedWeek = weekInput.value;
 let selectedMonth = monthInput.value;
 let selectedYear = yearInput.value;
@@ -150,6 +151,7 @@ interface Body {
 
 //Geting sales report data
 getButton.addEventListener('click', async ()=>{
+    console.log(selectedBasedOn);
     const body: Body = {year: selectedYear} as Body;
     if(selectedBasedOn == 'week'){
         body.month = selectedMonth;
@@ -217,3 +219,34 @@ function builSalesReport (data: Order[]): void {
         }
     }
 }
+
+
+
+//* To geting current month sales report as default 
+const now = new Date();
+
+const month = (now.getMonth() + 1).toString();
+console.log(`⭐ ${month}`);
+const year = now.getFullYear().toString();
+console.log(`⚡ ${year}`);
+
+for(const option of yearSelector.options){
+    if(option.value === year){
+        option.selected = true;
+        selectedYear = year;
+        yearInput.value = year;
+        break;
+    }
+}
+
+for(const option of monthSelector){
+    console.log(option.value);
+    if(option.value === month) {
+        option.selected = true;
+        selectedMonth = month;
+        monthInput.value = month;
+        break;
+    }
+}
+
+getButton.click();

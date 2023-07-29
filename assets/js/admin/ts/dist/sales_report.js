@@ -93,7 +93,7 @@ function buildAvailableWeek() {
         weekSelector.appendChild(option);
     }
 }
-//DATES EVENTS
+//* DATES EVENTS
 let selectedWeek = weekInput.value;
 let selectedMonth = monthInput.value;
 let selectedYear = yearInput.value;
@@ -122,6 +122,7 @@ daySelector.addEventListener('change', () => {
 buildDateSelectors();
 //Geting sales report data
 getButton.addEventListener('click', () => __awaiter(void 0, void 0, void 0, function* () {
+    console.log(selectedBasedOn);
     const body = { year: selectedYear };
     if (selectedBasedOn == 'week') {
         body.month = selectedMonth;
@@ -171,3 +172,27 @@ function builSalesReport(data) {
         }
     }
 }
+//* To geting current month sales report as default 
+const now = new Date();
+const month = (now.getMonth() + 1).toString();
+console.log(`⭐ ${month}`);
+const year = now.getFullYear().toString();
+console.log(`⚡ ${year}`);
+for (const option of yearSelector.options) {
+    if (option.value === year) {
+        option.selected = true;
+        selectedYear = year;
+        yearInput.value = year;
+        break;
+    }
+}
+for (const option of monthSelector) {
+    console.log(option.value);
+    if (option.value === month) {
+        option.selected = true;
+        selectedMonth = month;
+        monthInput.value = month;
+        break;
+    }
+}
+getButton.click();

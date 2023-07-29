@@ -271,4 +271,8 @@ router
 .route('/page')
 .get(test)
 
+router.all("*", (req, res)=>{
+    res.status(404).render('pagenotfound', {fromAdmin: true})
+})
+
 module.exports = router;
