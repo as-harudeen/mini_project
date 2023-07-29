@@ -21,8 +21,8 @@ const razorpayInstence = new Razorpay({
 // const localStorage = new LocalStorage('../config')
 
 
-//@des http:localhost:3000/api/register
-//@method POST
+//*@des http:localhost:3000/api/register
+//*@method POST
 /*
 {
     username: 'Achu',

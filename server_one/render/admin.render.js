@@ -9,13 +9,22 @@ const moment = require('moment')
 
 //@des http:localhost:3000/admin/login
 const loginGET = (req, res)=>{
-    const token = req.cookies.adminToken
-    if(!token) return res.render('admin_login')
 
-    const admin = jwt.verify(token, process.env.SUPER_SECRET)
-    if(!admin) return res.render('admin_login')
-
-    res.status(200).redirect("/admin/panel/category")
+    try {
+        const token = req.cookies.adminToken
+        if(!token) return res.render('admin_login')
+        
+        const admin = jwt.verify(token, process.env.SUPER_SECRET)
+        if(!admin) return res.render('admin_login')
+        
+        res.status(200).redirect("/admin/panel/category")
+    } catch (err) {
+        try {
+            return res. render('admin_login');
+        } catch (err) {
+            return res.status(500).send(err.message);
+        }
+    }
 }
 
 //@des http:localhost:3000/admin/panel

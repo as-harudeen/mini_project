@@ -10,13 +10,15 @@ const authenticateUser = async (req, res, next)=>{
         if(!user) return res.redirect('/api/login')
         req.user = user
         if(await authorization(user.userId)){
-            console.log("HI");
             req.app.locals.user = user.userName
             next()
         } else return res.status(403).redirect('/api/login');
     } catch (err) {
-        
-        res.status(500).send(err.message)
+        try {
+            res.status(403).redirect('/api/login');
+        } catch (err) {
+            res.status(500).send(err.message)
+        }
     }
 }
 

@@ -8,6 +8,20 @@ let dataToCheckout = []//this for pass the data as query
 let dataToCheckoutOBJ = {}//this for optimize updatation in product (eg.. quantity, remove product)
 const product_stock = {}
 
+function noData () {
+    cartContainer.innerHTML = `
+    <div class="mx-2  bg-white d-flex flex-column align-items-center justify-content-center p-2 px-4 py-4"
+    style="border-radius: 14px; box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.25);">
+    <lottie-player src="https://assets10.lottiefiles.com/packages/lf20_3VDN1k.json"
+    background="transparent" speed="5"
+    style="width: 300px; height: 300px; opacity: 80%;" loop autoplay></lottie-player>
+    <div class="d-flex flex-column align-items-center justify-content-center "
+    style="color: #9e9e9e;">
+    <h5>No Data</h5>
+    </div>
+    </div>`
+}
+
 const fetchCartDetails = async ()=>{
 
     const res = await fetchData(`http://localhost:5000/cart`, 'GET', null, token)
@@ -17,6 +31,7 @@ const fetchCartDetails = async ()=>{
     dataToCheckoutOBJ = {}
 
     if(!cart) return false
+    if(!cart.length) return noData();
     for(let item of cart){
         const product_id = item.product_id
         dataToCheckoutOBJ[item.cart_item_id] = {

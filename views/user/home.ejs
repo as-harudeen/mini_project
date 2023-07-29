@@ -193,5 +193,18 @@
                 item.scrollLeft -= containerWidth;
             })
         })
+
+        const searchInput = document.getElementById('search-input');
+
+        function searchHandler () {
+            const searchVal = searchInput.value.trim();
+            if(searchVal) location.href = `/api/shop?q=${searchVal}`; 
+        }
+
+        let timer;
+        searchInput.addEventListener('keyup', ()=>{
+            clearTimeout(timer);
+            timer = setTimeout(searchHandler, 1000);
+        })
     </script>
     <%- include("../include/_footer.ejs")%>
