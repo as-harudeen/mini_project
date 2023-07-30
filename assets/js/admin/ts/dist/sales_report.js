@@ -14,6 +14,8 @@ const basedOnSelector = document.getElementById('based_on');
 const getButton = document.getElementById('get_btn');
 const tbody = document.querySelector('tbody');
 const orderRow = document.getElementById('order-row');
+const noData = document.getElementById('noData').innerHTML;
+const downloadButton = document.getElementById('download-btn');
 //Date's container
 const dayContainer = selectContainer.querySelector('.day_container');
 const yearContainer = selectContainer.querySelector('.year_container');
@@ -120,7 +122,7 @@ daySelector.addEventListener('change', () => {
 });
 //for initial build
 buildDateSelectors();
-//Geting sales report data
+//* Geting sales report data
 getButton.addEventListener('click', () => __awaiter(void 0, void 0, void 0, function* () {
     console.log(selectedBasedOn);
     const body = { year: selectedYear };
@@ -147,9 +149,20 @@ getButton.addEventListener('click', () => __awaiter(void 0, void 0, void 0, func
         builSalesReport(data);
     }
 }));
+let haveDNoneClass = false;
 //build order Details
 function builSalesReport(data) {
     tbody.innerHTML = '';
+    if (!data.length) {
+        tbody.innerHTML = noData;
+        downloadButton.classList.add("d-none");
+        haveDNoneClass = true;
+        return;
+    }
+    if (haveDNoneClass) {
+        downloadButton.classList.remove("d-none");
+        haveDNoneClass = false;
+    }
     for (const order of data) {
         for (const sub of order.sub_orders) {
             const tr = orderRow.content.cloneNode(true);

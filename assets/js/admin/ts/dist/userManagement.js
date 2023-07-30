@@ -93,6 +93,7 @@ class UserManagement extends PagenationButton {
         this.searchInput = document.getElementById('search');
         this.tbody = document.querySelector('tbody');
         this.searchInputVal = '';
+        this.noDataLootie = document.getElementById('no-data').innerHTML;
         this.tableRowTemplate = document.getElementById('table-row');
         this.searchInputHandler = () => {
             this.searchInputVal = this.searchInput.value.trim();
@@ -109,6 +110,8 @@ class UserManagement extends PagenationButton {
     }
     buildTable(users) {
         this.tbody.innerHTML = '';
+        if (!users.length)
+            return this.noData();
         for (const user of users) {
             const newTableRow = document.importNode(this.tableRowTemplate.content, true).firstElementChild;
             const userNo = newTableRow.firstElementChild;
@@ -142,6 +145,9 @@ class UserManagement extends PagenationButton {
             const users = yield this.fetchData();
             this.buildTable(users);
         });
+    }
+    noData() {
+        this.tbody.innerHTML = this.noDataLootie;
     }
     accessControlerHandler(userId, event) {
         return __awaiter(this, void 0, void 0, function* () {

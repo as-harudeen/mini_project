@@ -4,6 +4,8 @@ const basedOnSelector = document.getElementById('based_on')! as HTMLSelectElemen
 const getButton = document.getElementById('get_btn')! as HTMLButtonElement;
 const tbody = document.querySelector('tbody')!;
 const orderRow = document.getElementById('order-row')! as HTMLTemplateElement;
+const noData = (document.getElementById('noData')! as HTMLTemplateElement).innerHTML;
+const downloadButton = document.getElementById('download-btn')! as HTMLButtonElement;
 
 
 //Date's container
@@ -139,8 +141,6 @@ buildDateSelectors();
 
 
 
-
-
 interface Body {
     year: string;
     month?: string;
@@ -149,7 +149,8 @@ interface Body {
 }
 
 
-//Geting sales report data
+//* Geting sales report data
+
 getButton.addEventListener('click', async ()=>{
     console.log(selectedBasedOn);
     const body: Body = {year: selectedYear} as Body;
@@ -192,9 +193,21 @@ interface Order {
     sub_orders: SubOrders[];
 }
 
+let haveDNoneClass = false;
+
 //build order Details
 function builSalesReport (data: Order[]): void {
     tbody.innerHTML = '';
+    if(!data.length) {
+        tbody.innerHTML = noData;
+        downloadButton.classList.add("d-none");
+        haveDNoneClass = true;
+        return;
+    }
+    if(haveDNoneClass) {
+        downloadButton.classList.remove("d-none");
+        haveDNoneClass = false;
+    }
     for(const order of data){
         for(const sub of order.sub_orders){
             const tr = orderRow.content.cloneNode(true)! as HTMLTableRowElement;

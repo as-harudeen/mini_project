@@ -33,6 +33,20 @@ searchInp.addEventListener('keyup', ()=>{
 
 const productContainer = document.getElementById('products_container')
 
+
+function noData() {
+    productContainer.innerHTML = `
+      <div class="d-flex justify-content-center align-items-center mx-auto p-2 mt-3">
+      <div class="mx-2  bg-white d-flex flex-column align-items-center justify-content-center p-2 px-4 py-4"
+      style="border-radius: 14px; box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.25);">
+      <lottie-player src="https://assets10.lottiefiles.com/packages/lf20_3VDN1k.json" background="transparent"
+      speed="5" style="width: 300px; height: 300px; opacity: 80%;" loop autoplay></lottie-player>
+      <div class="d-flex flex-column align-items-center justify-content-center " style="color: #9e9e9e;">
+          <h5>No Data</h5>
+      </div>
+  </div>`
+}
+
 //build
 async function build(){
     productContainer.innerHTML = ''
@@ -50,6 +64,7 @@ async function build(){
     const res = await fetchData(url, "GET")
     
     const products = await res.json()
+    if(!products.length) return noData();
     products.forEach(product => {
         const newDiv = document.createElement('div')
         newDiv.innerHTML = `
