@@ -13,7 +13,7 @@ const {
     addressUpdate,
     addToWhishlist,
     getwhishlist
-} = require('../controllers/user.controller.js')
+} = require('../controllers/restApiController.js');
 
 
 //Get products

@@ -6,7 +6,7 @@ const product_temp = document.getElementById('whishlist_product')
 const product_container = document.getElementById('product_container')
 
 const token = getToken()
-const url = 'http://localhost:5000/getwhishlist'
+const url = '/rest/getwhishlist'
 
 const res = await fetchData(url, 'GET', null, token)
 if(res.ok) {

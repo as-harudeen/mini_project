@@ -40,7 +40,7 @@ const token = getToken()
 const isExsting = {}
 const option = {cart: 1, _id: 0}
 //fetching user cart with using token
-const res = await fetchData(`http://localhost:5000/user?option=${JSON.stringify(option)}`, 'GET', null, token)
+const res = await fetchData(`/rest/user?option=${JSON.stringify(option)}`, 'GET', null, token)
 const data = await res.json()
 
 if(data.cart){
@@ -72,7 +72,7 @@ isUIDExist()//for first checking
 
 
 addToCart.addEventListener('click', async()=>{
-    const url = 'http://localhost:5000/cart/update'
+    const url = '/rest/cart/update'
     const body = {
         product_id,
         color: selected_color.dataset.value,
@@ -102,7 +102,7 @@ buy_btn?.addEventListener('click', ()=>{
         size: selected_size.dataset.value,
         quantity: 1
     }]
-    location.href = `http://localhost:3000/api/checkout?products=${JSON.stringify(data)}`
+    location.href = `/api/checkout?products=${JSON.stringify(data)}`
 })
 
 
@@ -111,7 +111,7 @@ const msg_container = document.getElementById('msg-container')
 const add_to_whishlist_btn = document.getElementById('add_to_whishlist')
 
 add_to_whishlist_btn?.addEventListener('click', async ()=>{
-    const url = 'http://localhost:5000/whishlist/add'
+    const url = '/rest/whishlist/add'
     
     const res = await fetchData(url, 'PUT', {product_id}, token)
     if(res.ok){

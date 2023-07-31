@@ -1,9 +1,8 @@
 const jwt = require('jsonwebtoken')
-const CategoryModel = require('../../models/categoryModel.js')
-const ProductModel = require('../../models/product.model.js')
-const OrderModel = require('../../models/orderModel.js')
-const UserModel = require('../../models/userModel.js')
-const CouponModel = require('../../models/coupon.model.js')
+const CategoryModel = require('../models/categoryModel.js')
+const ProductModel = require('../models/product.model.js')
+const UserModel = require('../models/userModel.js')
+const CouponModel = require('../models/coupon.model.js')
 const moment = require('moment')
 
 

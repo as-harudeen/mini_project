@@ -1,31 +1,16 @@
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const mongoose = require('mongoose')
-const CategoryModel = require('../../models/categoryModel.js')
-const UserModel = require('../../models/userModel.js')
-const ProductModel = require('../../models/product.model.js')
-const OrderModel = require('../../models/orderModel.js')
-const CouponModel = require('../../models/coupon.model.js')
+const CategoryModel = require('../models/categoryModel.js')
+const UserModel = require('../models/userModel.js')
+const ProductModel = require('../models/product.model.js')
+const OrderModel = require('../models/orderModel.js')
+const CouponModel = require('../models/coupon.model.js')
 const sharp = require('sharp')
-const moment = require('moment')
 const fs = require('fs');
 const PDFDocument = require('pdfkit');
 
 
-// const redisClient = require('redis').createClient()
-// redisClient.connect()
-// .then(()=> console.log("conecteddddd"))
-
-
-
-//@des http:localhost:3000/admin/login
-//@method POST
-/*
-{
-    admin_name: 'Achu',
-    password: 'achubsl'
-}
-*/
 const login = async (req, res)=>{
 
     try {

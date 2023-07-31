@@ -1,5 +1,4 @@
 const router = require('express').Router();
-const registerMail = require('../controllers/mailer.js')
 const {
     register,
     loginWithPass,
@@ -7,7 +6,6 @@ const {
     generateOTP,
     verifyOTP,
     count,
-    red,
     order,
     createOrder,
     logout,
@@ -74,6 +72,9 @@ router.get('/doc_count/:collection', count)
 //Generate OTP
 router.get('/generate-otp/:email' ,generateOTP);
 
+//verify OTP
+router.post('/verify-otp', verifyOTP)
+
 router.use(authenticateUser);
 
 
@@ -136,8 +137,7 @@ router
 router.post('/get-user', getUser)
 
 
-//verify OTP
-router.post('/verify-otp', verifyOTP)
+
 
 
 
@@ -150,10 +150,5 @@ router.put('/return/:orderId/:subId', returnRequest)
 //Razorpay
 router.post('/razorpay/createOrder', orderAuth, createOrder)
 
-
-
-//redis
-router.route('/redis')
-.get(red)
 
 module.exports = router;

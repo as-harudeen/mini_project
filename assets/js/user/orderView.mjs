@@ -20,7 +20,7 @@ confirmDialog.querySelector('.cancel-btn').addEventListener('click', ()=>{
 })
 
 confirmDialog.querySelector('.confirm-btn').addEventListener('click', async ()=>{
-    const res = await fetchData(`http://localhost:5000/order/cancelrequest/${orderId}/${subId}`, 'PUT', {}, token)
+    const res = await fetchData(`/rest/order/cancelrequest/${orderId}/${subId}`, 'PUT', {}, token)
     if(res.ok){
         confirmDialog.close()
         document.getElementById('cancel-order-btn-container').innerHTML = `

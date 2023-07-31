@@ -50,7 +50,7 @@ form.addEventListener('submit', async(e)=>{
 
         if(Object.keys(body.$set).length){
             const findBy = { 'address._id': address_id}
-            const res = await fetchData(`http://localhost:5000/profile/update?findBy=${JSON.stringify(findBy)}`, 'PUT', body, token)
+            const res = await fetchData(`/rest/profile/update?findBy=${JSON.stringify(findBy)}`, 'PUT', body, token)
             if(res.ok) {
 
                 x_full_name = full_name

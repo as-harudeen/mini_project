@@ -38,7 +38,7 @@ form.addEventListener('submit', async(e)=>{
             pincode
         }
 
-        const res = await fetchData('http://localhost:5000/address/add', 'PUT', body, token)
+        const res = await fetchData('/rest/address/add', 'PUT', body, token)
         if(res.ok){
             const data = await res.json()
             full_nameINP.value = ''
@@ -68,7 +68,7 @@ form.addEventListener('submit', async(e)=>{
                 `
 
                 newAddress.querySelector('.del-btn').addEventListener('click', async ()=>{
-                    const url = 'http://localhost:5000/address/delete'
+                    const url = '/rest/address/delete'
                     const body = {address_id: address_id}
                     const res = await fetchData(url, 'PUT', body, token)
                     if(res.ok)address_container.removeChild(newAddress)
@@ -132,7 +132,7 @@ async function buildAddress (){
         address: 1, 
         _id: 0
     }
-    const res = await fetchData(`http://localhost:5000/user?option=${JSON.stringify(option)}`, 'GET', null, token)
+    const res = await fetchData(`/rest/user?option=${JSON.stringify(option)}`, 'GET', null, token)
     if(res.ok){
         address_container.innerHTML = ''
         const data = await res.json()
@@ -155,7 +155,7 @@ async function buildAddress (){
                 `
 
                 newAddress.querySelector('.del-btn').addEventListener('click', async ()=>{
-                    const url = 'http://localhost:5000/address/delete'
+                    const url = '/rest/address/delete'
                     const body = {address_id: address._id}
                     const res = await fetchData(url, 'PUT', body, token)
                     if(res.ok)address_container.removeChild(newAddress)

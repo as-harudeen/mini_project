@@ -1,12 +1,12 @@
-const UserModel = require('../../models/userModel.js');
-const ProductModel = require('../../models/product.model.js')
-const OrderModel = require('../../models/orderModel.js')
-const CouponModel = require('../../models/coupon.model.js')
+const UserModel = require('../models/userModel.js');
+const ProductModel = require('../models/product.model.js')
+const OrderModel = require('../models/orderModel.js')
+const CouponModel = require('../models/coupon.model.js')
 const bcrypt = require('bcrypt');
 const otpGenerator = require('otp-generator');
 const jwt = require('jsonwebtoken')
-const { getDb } = require('../../database/db.js')
-const sendMail = require('../controllers/mailer.js')
+const { getDb } = require('../database/db.js')
+const sendMail = require('../utils/mailer.js')
 const Razorpay = require('razorpay')
 const env = process.env
 
@@ -14,11 +14,7 @@ const razorpayInstence = new Razorpay({
     key_id: env.RAZOR_KEY_ID,
     key_secret: env.RAZOR_KEY_SECRET
 })
-// const {LocalStorage} = require('node-localstorage')
-// const {decryptData} = require('../../modules/secure.js')
 
-
-// const localStorage = new LocalStorage('../config')
 
 
 //*@des http:localhost:3000/api/register
@@ -343,36 +339,7 @@ const logout = (req, res) => {
     })
 }
 
-//@des localhost:3000/api/wisilist
 
-
-
-
-const redis = require('redis');
-const { connect, connection } = require('mongoose');
-const client = redis.createClient();
-client.connect()
-    .then(() => console.log("connected"))
-    .catch(err => console.log(err.message))
-
-
-const red = async (req, res) => {
-
-    try {
-        const username = 'achu'
-
-        const inRedis = await client.hGet("sample", username)
-        // if(inRedis)return res.send(JSON.parse(inRedis))
-        const user = await UserModel.findOne({ username })
-        console.log(user)
-        await client.hSet("sample", username, JSON.stringify(user))
-        await client.expire('sample', 10)
-        res.send("hj")
-    } catch (err) {
-        console.log(err.message)
-        res.send("internal error")
-    }
-}
 
 
 module.exports = {
@@ -382,7 +349,6 @@ module.exports = {
     generateOTP,
     verifyOTP,
     count,
-    red,
     order,
     createOrder,
     logout,

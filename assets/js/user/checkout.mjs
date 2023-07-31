@@ -16,7 +16,7 @@ function buildAddress (){//Change / building the selected address
 
 
 //fetching address
-const res = await fetchData(`http://localhost:5000/user?option=${JSON.stringify({address: 1})}`, 'GET', null, token)
+const res = await fetchData(`/rest/user?option=${JSON.stringify({address: 1})}`, 'GET', null, token)
 const data = await res.json()
 
 //address for select
@@ -153,7 +153,7 @@ openModalBtn.addEventListener('click', ()=>{
 
 
 //fetching available coupon
-const response = await fetchData('http://localhost:5000/getcoupons', 'GET', null, token)
+const response = await fetchData('/rest/getcoupons', 'GET', null, token)
 const couponsArr = await response.json()
 
 const coupons = {}

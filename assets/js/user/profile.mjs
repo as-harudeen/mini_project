@@ -28,7 +28,7 @@ form.addEventListener('submit', async (e)=>{
     const currUsername = username.value.trim()
     const currEmail = email.value.trim()
 
-    const url = 'http://localhost:5000/profile/update'
+    const url = '/rest/profile/update'
     const body = {}
 
     if(emailVerified) body.email = currEmail
