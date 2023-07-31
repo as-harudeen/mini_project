@@ -2,12 +2,9 @@ const express = require('express');
 const path = require('path');
 const morgan = require('morgan');
 const cookieParser = require('cookie-parser')
-require('dotenv').config({path: '../.env'});
-const {connect} = require('../database/db.js')
+require('dotenv').config();
+const {connect} = require('./database/db.js')
 const session = require('express-session')
-const errHandler = require('./middlewares/err.handler.middleware.js')
-
-
 
 //Database connecting
 connect()
@@ -33,18 +30,18 @@ app.use(session({
   }));
 
 //Setting static files
-app.use("/css", express.static(path.resolve(__dirname, '../assets/css')));
-app.use("/js", express.static(path.resolve(__dirname, '../assets/js')));
-app.use("/public", express.static(path.resolve(__dirname, '../assets/public')));
+app.use("/css", express.static(path.resolve(__dirname, './assets/css')));
+app.use("/js", express.static(path.resolve(__dirname, './assets/js')));
+app.use("/public", express.static(path.resolve(__dirname, './assets/public')));
 
 //Seting view engine
-app.set('views', path.join(__dirname, '../views'))
 app.set('view engine', 'ejs')
 
 
 //Using routers
 app.use("/api", require('./routers/userRoutes.js'));
 app.use("/admin", require('./routers/adminRoutes.js'));
+app.use("/rest/", require('./routers/restApiRoutes.js'));
 // app.use(errHandler)
 
 app.all('*', (req, res)=> {

@@ -24,7 +24,7 @@ function noData () {
 
 const fetchCartDetails = async ()=>{
 
-    const res = await fetchData(`http://localhost:5000/cart`, 'GET', null, token)
+    const res = await fetchData(`/rest/cart`, 'GET', null, token)
     const cart = await res.json()
     // const cart = data[0].cart
 
@@ -85,7 +85,7 @@ const fetchCartDetails = async ()=>{
             const body = {
                 $inc: { "cart.$.quantity": -1 }
             }
-            const url = `http://localhost:5000/cart/update?findBy=${JSON.stringify(findBy)}`
+            const url = `/rest/cart/update?findBy=${JSON.stringify(findBy)}`
             const res = await fetchData(url, 'PUT', body, token)
             dataToCheckoutOBJ[item.cart_item_id].quantity--
             product_stock[product_id].stock++
@@ -104,7 +104,7 @@ const fetchCartDetails = async ()=>{
             const body = {
                 $inc: { "cart.$.quantity": 1 }
             }
-            const url = `http://localhost:5000/cart/update?findBy=${JSON.stringify(findBy)}`
+            const url = `/rest/cart/update?findBy=${JSON.stringify(findBy)}`
             const res = await fetchData(url, 'PUT', body, token)
 
             dataToCheckoutOBJ[item.cart_item_id].quantity++
@@ -139,7 +139,7 @@ checkoutBtn.addEventListener('click', ()=>{
   dataToCheckout = []
   if(isStockExeed()){
       for(let value of Object.values(dataToCheckoutOBJ))dataToCheckout.push(value)
-      location.href = `http://localhost:3000/api/checkout?products=${JSON.stringify(dataToCheckout)}&fromCart="true"`
+      location.href = `/api/checkout?products=${JSON.stringify(dataToCheckout)}&fromCart="true"`
   }
 })
 
@@ -157,7 +157,7 @@ cancelBtn.addEventListener("click", ()=>{
 })
 
 confirmBtn.addEventListener("click", async ()=>{
-    const url = 'http://localhost:5000/cart/update'
+    const url = '/rest/cart/update'
     const body = {$pull: {cart:{cart_item_id: item_todelete.id}}}
     const res = await fetchData(url, 'PUT', body, token)
     if(res.ok) {

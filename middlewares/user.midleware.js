@@ -1,4 +1,4 @@
-const UserModel = require('../../models/userModel.js')
+const UserModel = require('../models/userModel.js')
 
 
 //Verifying user

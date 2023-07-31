@@ -160,7 +160,7 @@ const fetchProducts = async (page = 1) => {
         limit
     }
 
-    let url = `http://localhost:5000/get-products?pagination=${JSON.stringify(pagination)}`
+    let url = `/rest/get-products?pagination=${JSON.stringify(pagination)}`
     const option = {}
 
     if (checkedSubCate.length) option.sub_category = { $in: checkedSubCate }

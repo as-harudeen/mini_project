@@ -8,7 +8,7 @@ const order_tbody = document.getElementById('order-tbody')
 
 
 async function buildOrders() {
-    const res = await fetchData('http://localhost:5000/profile/my_order', "GET", null, token)
+    const res = await fetchData('/rest/profile/my_order', "GET", null, token)
     if (res.ok) {
         const data = await res.json()
         for (let order of data) {

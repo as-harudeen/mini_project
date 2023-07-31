@@ -1,8 +1,8 @@
 const bcrypt = require('bcrypt')
-const ProductModel = require('../../models/product.model.js')
-const UserModel = require('../../models/userModel.js')
-const OrderModel = require('../../models/orderModel.js')
-const CouponModel = require('../../models/coupon.model.js')
+const ProductModel = require('../models/product.model.js')
+const UserModel = require('../models/userModel.js')
+const OrderModel = require('../models/orderModel.js')
+const CouponModel = require('../models/coupon.model.js')
 
 
 //localhost:5000/get-products

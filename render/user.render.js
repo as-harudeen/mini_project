@@ -1,7 +1,7 @@
-const ProductModel = require('../../models/product.model.js')
-const UserModel = require('../../models/userModel.js')
-const CategoryModel = require('../../models/categoryModel.js')
-const OrderModel = require('../../models/orderModel.js')
+const ProductModel = require('../models/product.model.js')
+const UserModel = require('../models/userModel.js')
+const CategoryModel = require('../models/categoryModel.js')
+const OrderModel = require('../models/orderModel.js')
 const jwt = require('jsonwebtoken')
 const moment = require('moment')
 
