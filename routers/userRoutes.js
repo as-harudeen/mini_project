@@ -79,15 +79,11 @@ router.get('/reg/generate-otp/:email' , generateOTPReg);
 //verify OTP
 router.post('/verify-otp', verifyOTP)
 
-<<<<<<< HEAD
-
-=======
 //Get user
 router.post('/get-user', getUser)
 
 
 router.use(authenticateUser);
->>>>>>> 297b87184a63754fe1477d2c65e886e4c8d302c6
 
 
 //Produt details
@@ -140,12 +136,9 @@ router
     .get(authenticateUser, orderViewGET)
 
 
-<<<<<<< HEAD
 //Get user
 router.post('/get-user',authenticateUser,  getUser)
 
-=======
->>>>>>> 297b87184a63754fe1477d2c65e886e4c8d302c6
 
 //Order
 router.post('/order',authenticateUser,  orderAuth, order)
