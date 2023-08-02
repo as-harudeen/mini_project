@@ -68,14 +68,12 @@ const updateCart = async (req, res)=>{
         }
 
         const option = req.body
-        console.log(option)
 
         // if(option.isBl)
         await UserModel.updateOne(
             findBy,
             option
             )
-            console.log("Updated")
         res.status(200).send("Updated")
     } catch (err) {
         console.log(err.message)
@@ -95,7 +93,6 @@ const updateProfile = async (req, res)=>{
         findBy.$and.push(JSON.parse(req.query.findBy))
     }
 
-    console.log(option)
     try {
         if(option.password){
             const oldPass = await UserModel.findById(userId, {password: 1, _id: 0})
@@ -105,7 +102,6 @@ const updateProfile = async (req, res)=>{
             option.password = await bcrypt.hash(option.password, 10)
         }
         
-        console.log(option)
 
         const user = await UserModel.findOneAndUpdate(findBy,option, {returnOriginal: false})
         const data = {...user.toObject()}
@@ -116,7 +112,6 @@ const updateProfile = async (req, res)=>{
         if(err.code == 11000){
             return res.status(400).send("already exist")
         }
-        console.log(err.message)
         res.status(500).send(err)
     }
 }
@@ -148,7 +143,6 @@ const getUser = async (req, res)=>{
 
 //localhost:5000/profile/my_order
 const my_order = async (req, res)=>{
-    console.time("orderGET")
     const {userId} = req.user
 
     try {
@@ -175,7 +169,6 @@ const my_order = async (req, res)=>{
         }
 
     
-        console.timeEnd('orderGET')
         res.status(200).json(data)
     } catch (err) {
         console.log(err)
@@ -234,7 +227,6 @@ const addressUpdate = async (req, res)=>{
 
     try {
         const user = await UserModel.findOneAndUpdate({_id: userId}, option, {returnOriginal: false})
-        console.log(user.address)
         res.status(200).send(user.address)
     } catch (err) {
         console.log(err.message)

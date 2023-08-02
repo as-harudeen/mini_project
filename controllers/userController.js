@@ -139,11 +139,33 @@ const getUser = async (req, res) => {
 const generateOTP = async (req, res) => {
 
     const { email } = req.params
-    console.log(email);
 
     const user = await UserModel.findOne({email});
     if(!user) return res.status(400).send("User Not found");
     if(user.isBlocked) return res.status(403).send("User has been blocked");
+
+    req.app.locals.OTP = otpGenerator.generate(6, {
+        lowerCaseAlphabets: false,
+        upperCaseAlphabets: false,
+        specialChars: false
+    })
+
+    await sendMail("Email Verification", `Your OTP is ${req.app.locals.OTP}`, email)
+
+    setTimeout(() => req.app.locals.OTP = '', 60000)
+    res.status(201).send("OTP Sended")
+}
+
+
+//Generate OTP
+//@des localhost:3000/api/generate-otp/:email
+//method get
+const generateOTPReg = async (req, res) => {
+
+    const { email } = req.params
+
+    const user = await UserModel.findOne({email});
+    if(user) return res.status(400).send("User Already Exist..!");
 
     req.app.locals.OTP = otpGenerator.generate(6, {
         lowerCaseAlphabets: false,
@@ -187,7 +209,6 @@ const count = async (req, res) => {
     const db = await getDb()
     try {
         const count = await db.collection(collection).countDocuments(option);
-        console.log(count)
         res.status(200).send(String(count))
     } catch (err) {
         res.status(500).send(err.message)
@@ -224,7 +245,6 @@ const order = async (req, res) => {
     for (let product_id in productQuantity) {
         const product = await ProductModel.findById(product_id, { product_stock: 1, _id: 0 })
         if (product.product_stock < productQuantity[product_id]) return res.status(400).send("Stock not available")
-        else console.log("availble")
     }
     
     try {
@@ -243,11 +263,8 @@ const order = async (req, res) => {
         
         //distributing discounts for each products
         checkoutData.forEach(product => {
-            const percentage = (product.total_price / total_price) * 100
-            console.log("🐉 ",percentage)
-            console.log(discount_price * (percentage / 100))
-            console.log(product.offer_price)
-            product.offer_price += discount_price * (percentage / 100)
+            const percentage = (product.total_price / total_price) * 100;
+            product.offer_price += Math.round(discount_price * (percentage / 100));
         })
 
 
@@ -319,8 +336,7 @@ const returnRequest = async (req, res)=> {
     const {orderId, subId} = req.params;
     const user = await UserModel.findOne({_id: userId, orders: orderId}, {_id: 1})
     if(!user) return res.status(403).send("Forbidden");
-    const order = await OrderModel.findOneAndUpdate({_id: orderId, 'sub_orders._id': subId}, {$set: {'sub_orders.$.order_status': 'Requested for return'}});
-    console.log(order);
+    await OrderModel.updateOne({_id: orderId, 'sub_orders._id': subId}, {$set: {'sub_orders.$.order_status': 'Requested for return'}});
     res.status(200).send("Requested for return");
 }
 
@@ -354,5 +370,6 @@ module.exports = {
     createOrder,
     logout,
     loginWithOTP,
-    returnRequest
+    returnRequest,
+    generateOTPReg
 }

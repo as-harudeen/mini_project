@@ -1,6 +1,5 @@
 import fetchData from "../helper/fetchData.js"
 import getToken from "../helper/getToken.js"
-import { setError } from "../helper/setError&SetSuccess.js"
 
 
 
@@ -24,6 +23,12 @@ const selectAddressContainer = document.querySelector('.select-address-container
 const selectAddressTemp = document.getElementById('select-address-temp')
 let selectedAddressDiv 
 
+if(data.address.length === 0) {
+    alert("Please add address first...!\nRedirecting to Address page.");
+    setTimeout(()=> {
+        location.href = '/api/profile/address';
+    }, 2000)
+}
 
 for(let adrs of data.address){//building address's
     const addressTemp = selectAddressTemp.content.cloneNode(true)
@@ -93,8 +98,8 @@ function buildConfirmcontainer(){
     confirmContainer.innerHTML = '<h6>address</h6>'
     confirmContainer.innerHTML += selectedAddressDiv.innerHTML
     confirmContainer.innerHTML += '<h6 class="mt-3">Payment method</h6>'
-    confirmContainer.innerHTML += '<p>Cash on delivery.</p>'
-    confirmContainer.innerHTML += grant_total_price.innerText
+    confirmContainer.innerHTML += `<p>${selectedPayment.dataset.method}</p>`
+    confirmContainer.innerHTML += `<h6>Total:- </h6>${grant_total_price.innerText}`;
 }
 
 const curUrl = location.href
@@ -287,7 +292,7 @@ const total_wallet_amount = walletAmount
 
 walletUseBtn.addEventListener('click', ()=>{
     const inp_val = walletInp.value
-    if(inp_val > walletAmount){
+    if(+inp_val > +walletAmount){
         const msg = document.createElement('p')
         msg.classList.add('text-danger')
         msg.innerText = "Please choose within your wallet amount"
