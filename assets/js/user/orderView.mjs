@@ -24,7 +24,7 @@ confirmDialog.querySelector('.confirm-btn').addEventListener('click', async ()=>
     if(res.ok){
         confirmDialog.close()
         document.getElementById('cancel-order-btn-container').innerHTML = `
-        <form action="/api/Shop" method="get">
+        <form action="/Shop" method="get">
         <button class="btn btn-success" style="width: 100%; border-radius: 10px;font-size: 13px;">Order Again</button>
         </form>`
 

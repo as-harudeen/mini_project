@@ -278,18 +278,6 @@ const orderViewGET = async (req, res) => {
 
 
 
-//@des http://localhost:3000/api/wihshlist
-const whishlistGET = async (req, res) => {
-    const { userId } = req.user
-    try {
-        const user = await UserModel.findById(userId, { _id: 0, whishlist: 1 })
-        const products = await ProductModel.find({ _id: { $in: user.whishlist } })
-        res.status(200).render("user/whishlist", { productDetails: products })
-    } catch (err) {
-        return res.status(500).send(err.message)
-    }
-}
-
 
 module.exports = {
     registerGET,
@@ -304,6 +292,5 @@ module.exports = {
     editAddressGET,
     checkoutGET,
     orderGET,
-    orderViewGET,
-    whishlistGET
+    orderViewGET
 }

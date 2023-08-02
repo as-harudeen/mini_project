@@ -63,7 +63,7 @@ form.addEventListener('submit', async(e)=>{
                 <Span>Ph :${phone},</Span>
                 <Span>Pin :${pincode}</Span>
                 </span>
-                <a href="/api/profile/address/edit/${address_id}" class="edit-btn btn btn-sm btn-dark"><i class="fa-solid fa-pen-to-square"></i></a>
+                <a href="/profile/address/edit/${address_id}" class="edit-btn btn btn-sm btn-dark"><i class="fa-solid fa-pen-to-square"></i></a>
                 <button  type="button" class="del-btn btn btn-sm btn-danger">x</button>
                 `
 
@@ -150,7 +150,7 @@ async function buildAddress (){
                 <Span>Ph :${address.phone},</Span>
                 <Span>Pin :${address.pincode}</Span>
                 </span>
-                <a href="/api/profile/address/edit/${address._id}" class="edit-btn btn btn-sm btn-dark"><i class="fa-solid fa-pen-to-square"></i></a>
+                <a href="/profile/address/edit/${address._id}" class="edit-btn btn btn-sm btn-dark"><i class="fa-solid fa-pen-to-square"></i></a>
                 <button  type="button" class="del-btn btn btn-sm btn-danger">x</button>
                 `
 

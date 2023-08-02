@@ -30,8 +30,8 @@ loginBtn.addEventListener('click', async (e) => {
         password
     }
 
-    const response = await fetchData('/api/login', 'POST', body)
-    if (response.ok) window.location.href = '/api'
+    const response = await fetchData('/login', 'POST', body)
+    if (response.ok) window.location.href = '/'
     else {
         setError(emailInp, 'Password of Email not correct')
         setError(passwordInp, 'Password or Email not correct')

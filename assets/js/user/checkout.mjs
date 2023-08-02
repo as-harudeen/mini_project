@@ -129,7 +129,7 @@ confirmBtn.addEventListener('click', async ()=>{
         const success = successTemp.content.cloneNode(true)
         success.querySelector('.success-msg').innerText = 'Order successfully'
         const navigator = success.querySelector('.success-navigator')
-        navigator.href = '/api/'
+        navigator.href = '/'
         navigator.innerText = "Home page."
         successContainer.appendChild(success)
     } 
@@ -240,7 +240,7 @@ const razorpayHandler = async ()=>{
 
     return new Promise(async (resolve, reject)=>{
 
-        const url = '/api/razorpay/createOrder'
+        const url = '/razorpay/createOrder'
         const res = await fetchData(url, 'POST', {})
     if(res.ok){
         const order = await res.json()

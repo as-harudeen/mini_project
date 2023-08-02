@@ -1,65 +1,75 @@
-
-    <nav class="navbar navbar-expand-lg navbar-dark shadow" style="z-index:10;">
-        <div class="container ">
-            <a class="navbar-brand fw-bold" href="#">HESHOP</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+<nav class="navbar navbar-expand-lg navbar-dark shadow" style="z-index:10;">
+    <div class="container ">
+        <a class="navbar-brand fw-bold" href="#">HESHOP</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/">Home</a>
+                </li>
+                <%if(locals.user){%>
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/api">Home</a>
+                        <a class="nav-link" href="/logout">logOut</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">About</a>
-                    </li>
-                    <%if(locals.user){%>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/api/logout">logOut</a>
-                        </li>
                     <%}else{%>
                         <li class="nav-item"></li>
-                           <a class="nav-link" href="/api/login">login</a>
+                        <a class="nav-link" href="/login">login</a>
                         </li>
-                    <%}%>
-                </ul>
-                <form class="Nav_icon d-flex gap-4 justify-content-cneter align-items-center">
-                    <input id="search-input" class="search p-3" type="search" placeholder="What you looking for?" aria-label="Search">
-                    <% if(locals.user) {%>
-                        <a href="/WhishList" class="link-dark text-center" style="position: relative;">
-                            <i class="fa-regular fa-heart"></i>
-                        </a>
-                        <a href="/api/cart" class="link-light text-center" style="position: relative;">
-                            <i class="fa-solid fa-cart-shopping "></i>
-                            <% if(locals.cartCount){%>
-                                <span id="cartItemCount"
-                                    class="badge badge-pill bg-danger d-flex justify-content-center align-items-center p-1"
-                                    style="border-radius: 50%; position: absolute; top: -5px; right: -10px; width: 18px; height: 18px;font-size: 9px;">
-                                    <%=locals.cartCount%>
-                                </span>
+                        <%}%>
+            </ul>
+            <form class="Nav_icon d-flex gap-4 justify-content-cneter align-items-center">
+                <input id="search-input" class="search p-3" type="search" placeholder="What you looking for?"
+                    aria-label="Search">
+                <% if(locals.user) {%>
+                    <a href="/WhishList" class="link-dark text-center" style="position: relative;">
+                        <i class="fa-regular fa-heart"></i>
+                    </a>
+                    <a href="/cart" class="link-light text-center" style="position: relative;">
+                        <i class="fa-solid fa-cart-shopping "></i>
+                        <% if(locals.cartCount){%>
+                            <span id="cartItemCount"
+                                class="badge badge-pill bg-danger d-flex justify-content-center align-items-center p-1"
+                                style="border-radius: 50%; position: absolute; top: -5px; right: -10px; width: 18px; height: 18px;font-size: 9px;">
+                                <%=locals.cartCount%>
+                            </span>
                             <%}else{%>
                                 <span id="cartItemCount"
                                     class="badge badge-pill bg-danger d-flex justify-content-center align-items-center p-1"
                                     style="border-radius: 50%; position: absolute; top: -5px; right: -10px; width: 18px; height: 18px;font-size: 9px;">
-                                    0   
+                                    0
                                 </span>
-                            <%}%>
-                        </a>
-                   <%}else{%>
-                            <i class="fa-regular fa-heart"></i>
-                            <i class="fa-solid fa-cart-shopping "></i>
-                    <%}%>
-                    <div class="d-flex flex-column align-items-center">
-                        <div class="iconP ">
-                             <a href="/api/profile"><i class="fa-regular fa-user text-dark"></i></a>
-                        </div>
-                        <span class="text-danger fw-bold ">
-                            <%= locals.user?user:"" %>
-                        </span>
-                    </div>
-                </form>
-            </div>
+                                <%}%>
+                    </a>
+                    <%}else{%>
+                        <i class="fa-regular fa-heart"></i>
+                        <i class="fa-solid fa-cart-shopping "></i>
+                        <%}%>
+                            <div class="d-flex flex-column align-items-center">
+                                <div class="iconP ">
+                                    <a href="/profile"><i class="fa-regular fa-user text-dark"></i></a>
+                                </div>
+                                <span class="text-danger fw-bold ">
+                                    <%= locals.user?user:"" %>
+                                </span>
+                            </div>
+            </form>
         </div>
-    </nav>
+    </div>
+</nav>
+<script>
+    const searchInput = document.getElementById('search-input');
+
+    function searchHandler() {
+        const searchVal = searchInput.value.trim();
+        if (searchVal) location.href = `/shop?q=${searchVal}`;
+    }
+
+    let timer;
+    searchInput.addEventListener('keyup', () => {
+        clearTimeout(timer);
+        timer = setTimeout(searchHandler, 1000);
+    })
+</script>

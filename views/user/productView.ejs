@@ -73,18 +73,12 @@
                         <p class="text-success fw-bold mt-4 " id="CartSuccMsg"></p>
                         <div class="pt-3">
                             <div class="border border-dark d-flex flex-column" style="max-width: 350px;">
-
-                                <%if(isInWhishlist == false){%>
-                                    <button id="add_to_whishlist" class="btn btn-outline-warning p-3">Add to Whishlist</button>
-                                    <%} else {%>
-                                        <button class="btn btn-outline-warning p-3">Already in Whishlist</button>
-                                <%}%>
-                                <button id="add_to_cart" class="btn btn-dark p-3">Add to cart</button>
+                                <button id="add_to_cart" class="btn btn-dark p-3 mb-2">Add to cart</button>
                                 <hr class="p-0 m-0 bg-dark">
                                 <% if(product.product_stock > 0){%>
-                                    <div id="buy_now" class="btn btn-dark-outline">Buy now</div>
+                                    <button id="buy_now" class="btn btn-outline-warning">Buy now</button>
                                     <%} else {%>
-                                        <div class="btn btn-outline-danger">Out of stock</div>
+                                        <button class="btn btn-outline-danger">Out of stock</button>
                                         <%}%>
 
                                 <div id="msg-container"></div>

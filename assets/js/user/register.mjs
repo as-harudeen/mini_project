@@ -66,8 +66,8 @@ form.addEventListener('submit', async (e) => {
     else {
         let validate = checkValid(username, email, password, confirm_password) 
         if(validate && verified) {
-            const res = await fetchData('/api/register', 'POST', body)
-            if(res.ok) window.location.href = '/api/login'
+            const res = await fetchData('/register', 'POST', body)
+            if(res.ok) window.location.href = '/login'
             else console.log("Internal error")
         } else if (validate && !verified) setError(otpInp, "Not verified..!")
     }
@@ -113,13 +113,13 @@ const checkValid = (username, email, password, confirm_password)=>{
 
 //SendOTP
 sendOTP_btn.addEventListener('click', async ()=>{
-    const response = await fetchData(`/api/generate-otp/${emailInp.value.trim()}`, 'GET')
+    const response = await fetchData(`/generate-otp/${emailInp.value.trim()}`, 'GET')
     if(response.ok) alert("OTP Sended success.")
 })
 
 
 verifyOTP_btn.addEventListener('click', async()=>{
-    const response = await fetchData('/api/verify-otp', 'POST', {OTP: otpInp.value})
+    const response = await fetchData('/verify-otp', 'POST', {OTP: otpInp.value})
     if(response.ok) {
         verified = true
         setSuccess(otpInp)

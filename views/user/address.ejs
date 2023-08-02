@@ -7,16 +7,15 @@
                         <div class="container bg-white profile_left p-5">
                             <div class="mb-4 d-flex flex-column">
                                 <h6>Manage My Account</h6>
-                                <a href="/api/profile" class="text-decoration-none">My Profile</a>
+                                <a href="/profile" class="text-decoration-none">My Profile</a>
                             </div>
                             <div class="mb-4 d-flex flex-column">
                                 <h6>My Orders</h6>
-                                <a href="/api/profile/order" class="text-decoration-none">My Orders</a>
-                                <a href="/profile/orderReturn" class="text-decoration-none">My Return</a>
+                                <a href="/profile/order" class="text-decoration-none">My Orders</a>
                             </div>
                             <div class="mb-4 d-flex flex-column">
                                 <h6>My Address</h6>
-                                <a href="#" class="text-decoration-none  text-danger">My Address</a>
+                                <a class="text-decoration-none  text-danger">My Address</a>
                             </div>
                         </div>
                     </div>
@@ -30,15 +29,6 @@
                                     <div class="address_Form p-4">
                                         <form action="/profile/address/editAddress" method="post">
                                         <div class="address_bg bg-white p-3" style="border-radius: 12px;">
-                                            <!-- <% if(userAddress.length == 0){%>
-                                                <div class="bg-white p-2  d-flex align-items-center justify-content-center"  style="position: relative;">
-                                                    <h2  style="color: #9a9a9a; opacity: 50%;" >No Address Found !</h2>
-                                                    <lottie-player src="https://assets7.lottiefiles.com/packages/lf20_uio5iafn.json"  background="transparent"
-                                                      speed="1"  style="width: 150px; "  loop  autoplay>
-                                                    </lottie-player>
-
-                                                </div>
-                                                <%}%> -->
                                                     <div id="address_container" class="bg-white p-2">
               
                                                     </div>
@@ -77,10 +67,6 @@
                                                 </div>
                                             </div>
                                             <div class="d-flex row">
-                                                <!-- <div class="d-flex col-lg-6 flex-column p-2 gap-2 ">
-                                                    <label for="">State*</label>
-                                                    <input type="text" name="state" required>
-                                                </div> -->
                                                 <div class="d-flex col-lg-6 flex-column p-2 gap-2 ">
                                                     <label for="">Phone*</label>
                                                     <input id="phone" type="number" name="phone" required>

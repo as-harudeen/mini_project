@@ -46,9 +46,9 @@ const searchInpEventHandler = async ()=>{
     }
 
     
-    /*api/doc_count/:collection   here we need users document count*/
+    /*doc_count/:collection   here we need users document count*/
     console.log("hhi");
-    const res = await fetchData(`/api/doc_count/users?option=${JSON.stringify(option)}`, 'GET')
+    const res = await fetchData(`/doc_count/users?option=${JSON.stringify(option)}`, 'GET')
     console.log(res)
     const count = await res.text()
     // console.log(count);

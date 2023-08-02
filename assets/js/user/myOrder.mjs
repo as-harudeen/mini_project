@@ -69,7 +69,7 @@ function buildNewOrders(img, status, qty, price, del_date, id, sub_id) {
     const month = date.getMonth() + 1
     const year = date.getFullYear()
     order_item_tr.querySelector('.order-date').innerText = `${day}/${month}/${year}`
-    order_item_tr.querySelector('.view-btn').href = `/api/profile/order/${id}/${sub_id}`
+    order_item_tr.querySelector('.view-btn').href = `/profile/order/${id}/${sub_id}`
 
     order_tbody.appendChild(order_item_tr)
 }
@@ -103,7 +103,7 @@ function buildOrderHistory(id, status, img, price, qty, orderId) {
         returnAnchor.innerText = "Return"
         returnAnchor.classList.add("btn-success")
         returnAnchor.addEventListener('click', async function returnHandler() {
-            const res = await fetch(`/api/return/${orderId}/${id}`, {
+            const res = await fetch(`/return/${orderId}/${id}`, {
                 method: 'PUT'
             })
             if (res.ok) {

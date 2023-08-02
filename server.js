@@ -39,15 +39,14 @@ app.set('view engine', 'ejs')
 
 
 //Using routers
-app.use("/api", require('./routers/userRoutes.js'));
+app.use("/", require('./routers/userRoutes.js'));
 app.use("/admin", require('./routers/adminRoutes.js'));
-app.use("/rest/", require('./routers/restApiRoutes.js'));
+app.use("/rest", require('./routers/restApiRoutes.js'));
 // app.use(errHandler)
 
-app.all('*', (req, res)=> {
-  res.status(404).render('pagenotfound')
+app.get('*', (req, res) => {
+  res.status(404).render('pageNotFound')
 })
-
 
 
 app.listen(port, ()=>{

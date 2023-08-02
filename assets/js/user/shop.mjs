@@ -35,7 +35,7 @@ function buildProducts(products) {
         <div class="container bg-white ProductCard m-2 mx-4"
         data-category-id="${product._id}">
         <!-- image rendering  -->
-        <a href="/api/products/${product._id}">
+        <a href="/products/${product._id}">
             <div class="cardImage mb-2 d-flex align-items-center justify-content-center">
                 <img src="/public/img/${product.product_images[0]}" alt="Product Image">
             </div>
@@ -189,7 +189,7 @@ const fetchProducts = async (page = 1) => {
 //PAGENATION
 const btnsCount = async (option) => {
     console.log();
-    let url = '/api/doc_count/products'
+    let url = '/doc_count/products'
     //this will return doc count that matching certain condition
     if (option) url += `?option=${JSON.stringify(option)}`
     const res = await fetchData(url, 'GET')

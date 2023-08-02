@@ -102,7 +102,7 @@ buy_btn?.addEventListener('click', ()=>{
         size: selected_size.dataset.value,
         quantity: 1
     }]
-    location.href = `/api/checkout?products=${JSON.stringify(data)}`
+    location.href = `/checkout?products=${JSON.stringify(data)}`
 })
 
 

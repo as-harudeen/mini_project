@@ -139,7 +139,7 @@ checkoutBtn.addEventListener('click', ()=>{
   dataToCheckout = []
   if(isStockExeed()){
       for(let value of Object.values(dataToCheckoutOBJ))dataToCheckout.push(value)
-      location.href = `/api/checkout?products=${JSON.stringify(dataToCheckout)}&fromCart="true"`
+      location.href = `/checkout?products=${JSON.stringify(dataToCheckout)}&fromCart="true"`
   }
 })
 

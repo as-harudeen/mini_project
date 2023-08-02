@@ -5,7 +5,7 @@ const OrderModel = require('../models/orderModel.js')
 const CouponModel = require('../models/coupon.model.js')
 
 
-//localhost:5000/get-products
+///rest/get-products
 //QUERY   option & sort
 const getProducts = async(req, res)=>{
     try {
@@ -14,7 +14,7 @@ const getProducts = async(req, res)=>{
         const sort = JSON.parse(req.query.sort)
         const pagination = JSON.parse(req.query.pagination)
 
-        const products = await ProductModel.find(option, null, pagination).sort(sort)
+        const products = await ProductModel.find(option, null, pagination).sort(sort);
         res.status(200).send(products)
 
     } catch (err) {
