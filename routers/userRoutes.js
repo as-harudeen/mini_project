@@ -10,7 +10,8 @@ const {
     createOrder,
     logout,
     loginWithOTP,
-    returnRequest
+    returnRequest,
+    generateOTPReg
 } = require('../controllers/userController.js')
 const {
     registerGET,
@@ -72,8 +73,16 @@ router.get('/doc_count/:collection', count)
 //Generate OTP
 router.get('/generate-otp/:email' ,generateOTP);
 
+//Generate OTP For Register
+router.get('/reg/generate-otp/:email' , generateOTPReg);
+
+
 //verify OTP
 router.post('/verify-otp', verifyOTP)
+
+//Get user
+router.post('/get-user', getUser)
+
 
 router.use(authenticateUser);
 
@@ -131,13 +140,6 @@ router
 router
 .route('/profile/order/:order_id/:sub_order_id')
 .get(orderViewGET)
-
-
-//Get user
-router.post('/get-user', getUser)
-
-
-
 
 
 
