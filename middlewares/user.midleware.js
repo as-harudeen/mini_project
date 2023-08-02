@@ -8,7 +8,6 @@ const verifyUser = async (req, res, next)=>{
         const {username, email} = req.body
     
         const user = await UserModel.findOne({$or: [{username}, {email}]})
-        console.log(user);
         if(!user) return res.status(400).json({err: "User not found"})
         if(user.isBlocked) return res.status(403).send('Forbidden');
         next()

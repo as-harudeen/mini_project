@@ -113,7 +113,7 @@ const checkValid = (username, email, password, confirm_password)=>{
 
 //SendOTP
 sendOTP_btn.addEventListener('click', async ()=>{
-    const response = await fetchData(`/api/generate-otp/${emailInp.value.trim()}`, 'GET')
+    const response = await fetchData(`/api/reg/generate-otp/${emailInp.value.trim()}`, 'GET')
     if(response.ok) alert("OTP Sended success.")
 })
 

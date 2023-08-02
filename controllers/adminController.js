@@ -466,7 +466,6 @@ const getOrders = async (req, res)=>{
 const updateOrderStatus = async (req, res)=>{
     const {sub_id} = req.params
     const status = req.body.status
-    console.log("⭐⭐⭐", status)
     
     const option = {$set: {"sub_orders.$.order_status": status}}
     option.$set['sub_orders.$.isCanceled'] = status == 'Canceled'
@@ -482,9 +481,7 @@ const updateOrderStatus = async (req, res)=>{
     (status == 'Canceled' && sub_order.order_status != 'Return Accepted')) {
         updateQuantity = sub_order.quantity
         if(order.payment_method == 'Razorpay'){
-            console.log("HI")
-            const user = await UserModel.findOneAndUpdate({_id: order.user_id}, {$inc: {wallet: sub_order.total_price - sub_order.offer_price}})
-            console.log(user)
+            await UserModel.updateOne({_id: order.user_id}, {$inc: {wallet:  Math.round(sub_order.total_price - sub_order.offer_price)}})
         }
     }
     else if((status != 'Return Accepted' && sub_order.order_status == 'Canceled') ||
@@ -492,7 +489,6 @@ const updateOrderStatus = async (req, res)=>{
     
 
     if(updateQuantity) await ProductModel.updateOne({_id: sub_order.product_id}, {$inc: {product_stock: updateQuantity}})
-    else console.log("no updation")
 
     res.status(200).send({isCanceled: sub_order.isCanceled, order_status: sub_order.order_status})
 
@@ -530,7 +526,6 @@ const addCoupon = async(req, res)=>{
             coupon_value,
             expiry_date
         })
-        console.log("🌟 coupon added success")
 
         res.status(200).send(coupon)
     } catch (err) {
@@ -557,7 +552,6 @@ const deleteCoupon = async(req, res)=>{
 const getorderdata = async (req, res)=>{
     
     const now = new Date();
-    // console.log(now);
     const timeFrame = {
         year: new Date(now.getFullYear(), 0, 1),
         month: new Date(now.getFullYear(), now.getMonth(), 1),
@@ -697,7 +691,6 @@ const getorderdetails = async (req, res)=>{
                 })
             });
             doc.end();
-            console.log(`PDF generated successfully: ${filename}`);
         }
 
         const pipeline = [
@@ -767,7 +760,6 @@ const getorderdetails = async (req, res)=>{
 
 
         generatePDF(ordersWithProductDetails);
-        console.log(ordersWithProductDetails[0])
 
 
         res.status(200).send(ordersWithProductDetails)
