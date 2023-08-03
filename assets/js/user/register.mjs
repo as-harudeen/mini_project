@@ -17,20 +17,20 @@ const regEx = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[
 
 
 //For enable OTP buttons
-emailInp.addEventListener('keyup', async ()=>{
+emailInp.addEventListener('keyup', async () => {
     verified = false
-    if(regEx.test(emailInp.value.trim())){
-        const response = await fetchData('get-user', 
-        'POST', 
-        {
-            email: emailInp.value.trim()
-        })
+    if (regEx.test(emailInp.value.trim())) {
+        const response = await fetchData('get-user',
+            'POST',
+            {
+                email: emailInp.value.trim()
+            })
 
-        if(response.ok) return setError(emailInp, 'Email already taken')
+        if (response.ok) return setError(emailInp, 'Email already taken')
         setSuccess(emailInp)
         sendOTP_btn.disabled = false
         verifyOTP_btn.disabled = false
-        
+
     } else {
         sendOTP_btn.disabled = true
         verifyOTP_btn.disabled = true
@@ -43,7 +43,7 @@ emailInp.addEventListener('keyup', async ()=>{
 form.addEventListener('submit', async (e) => {
     e.preventDefault()
 
-    const username = usernameInp.value.trim() 
+    const username = usernameInp.value.trim()
     const email = emailInp.value.trim()
     const password = passwordInp.value.trim()
     const confirm_password = confirmPasswordInp.value.trim()
@@ -55,19 +55,19 @@ form.addEventListener('submit', async (e) => {
     }
     const response = await fetchData('get-user', 'POST', body)
 
-    if(response.ok){
+    if (response.ok) {
         const userData = await response.json()
         setSuccess(emailInp)
         setSuccess(usernameInp)
 
-        if(userData.user.email === email) setError(emailInp, 'Email Already taken')
-        if(userData.user.username === username) setError(usernameInp, "Not available")
+        if (userData.user.email === email) setError(emailInp, 'Email Already taken')
+        if (userData.user.username === username) setError(usernameInp, "Not available")
     }
     else {
-        let validate = checkValid(username, email, password, confirm_password) 
-        if(validate && verified) {
+        let validate = checkValid(username, email, password, confirm_password)
+        if (validate && verified) {
             const res = await fetchData('/register', 'POST', body)
-            if(res.ok) window.location.href = '/login'
+            if (res.ok) window.location.href = '/login'
             else console.log("Internal error")
         } else if (validate && !verified) setError(otpInp, "Not verified..!")
     }
@@ -76,28 +76,28 @@ form.addEventListener('submit', async (e) => {
 
 
 //Validation
-const checkValid = (username, email, password, confirm_password)=>{
+const checkValid = (username, email, password, confirm_password) => {
     let NoErr = true
-    if(username == ''){
+    if (username == '') {
         setError(usernameInp, 'Please Provide Username.')
         NoErr = false
-    }else {
+    } else {
         setSuccess(usernameInp)
     }
 
-    if(regEx.test(email)){
+    if (regEx.test(email)) {
         setSuccess(emailInp)
     } else {
         setError(emailInp, 'Please Provide valid Email.')
         NoErr = false
     }
-    
-    if(password.length < 8){
+
+    if (password.length < 8) {
         setError(passwordInp, "Password should be at least 8 character.")
         NoErr = false
     } else {
         setSuccess(passwordInp)
-        if(password != confirm_password){
+        if (password != confirm_password) {
             setError(confirmPasswordInp, "Not Match.")
             NoErr = false
         } else {
@@ -112,19 +112,16 @@ const checkValid = (username, email, password, confirm_password)=>{
 
 
 //SendOTP
-sendOTP_btn.addEventListener('click', async ()=>{
-<<<<<<< HEAD
-    const response = await fetchData(`/generate-otp/${emailInp.value.trim()}`, 'GET')
-=======
-    const response = await fetchData(`/api/reg/generate-otp/${emailInp.value.trim()}`, 'GET')
->>>>>>> 297b87184a63754fe1477d2c65e886e4c8d302c6
-    if(response.ok) alert("OTP Sended success.")
+sendOTP_btn.addEventListener('click', async () => {
+    const response = await fetchData(`/reg/generate-otp/${emailInp.value.trim()}`, 'GET')
+
+    if (response.ok) alert("OTP Sended success.")
 })
 
 
-verifyOTP_btn.addEventListener('click', async()=>{
-    const response = await fetchData('/verify-otp', 'POST', {OTP: otpInp.value})
-    if(response.ok) {
+verifyOTP_btn.addEventListener('click', async () => {
+    const response = await fetchData('/verify-otp', 'POST', { OTP: otpInp.value })
+    if (response.ok) {
         verified = true
         setSuccess(otpInp)
     }

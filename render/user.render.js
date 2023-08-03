@@ -13,29 +13,33 @@ const registerGET = (req, res) => {
 //@des http:localhost:3000/api/login
 const loginGET = (req, res) => {
     try {
-        console.log("1");
         const token = req.cookies.userToken;
         const user = jwt.verify(token, process.env.SECRET)
-        console.log("2");
-        if (user) return res.redirect('/api');
-        console.log("3");
+        if (user) return res.redirect('/');
         res.status(200).render('user_login')
     } catch (err) {
         try {
-            console.log("4");
             res.status(200).render('user_login');
         } catch (err) {
-            console.log("5");
             return res.status(500).send(err.message)
         }
     }
 }
 
-//@des http:localhost:3000/api/login
+//@des http:localhost:3000/login/otp
 const otpLoginGET = (req, res) => {
-    const token = req.cookies.userToken;
-    if (token) return res.redirect('/api');
-    res.status(200).render('user/login_with_otp')
+    try {
+        const token = req.cookies.userToken;
+        const user = jwt.verify(token, process.env.SECRET)
+        if (user) return res.redirect('/');
+        res.status(200).render('user/login_with_otp')
+    } catch (err) {
+        try {
+            return res.status(200).render('user/login_with_otp')
+        } catch (err) {
+            return res.status(500).send(err.message)
+        }
+    }
 }
 
 
@@ -47,8 +51,9 @@ const productDetailGET = async (req, res) => {
         const { userId } = req.user
         const user = await UserModel.findById(userId, { _id: 0, whishlist: 1 })
         const product = await ProductModel.findById(product_id)
-        const category = await CategoryModel.findOne({ category_name: product.category })
-        res.status(200).render('user/productView', { product, isInWhishlist: user.whishlist.includes(product_id), offer_price: category.offer_price })
+        const category = await CategoryModel.findOne({ category_name: product.category, });
+        const relatedProducts = await ProductModel.find({category: product.category, isDeleted: false}).limit(4);
+        res.status(200).render('user/productView', { product, isInWhishlist: user.whishlist.includes(product_id), offer_price: category.offer_price, relatedProducts })
     } catch (err) {
         console.log(err.message)
         return res.status(500).send(err.message)

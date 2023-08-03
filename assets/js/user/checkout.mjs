@@ -26,7 +26,7 @@ let selectedAddressDiv
 if(data.address.length === 0) {
     alert("Please add address first...!\nRedirecting to Address page.");
     setTimeout(()=> {
-        location.href = '/api/profile/address';
+        location.href = '/profile/address';
     }, 2000)
 }
 

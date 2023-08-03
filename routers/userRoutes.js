@@ -83,9 +83,6 @@ router.post('/verify-otp', verifyOTP)
 router.post('/get-user', getUser)
 
 
-router.use(authenticateUser);
-
-
 //Produt details
 router
     .route('/products/:product_id')

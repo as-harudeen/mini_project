@@ -25,7 +25,7 @@ emailInput.addEventListener('keyup', () => {
         sendOTPButton.disabled = true;
 });
 sendOTPButton.addEventListener('click', () => __awaiter(void 0, void 0, void 0, function* () {
-    const url = `/api/generate-otp/${emailVal}`;
+    const url = `/generate-otp/${emailVal}`;
     const res = yield fetch(url, {
         method: 'GET',
     });
@@ -59,7 +59,7 @@ form.addEventListener('submit', (e) => __awaiter(void 0, void 0, void 0, functio
         body: JSON.stringify(body)
     });
     if (res.ok)
-        location.href = '/api/';
+        location.href = '/';
     else {
         errDisplay.innerText = 'Incorrect OTP';
         setTimeout(() => {

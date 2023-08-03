@@ -19,7 +19,7 @@ emailInput.addEventListener('keyup', ()=>{
 
 
 sendOTPButton.addEventListener('click', async ()=>{
-    const url = `/api/generate-otp/${emailVal}`;
+    const url = `/generate-otp/${emailVal}`;
     const res = await fetch(url, {
         method: 'GET',
     })
@@ -54,7 +54,7 @@ form.addEventListener('submit', async (e: Event)=> {
         body: JSON.stringify(body)
     })
 
-    if(res.ok) location.href = '/api/';
+    if(res.ok) location.href = '/';
     else {
         errDisplay.innerText = 'Incorrect OTP';
         setTimeout(()=>{

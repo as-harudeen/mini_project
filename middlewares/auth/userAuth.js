@@ -5,17 +5,17 @@ const UserModel = require('../../models/userModel.js');
 const authenticateUser = async (req, res, next)=>{
     try {
         const token = req.cookies.userToken
-        if(!token) return res.redirect('/api/login')
+        if(!token) return res.redirect('/login')
         const user = jwt.verify(token, process.env.SECRET)
-        if(!user) return res.redirect('/api/login')
+        if(!user) return res.redirect('/login')
         req.user = user
         if(await authorization(user.userId)){
             req.app.locals.user = user.userName
             next()
-        } else return res.status(403).redirect('/api/login');
+        } else return res.status(403).redirect('/login');
     } catch (err) {
         try {
-            res.status(403).redirect('/api/login');
+            res.status(403).redirect('/login');
         } catch (err) {
             res.status(500).send(err.message)
         }

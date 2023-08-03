@@ -91,7 +91,40 @@
                 </div>
                 <h4 class="pt-4 px-5">Related Adds</h4>
                 <div class="row">
-
+                    <% relatedProducts.forEach((data)=>{%>
+                        <div class="col-lg-3 col-sm-6 p-3">
+                            <div class="container bg-white ProductCard">
+                                <!-- image rendering  -->
+                                <a href="/products/<%= data._id%>">
+                                    <div class="cardImage mb-2">
+                                        <img src="/public/img/<%=data.product_images[0] %>" alt="Product Image">
+                                    </div>
+                                </a>
+                                <span>
+                                    <%= data.product_name %>
+                                </span>
+                                <div class="p_price d-flex justify-content-between">
+                                    <div class="price text-danger">₹ <text>
+                                            <%= data.product_price %>
+                                        </text> &nbsp; <span>₹ 1160</span></div>
+                                    <div class="favor" style="cursor: pointer;">
+                                        <i class="fa-regular fa-heart"></i>
+                                    </div>
+                                </div>
+                                <div class="rating d-flex align-items-center">
+                                    <div class="star d-flex align-items-center">
+                                        <img src="/assets/product/star.png" alt="">
+                                        <img src="/assets/product/star.png" alt="">
+                                        <img src="/assets/product/star.png" alt="">
+                                        <img src="/assets/product/star.png" alt="">
+                                        <img src="/assets/product/star.png" alt="">
+                                    </div>
+                                    <div class="value ms-2">(75)</div>
+                                </div>
+                            </div>
+                        </div>
+                    <%});%>
+                </div>
                 </div>
     </div>
     </section>

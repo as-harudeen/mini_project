@@ -115,7 +115,6 @@
                                     <a href="/products/<%= data._id%>">
                                         <img src="/public/img/<%=data.product_images[0] %>" class="product-thumb" alt="">
                                     </a>
-                                    <button class="card-btn">add to wishlist</button>
                                 </div>
                                 <div class="product-info">
                                     <h2 class="product-brand"><%= data.product_name %></h2>
@@ -172,9 +171,6 @@
                 </div>
             </div>
     </div>
-    <script>
-        fetch(URL)
-    </script>
     <script>
         const productContainers = [...document.querySelectorAll('.product-container')];
         const nxtBtn = [...document.querySelectorAll('.nxt-btn')];

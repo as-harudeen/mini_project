@@ -134,13 +134,14 @@ const getUser = async (req, res) => {
 
 
 //Generate OTP
-//@des localhost:3000/api/generate-otp/:email
+//@des localhost:3000/generate-otp/:email
 //method get
 const generateOTP = async (req, res) => {
 
     const { email } = req.params
 
     const user = await UserModel.findOne({email});
+    console.log(`${email} - ${user}`);
     if(!user) return res.status(400).send("User Not found");
     if(user.isBlocked) return res.status(403).send("User has been blocked");
 
@@ -150,6 +151,8 @@ const generateOTP = async (req, res) => {
         specialChars: false
     })
 
+    console.log(req.app.locals.OTP);
+    
     await sendMail("Email Verification", `Your OTP is ${req.app.locals.OTP}`, email)
 
     setTimeout(() => req.app.locals.OTP = '', 60000)
@@ -304,7 +307,7 @@ const order = async (req, res) => {
 //@des localhost:3000/razorpay/createOrder
 //method POST
 const createOrder = async (req, res) => {
-    const { checkoutData } = req?.order
+    const { checkoutData } = req.order
     if (!checkoutData) return res.status(400).send("No checkout details")
 
     try {
@@ -342,7 +345,7 @@ const returnRequest = async (req, res)=> {
 
 
 
-//@des localhost:3000/api/logout
+//@des localhost:3000/logout
 const logout = (req, res) => {
     req.session.destroy((err) => {
         if (err) {
@@ -350,7 +353,7 @@ const logout = (req, res) => {
         } else {
             res.clearCookie('userToken')
             req.app.locals.user = null;
-            res.redirect("/api")
+            res.redirect("/");
         }
     })
 }

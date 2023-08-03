@@ -1,4 +1,4 @@
-const nodemailer = require('nodemailer')
+const nodemailer = require('nodemailer');
 
 
 const registerMail = async (subject, text, email)=>{
@@ -9,13 +9,13 @@ const registerMail = async (subject, text, email)=>{
             port: 465,
             secure: true,
             auth: {
-                user: process.env.USER,
+                user: process.env.USER_EMAIL,
                 pass: process.env.PASS
             }
         })
     
         let info = await transporter.sendMail({
-            from: process.env.USER,
+            from: process.env.USER_EMAIL,
             to: email,
             subject,
             text
