@@ -162,7 +162,7 @@ class UserManagement extends PagenationButton {
         return __awaiter(this, void 0, void 0, function* () {
             const option = { username: { $regex: `^${this.searchInputVal}` } };
             //fetching count of total user
-            const res = yield fetch(`/api/doc_count/users?option=${JSON.stringify(option)}`, {
+            const res = yield fetch(`/doc_count/users?option=${JSON.stringify(option)}`, {
                 method: 'GET'
             });
             const count = yield res.text();

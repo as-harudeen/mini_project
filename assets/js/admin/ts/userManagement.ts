@@ -179,7 +179,7 @@ class UserManagement extends PagenationButton{
     private async totalUserCount(): Promise<number> {
         const option = { username: { $regex: `^${this.searchInputVal}` } };
         //fetching count of total user
-        const res = await fetch(`/api/doc_count/users?option=${JSON.stringify(option)}`, {
+        const res = await fetch(`/doc_count/users?option=${JSON.stringify(option)}`, {
             method: 'GET'
         })
         const count = await res.text();
