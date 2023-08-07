@@ -1586,3 +1586,9 @@ dialog button {
   right: 50vw;
   transform: translate(50%, 50%);
 } */
+
+.banner-del {
+  top: 1.7rem;
+  right: 3rem;
+  width: 12px;
+}

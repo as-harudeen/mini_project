@@ -143,6 +143,11 @@ const salesreportGET = async (req, res)=> {
     res.status(200).render('admin/salesReport')
 }
 
+//localhost:3000/admin/panel/banner/
+const bannerGET = (req, res) => {
+    res.status(200).render('admin/banner');
+}
+
 
 module.exports = {
     loginGET,
@@ -159,5 +164,6 @@ module.exports = {
     addCouponGET,
     couponsGET,
     dashboardGET,
-    salesreportGET
+    salesreportGET,
+    bannerGET
 }

@@ -1,0 +1,88 @@
+<%- include('../include/_header.ejs')%>
+    <div class="container-fluid p-0 min-vh-100 " style="margin-top: 7%;">
+        <%- include('../include/_adminNav.ejs')%>
+            <div class="container f-flex align-items-center justify-content-center">
+                <div class="row p-4 gap-3 d-flex justify-content-center">
+                    <div class="DashBoardUl container col-md-2 p-0 m-0 bg-white d-flex pt-4 sideBar">
+                        <ul class="d-flex flex-column">
+                            <li class="dashOther fw-bold p-1 m-2 ps-4 ">
+                                <!-- <img src="/assets/admin/d1.png" alt="" class="img-fluid me-2"> -->
+                                <span><a class="text-decoration-none" style="color: #cdcdcd ;"
+                                        href="/admin/panel/dashboard">DashBoard</a></span>
+                            </li>
+                            <li class="dashOther fw-bold p-1 ps-4 m-2">
+                                <!-- <img src="/assets/admin/d2.png" alt="" class="img-fluid me-2"> -->
+                                <span></span>
+                                <a href="/admin/panel/category" class="text-decoration-none"
+                                    style="color: #cdcdcd;">Category</a></span>
+                            </li>
+                            <li class="dashOther fw-bold p-1 ps-4 m-2">
+                                <!-- <img src="/assets/admin/d2.png" alt="" class="img-fluid me-2"> -->
+                                <span></span>
+                                <a href="/admin/panel/products" class="text-decoration-none"
+                                    style="color: #cdcdcd;">Product</a></span>
+                            </li>
+                            <li class="dashOther fw-bold p-1 ps-4 m-2">
+                                <!-- <img src="/assets/admin/d4.png" alt="" class="img-fluid me-2"> -->
+                                <span></span>
+                                <a href="/admin/panel/user_management" class="text-decoration-none"
+                                    style="color: #cdcdcd;">Coustomer</a></span>
+                            </li>
+                            <li class="dashOther fw-bold p-1 ps-4 m-2">
+                                <!-- <img src="/assets/admin/d5.png" alt="" class="img-fluid me-2"> -->
+                                <span></span>
+                                <a href="/admin/panel/orders" class="text-decoration-none"
+                                    style="color: #cdcdcd;">Order</a></span>
+                            </li>
+                            <li class="dashOther fw-bold p-1 ps-4 m-2">
+                                <!-- <img src="/assets/admin/d6.png" alt="" class="img-fluid me-2"> -->
+                                <span></span>
+                                <a href="/admin/panel/coupons" class="text-decoration-none"
+                                    style="color: #cdcdcd;">Coupons</a></span>
+                            </li>
+                            <li class="sideBarlist p-1 ps-4 m-2">
+                                <!-- <img src="/assets/admin/d3.png" alt="" class="img-fluid me-2"> -->
+                                <span><a href="/admin/panel/banner/add" class="text-decoration-none"
+                                        style="color: white;">Banner</a></span>
+                            </li>
+                            <li id="logout" class="dashOther fw-bold p-1 ps-4 m-2">
+                                <!-- <img src="/assets/admin/d6.png" alt="" class="img-fluid me-2"> -->
+                                <span></span>
+                                <a href="" class="text-decoration-none" style="color: #cdcdcd;">Logout</a></span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class=" container col-md-9  p-0 m-0">
+                        <div class="container p-0">
+                            <div class="container p-0 m-0">
+                                <div class="container p-0 bg-white p_addingWrapper">
+                                    <form id="form" method="post">
+                                        <div id="banner_container" class="container p-3 ps-5">
+                                            <img src="/public/banners/banner4.jpg" alt=""
+                                                class="img-fluid p-3 bannerImage">
+                                            <img src="/public/banners/banner4.jpg" alt=""
+                                                class="img-fluid p-3 bannerImage">
+                                            </div>
+                                            <div class="container">
+                                                <h6>Add New Banner</h6>
+                                                <input type="file" name="banner" id="banner-img-input">
+                                                <button class="btn btn-dark">add</button>
+                                            </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+
+    <template id="banner-temp">
+        <div class="container position-relative">
+            <a class="banner-del btn btn-danger position-absolute">x</a>
+            <img  src="/public/banners/" alt=""
+            class="img-fluid p-3 bannerImage">
+        </div>
+    </template>
+    <script type="module" src="/js/admin/ts/dist/banner.js"></script>
+    <%- include('../include/_adminFooter.ejs')%>

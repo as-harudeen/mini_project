@@ -6,6 +6,7 @@ const UserModel = require('../models/userModel.js')
 const ProductModel = require('../models/product.model.js')
 const OrderModel = require('../models/orderModel.js')
 const CouponModel = require('../models/coupon.model.js')
+const BannerModel = require('../models/banner.model.js');
 const sharp = require('sharp')
 const fs = require('fs');
 const PDFDocument = require('pdfkit');
@@ -366,18 +367,6 @@ const unlistProduct = async (req, res)=>{
     res.status(200).send("Unlisted")
 }
 
-
-
-//test
-const test = async (req, res) => {
-    const options = {
-       limit: 2,
-       skip: 2
-    };
- 
-    const products = await ProductModel.find({}, null, options);
-    res.send(products)
- }
  
 
 //get orders count
@@ -784,6 +773,43 @@ const downloadSalesreport = (req, res)=>{
 }
 
 
+//localhost:3000/admin/panel/banner/add
+//method POST
+const banner = async (req, res) => {
+    try {
+        const {img} = req.body;
+        await BannerModel.create({
+            banner_url: img
+        })
+        res.status(200).send("Added");
+    } catch (err) {
+        return res.status(500).send(err);
+    }
+}
+
+//localhost:3000/admin/getbanners
+//method GET
+const getBannerDetails = async (req, res) => {
+    try {
+        const banners = await BannerModel.find();
+        res.status(200).json(banners);
+    } catch (err) {
+        return res.status(500).send(err.message);
+    }
+}
+
+//delete banner
+const deleteBanner = async (req, res) => {
+    const {id} = req.params;
+    try {
+        await BannerModel.deleteOne({_id: id});
+        return res.status(200).send("Deleted");
+    } catch (er) {
+        return res.status(500).send(er)
+    }
+}
+
+
 module.exports = {
     login,
     addCategory,
@@ -801,7 +827,6 @@ module.exports = {
     editProduct,
     listProduct,
     unlistProduct,
-    test,
     getOrders,
     updateOrderStatus,
     addCoupon,
@@ -809,5 +834,8 @@ module.exports = {
     getorderscount,
     getorderdata,
     getorderdetails,
-    downloadSalesreport
+    downloadSalesreport,
+    banner,
+    getBannerDetails,
+    deleteBanner
 }

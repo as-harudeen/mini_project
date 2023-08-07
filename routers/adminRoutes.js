@@ -15,7 +15,8 @@ const {
     addCouponGET,
     couponsGET,
     dashboardGET,
-    salesreportGET
+    salesreportGET,
+    bannerGET
 } = require('../render/admin.render.js')
 const {
     login,
@@ -34,7 +35,6 @@ const {
     editProduct,
     listProduct,
     unlistProduct,
-    test,
     getOrders,
     updateOrderStatus,
     addCoupon,
@@ -42,7 +42,10 @@ const {
     getorderscount,
     getorderdata,
     getorderdetails,
-    downloadSalesreport
+    downloadSalesreport,
+    banner,
+    getBannerDetails,
+    deleteBanner
 } = require("../controllers/adminController.js")
 
 const authenticate = require('../middlewares/auth/adminAuth.js')
@@ -266,13 +269,16 @@ router
 .route('/logout')
 .delete(logout)
 
-//Test
+//Banner
 router
-.route('/page')
-.get(test)
+.route('/panel/banner')
+.get(bannerGET)
+.post(banner)
 
-router.all("*", (req, res)=>{
-    res.status(404).render('pagenotfound', {fromAdmin: true})
-})
+router
+.route('/getbanners')
+.get(getBannerDetails)
+
+router.get('/panel/banner/delete/:id', deleteBanner)
 
 module.exports = router;
