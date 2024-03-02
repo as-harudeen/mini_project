@@ -21,7 +21,7 @@ app.use(express.urlencoded({extended: true}));
 
 
 //Using midlewares
-app.use(morgan('tiny'))
+// app.use(morgan('tiny'))
 app.use(cookieParser())
 app.use(session({
     secret: process.env.SECRET,

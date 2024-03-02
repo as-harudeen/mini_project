@@ -12,7 +12,10 @@ const authenticateUser = async (req, res, next)=>{
         if(await authorization(user.userId)){
             req.app.locals.user = user.userName
             next()
-        } else return res.status(403).redirect('/login');
+        } else {
+            res.clearCookie('userToken');
+            return res.status(403).redirect('/login');
+        }
     } catch (err) {
         try {
             res.status(403).redirect('/login');
@@ -25,7 +28,6 @@ const authenticateUser = async (req, res, next)=>{
 const authorization = async (userId) => {
     try {
         const user = await UserModel.findOne({_id: userId, isBlocked: false});
-        console.log(user);
         return user;
     } catch (err) {
         return false;

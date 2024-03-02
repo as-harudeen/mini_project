@@ -14,7 +14,8 @@ const registerGET = (req, res) => {
 const loginGET = (req, res) => {
     try {
         const token = req.cookies.userToken;
-        const user = jwt.verify(token, process.env.SECRET)
+        const user = jwt.verify(token, process.env.SECRET);
+        console.log(user);
         if (user) return res.redirect('/');
         res.status(200).render('user_login')
     } catch (err) {

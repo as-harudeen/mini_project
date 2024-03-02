@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 
 const connect = async ()=>{
     //connect to data base
-    mongoose.connect('mongodb://127.0.0.1:27017/mini-project')
+    mongoose.connect(process.env.CONNECTION_STRING)
     .then(()=>{
         console.log("Database connected....")
     })
